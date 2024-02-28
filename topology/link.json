@@ -1,0 +1,1066 @@
+[
+    {
+        "_id": {
+          "$oid": "6569f30442e7f25d7a592669"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAA",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAB",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
+            "te_metric": 1,
+            "igp_metric": 1,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 25
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 25,
+              "max_delay": 25
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 200000,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 25
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 25,
+                    "max_delay": 25
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      },
+      {
+        "_id": {
+          "$oid": "6569f30442e7f25d7a592668"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAA",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAC",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
+            "te_metric": 1,
+            "igp_metric": 1,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 30
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 30,
+              "max_delay": 30
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 200000,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 25
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 25,
+                    "max_delay": 25
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      },
+      {
+        "_id": {
+          "$oid": "6569f30442e7f25d7a592667"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAA",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAD",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
+            "te_metric": 1,
+            "igp_metric": 1,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 35
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 35,
+              "max_delay": 35
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 200000,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 25
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 25,
+                    "max_delay": 25
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      },
+      {
+        "_id": {
+          "$oid": "6569f30442e7f25d7a592666"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAB",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAE",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
+            "te_metric": 1,
+            "igp_metric": 1,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 25
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 25,
+              "max_delay": 25
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 200000,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 25
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 25,
+                    "max_delay": 25
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      },
+      {
+        "_id": {
+          "$oid": "6569f30442e7f25d7a592665"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAC",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAE",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
+            "te_metric": 1,
+            "igp_metric": 1,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 30
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 30,
+              "max_delay": 30
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 200000,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 25
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 25,
+                    "max_delay": 25
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      },
+      {
+        "_id": {
+          "$oid": "6569f30442e7f25d7a592664"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAD",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAE",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
+            "te_metric": 1,
+            "igp_metric": 1,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 40
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 25,
+              "max_delay": 25
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 200000,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 25
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 25,
+                    "max_delay": 25
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      },
+      {
+        "_id": {
+          "$oid": "6569f30442e7f25d7a592663"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAB",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAC",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
+            "te_metric": 200000,
+            "igp_metric": 200000,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 25
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 25,
+              "max_delay": 25
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 200000,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 25
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 25,
+                    "max_delay": 25
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      }
+]
