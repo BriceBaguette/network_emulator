@@ -1,11 +1,11 @@
 # Import necessary modules
 from router import Router, ForwardTableElement
 from link import Link
-import utils
 import numpy as np
 import json
 import base64
-from concurrent.futures import ProcessPoolExecutor
+import random
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import time
 import networkx as nx
 
@@ -122,7 +122,6 @@ class NetworkEmulator:
 
         # Print the time taken to build the graph
         end = time.time()
-        print(net_graph)
         print("Build graph in: {}".format(end - start))
         # create a networkx graph
         G = nx.Graph(net_graph)
@@ -143,22 +142,36 @@ class NetworkEmulator:
                         cost=elements[k][2]
                     ))
         '''
-        for i in range(number_of_routers):
-            for j in range(number_of_routers):
-                if i != j:
-                    # Find the shortest paths from the source to the destination
-                    shortest_paths = list(
-                        nx.all_shortest_paths(G, source=i, target=j))
-                    for path in shortest_paths:
-                        # Update the forward table for the source router
-                        self.routers[i].updateForwardTable(ForwardTableElement(
-                            dest=self.routers[path[len(path)-1]].ip_address,
-                            next_hop=self.routers[path[1]].ip_address
-                        ))
+        with ThreadPoolExecutor() as executor:
+                # Use submit to asynchronously submit tasks to the executor
+                futures = []
+                for i in range(number_of_routers):
+                    for j in range(number_of_routers):
+                        if i != j:
+                            # Submit each task to the executor
+                            futures.append(executor.submit(self.update_forward_table, G, i, j))
+
+                # Wait for all tasks to complete
+                count = 0
+                for future in futures:
+                    count += 1
+                    future.result()
+
 
         # Print the time taken to start the network
         end = time.time()
         print("Network started in: {}".format(end - start))
+        
+    def update_forward_table(self, G, source, target):
+    # Find the shortest paths from the source to the destination
+        shortest_paths = list(nx.all_shortest_paths(G, source=source, target=target))
+        
+        for path in shortest_paths:
+            # Update the forward table for the source router
+            self.routers[source].updateForwardTable(ForwardTableElement(
+                next_hop=self.routers[path[1]].ip_address,
+                dest=self.routers[path[len(path) - 1]].ip_address
+            ))
 
     def emulate(self, source, destination):
         # Generate traffic between the source and destination for a number of generations
@@ -166,19 +179,22 @@ class NetworkEmulator:
             index = next(index for index, value in enumerate(
                 self.routers) if value.ip_address == source)
             source_router = self.routers[index]
-            self.send_probs(source=source_router, destination=destination)
+            latencies = self.send_probs(source=source_router, destination=destination)
+            print("Latencies: ", latencies)
 
     def send_probs(self, source, destination):
         # Initialize a latency array
         latency = np.zeros(self.generation_rate)
-
+        base_pkt_nmbr = random.randint(1, 100000000)
         # For each generation, calculate the latency from source to destination
         for i in range(self.generation_rate):
             # Find the next hop from the source to the destination
             indices = [index for index, value in enumerate(
                 source.forward_table) if value.destination == destination]
+            # Using hash function to determine which route to take
+            chosen_route = source.select_route(destination, len(indices), base_pkt_nmbr + i)
             index = next(index for index, value in enumerate(self.links) if value.source ==
-                         source.ip_address and value.destination == source.forward_table[indices[0]].next_hop)
+                         source.ip_address and value.destination == source.forward_table[indices[chosen_route]].next_hop)
             latency[i] += self.links[index].delay
 
             # Find the next router
@@ -190,8 +206,9 @@ class NetworkEmulator:
             while (next_router.ip_address != destination):
                 indices = [index for index, value in enumerate(
                     next_router.forward_table) if value.destination == destination]
+                chosen_route = next_router.select_route(destination, len(indices), base_pkt_nmbr + i)
                 index = next(index for index, value in enumerate(self.links) if value.source ==
-                             next_router.ip_address and value.destination == next_router.forward_table[indices[0]].next_hop)
+                             next_router.ip_address and value.destination == next_router.forward_table[indices[chosen_route]].next_hop)
                 latency[i] += self.links[index].delay
                 index = next(index for index, value in enumerate(
                     self.routers) if value.ip_address == next_router.forward_table[indices[0]].next_hop)
