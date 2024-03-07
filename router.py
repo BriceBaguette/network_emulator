@@ -20,12 +20,11 @@ class Router:
         
     def updateForwardTable(self, element):
         # Add a new element to the forward table
-        self.forward_table.append( element)
+        self.forward_table.append(element)
 
     def ecmp_hash(self, dest_ip, packet_nmbr):
         # Concatenate the input values to create a unique key
         hash_input = f"{self.ip_address}{dest_ip}{packet_nmbr}".encode('utf-8')
-
 
         # Use a hash function (e.g., MD5) to generate a hash value
         hash_value = hashlib.md5(hash_input).hexdigest()

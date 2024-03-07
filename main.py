@@ -24,7 +24,8 @@ def main():
                               num_generation=args.num_generations)
     net_sim.build()
     net_sim.start()
-    net_sim.emulate("kAAAAAAA","kAAAAAAE")
+    #net_sim.emulate("kAAAAAAA","kAAAAAAE")
+    net_sim.emulate_all()
 
 
 if __name__ == "__main__":

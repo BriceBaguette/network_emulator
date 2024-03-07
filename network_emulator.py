@@ -119,12 +119,24 @@ class NetworkEmulator:
                     self.routers) if value.ip_address == link.destination)
                 # Update the network graph with the link cost
                 net_graph[i, destination] = self.links[value].cost
+        
+        # create a networkx graph
+        G = nx.DiGraph()
 
+        # Add nodes to the graph
+        G.add_nodes_from(range(len(net_graph)))
+
+        # Add edges to the graph with weights
+        for i in range(len(net_graph)):
+            for j in range(len(net_graph[i])):
+                if net_graph[i, j] != 0:
+                    G.add_edge(i, j, weight=net_graph[i, j])
+        
         # Print the time taken to build the graph
         end = time.time()
         print("Build graph in: {}".format(end - start))
-        # create a networkx graph
-        G = nx.Graph(net_graph)
+
+
         '''
         with ProcessPoolExecutor() as executor:
             #pathLists = list(executor.map(utils.dijkstra, [net_graph]*number_of_routers, range(number_of_routers)))
@@ -164,8 +176,8 @@ class NetworkEmulator:
         
     def update_forward_table(self, G, source, target):
     # Find the shortest paths from the source to the destination
-        shortest_paths = list(nx.all_shortest_paths(G, source=source, target=target))
-        
+        shortest_paths = list(nx.all_shortest_paths(G, source=source, target=target, weight='weight'))
+ 
         for path in shortest_paths:
             # Update the forward table for the source router
             self.routers[source].updateForwardTable(ForwardTableElement(
@@ -180,7 +192,25 @@ class NetworkEmulator:
                 self.routers) if value.ip_address == source)
             source_router = self.routers[index]
             latencies = self.send_probs(source=source_router, destination=destination)
-            print("Latencies: ", latencies)
+            
+    def emulate_all(self):
+        
+        start = time.time()
+        for _ in range(self.num_generation):
+            with ThreadPoolExecutor() as executor:
+                # Submit tasks for each source
+                futures = []
+                for source in self.routers:
+                    for destination in self.routers:
+                        if source != destination:
+                            future = executor.submit(self.send_probs, source, destination.ip_address)
+                            futures.append(future)
+
+            # Wait for all tasks to complete
+            for future in futures:
+                future.result()
+
+        print("Emulated all network for " + str(self.num_generation) + " generations with " + str(self.generation_rate) + " probes in " + str(time.time() - start))
 
     def send_probs(self, source, destination):
         # Initialize a latency array
