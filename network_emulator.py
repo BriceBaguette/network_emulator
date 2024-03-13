@@ -23,6 +23,7 @@ class NetworkEmulator:
         self.link_file = link_file  # Link file
         self.generation_rate = generation_rate  # Generation rate
         self.num_generation = num_generation  # Number of generations
+        self.net_graph = None  # Network graph
 
     # Method to build the network
     def build(self):
@@ -105,7 +106,13 @@ class NetworkEmulator:
         number_of_routers = len(self.routers)
 
         # Construct a network graph as a sparse matrix
-        net_graph = np.zeros((number_of_routers, number_of_routers), dtype=int)
+
+        # Create the array
+        net_graph = np.empty((number_of_routers, number_of_routers), dtype=object)
+        for i in range(number_of_routers):
+            for j in range(number_of_routers):
+                net_graph[i, j] = []
+
 
         # Fill the network graph with link costs
         for i, router in enumerate(self.routers):
@@ -118,7 +125,12 @@ class NetworkEmulator:
                 destination = next(index for index, value in enumerate(
                     self.routers) if value.ip_address == link.destination)
                 # Update the network graph with the link cost
-                net_graph[i, destination] = self.links[value].cost
+                net_graph[i, destination].append(self.links[value].cost)
+                
+        for i in range(number_of_routers):
+            for j in range(number_of_routers):
+                if len(net_graph[i, j]) == 0:
+                    net_graph[i, j] = [0]
         
         # create a networkx graph
         G = nx.DiGraph()
@@ -129,9 +141,10 @@ class NetworkEmulator:
         # Add edges to the graph with weights
         for i in range(len(net_graph)):
             for j in range(len(net_graph[i])):
-                if net_graph[i, j] != 0:
-                    G.add_edge(i, j, weight=net_graph[i, j])
-        
+                for k in range(len(net_graph[i, j])):
+                    if net_graph[i, j][k] != 0:
+                        G.add_edge(i, j, weight=net_graph[i, j][k])
+        self.net_graph = net_graph
         # Print the time taken to build the graph
         end = time.time()
         print("Build graph in: {}".format(end - start))
@@ -176,14 +189,21 @@ class NetworkEmulator:
         
     def update_forward_table(self, G, source, target):
     # Find the shortest paths from the source to the destination
-        shortest_paths = list(nx.all_shortest_paths(G, source=source, target=target, weight='weight'))
- 
-        for path in shortest_paths:
-            # Update the forward table for the source router
-            self.routers[source].updateForwardTable(ForwardTableElement(
-                next_hop=self.routers[path[1]].ip_address,
-                dest=self.routers[path[len(path) - 1]].ip_address
-            ))
+        if not self.routers[source].has_entry_for_destination(self.routers[target].ip_address):
+            shortest_paths = list(nx.all_shortest_paths(G, source=source, target=target, weight='weight'))
+            if source == 0 and target == 4:
+                print(shortest_paths)
+            for path in shortest_paths:
+                # Update the forward table for the source router
+                self.routers[source].update_forward_table(ForwardTableElement(
+                    next_hop=self.routers[path[1]].ip_address,
+                    dest=self.routers[path[len(path) - 1]].ip_address
+                ))
+                for i in range(1, len(path) - 1):
+                    self.routers[path[i]].update_forward_table(ForwardTableElement(
+                        next_hop=self.routers[path[i + 1]].ip_address,
+                        dest=self.routers[path[len(path) - 1]].ip_address
+                    ))
 
     def emulate(self, source, destination):
         # Generate traffic between the source and destination for a number of generations

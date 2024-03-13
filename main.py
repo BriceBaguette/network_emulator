@@ -17,15 +17,15 @@ def main():
     args = parser.parse_args()
 
     print("Node file:", args.node_file)
-    print("Link file : ", args.link_file)
+    print("Link file:", args.link_file)
     print("Generation rate:", args.generation_rate)
     print("Number of generations:", args.num_generations)
     net_sim = NetworkEmulator(node_file=args.node_file,link_file=args.link_file ,generation_rate=args.generation_rate,
                               num_generation=args.num_generations)
     net_sim.build()
     net_sim.start()
-    #net_sim.emulate("kAAAAAAA","kAAAAAAE")
-    net_sim.emulate_all()
+    net_sim.emulate("kAAAAAAA","kAAAAAAE")
+    #net_sim.emulate_all()
 
 
 if __name__ == "__main__":

@@ -670,8 +670,8 @@
             }
           },
           "ls_attribute": {
-            "te_metric": 3,
-            "igp_metric": 3,
+            "te_metric": 1,
+            "igp_metric": 1,
             "admin_groups": 0,
             "unidir_delay": {
               "bitvector": 0,
