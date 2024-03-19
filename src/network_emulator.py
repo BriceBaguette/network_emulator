@@ -8,6 +8,9 @@ import random
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import time
 import networkx as nx
+from tqdm import tqdm
+from scipy import stats
+import matplotlib.pyplot as plt
 
 # Define the NetworkEmulator class
 
@@ -15,7 +18,7 @@ import networkx as nx
 class NetworkEmulator:
 
     # Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations
-    def __init__(self, node_file, link_file, generation_rate, num_generation):
+    def __init__(self, node_file, link_file, generation_rate, num_generation, max_fib_break = 1, fib_break_spread = 1):
         self.routers = list()  # List to store routers
         self.links = list()  # List to store links
 
@@ -23,7 +26,17 @@ class NetworkEmulator:
         self.link_file = link_file  # Link file
         self.generation_rate = generation_rate  # Generation rate
         self.num_generation = num_generation  # Number of generations
-        self.net_graph = None  # Network graph
+        
+        self.net_graph = None # Network graph
+        self.G = None # Networkx graph
+        
+        self.router_failure = False # Status of router failure
+        self.link_failure = False # Status of link failure
+        self.link_failed = [] # List of failed links
+        
+        self.max_fib_break = max_fib_break # Maximum number of FIB breaks
+        self.fib_break_spread = fib_break_spread # Spread of FIB breaks, between 0 and 1 (default: 1)
+
 
     # Method to build the network
     def build(self):
@@ -133,7 +146,7 @@ class NetworkEmulator:
                     net_graph[i, j] = [0]
         
         # create a networkx graph
-        G = nx.DiGraph()
+        G = nx.MultiDiGraph()
 
         # Add nodes to the graph
         G.add_nodes_from(range(len(net_graph)))
@@ -145,6 +158,7 @@ class NetworkEmulator:
                     if net_graph[i, j][k] != 0:
                         G.add_edge(i, j, weight=net_graph[i, j][k])
         self.net_graph = net_graph
+        self.G = G
         # Print the time taken to build the graph
         end = time.time()
         print("Build graph in: {}".format(end - start))
@@ -173,14 +187,16 @@ class NetworkEmulator:
                 for i in range(number_of_routers):
                     for j in range(number_of_routers):
                         if i != j:
-                            # Submit each task to the executor
                             futures.append(executor.submit(self.update_forward_table, G, i, j))
 
                 # Wait for all tasks to complete
-                count = 0
+                progress_bar = tqdm(total=len(futures), desc="Processing")
+                
                 for future in futures:
-                    count += 1
                     future.result()
+                    progress_bar.update(1)
+                    
+                progress_bar.close()
 
 
         # Print the time taken to start the network
@@ -191,8 +207,6 @@ class NetworkEmulator:
     # Find the shortest paths from the source to the destination
         if not self.routers[source].has_entry_for_destination(self.routers[target].ip_address):
             shortest_paths = list(nx.all_shortest_paths(G, source=source, target=target, weight='weight'))
-            if source == 0 and target == 4:
-                print(shortest_paths)
             for path in shortest_paths:
                 # Update the forward table for the source router
                 self.routers[source].update_forward_table(ForwardTableElement(
@@ -207,12 +221,15 @@ class NetworkEmulator:
 
     def emulate(self, source, destination):
         # Generate traffic between the source and destination for a number of generations
+        start = time.time()
         for _ in range(self.num_generation):
             index = next(index for index, value in enumerate(
                 self.routers) if value.ip_address == source)
             source_router = self.routers[index]
             latencies = self.send_probs(source=source_router, destination=destination)
-            
+            print(latencies)
+        end = time.time()
+        print(f"Network emulated in: {end-start} for {self.num_generation} generations of {self.generation_rate} probes")
     def emulate_all(self):
         
         start = time.time()
@@ -231,6 +248,11 @@ class NetworkEmulator:
                 future.result()
 
         print("Emulated all network for " + str(self.num_generation) + " generations with " + str(self.generation_rate) + " probes in " + str(time.time() - start))
+        
+    def get_router_index(self, ip_address):
+        for i in range(len(self.routers)):
+            if(self.routers[i].ip_address == ip_address):
+                return i
 
     def send_probs(self, source, destination):
         # Initialize a latency array
@@ -238,6 +260,17 @@ class NetworkEmulator:
         base_pkt_nmbr = random.randint(1, 100000000)
         # For each generation, calculate the latency from source to destination
         for i in range(self.generation_rate):
+            # Look if we create a link failure
+            if not (self.router_failure or self.max_fib_break == len(self.link_failed)):
+                for link in self.links:
+                    x = stats.norm.rvs()
+                    # Compute the confidence interval
+                    confidence_level = 0.995
+                    confidence_interval = stats.norm.interval(confidence_level,)
+                    if x < confidence_interval[0] or x > confidence_interval[1]:
+                        self.create_link_failure(link)
+                    
+                
             # Find the next hop from the source to the destination
             indices = [index for index, value in enumerate(
                 source.forward_table) if value.destination == destination]
@@ -249,7 +282,7 @@ class NetworkEmulator:
 
             # Find the next router
             index = next(index for index, value in enumerate(
-                self.routers) if value.ip_address == source.forward_table[indices[0]].next_hop)
+                self.routers) if value.ip_address == source.forward_table[indices[chosen_route]].next_hop)
             next_router = self.routers[index]
 
             # Continue finding the next hop and adding the delay until the destination is reached
@@ -259,10 +292,38 @@ class NetworkEmulator:
                 chosen_route = next_router.select_route(destination, len(indices), base_pkt_nmbr + i)
                 index = next(index for index, value in enumerate(self.links) if value.source ==
                              next_router.ip_address and value.destination == next_router.forward_table[indices[chosen_route]].next_hop)
-                latency[i] += self.links[index].delay
-                index = next(index for index, value in enumerate(
-                    self.routers) if value.ip_address == next_router.forward_table[indices[0]].next_hop)
-                next_router = self.routers[index]
-
+                # Look different case based on the link failure or not
+                if not self.links[index].failure:
+                    latency[i] += self.links[index].delay
+                    index = next(index for index, value in enumerate(
+                        self.routers) if value.ip_address == next_router.forward_table[indices[0]].next_hop)
+                    next_router = self.routers[index]
+                elif self.G.has_edge(self.get_router_index(next_router.ip_address),self.get_router_index(next_router.forward_table[indices[chosen_route]].next_hop)):
+                    self.G.remove_edge(self.get_router_index(next_router.ip_address),self.get_router_index(next_router.forward_table[indices[chosen_route]].next_hop))
+                    new_path = list(nx.shortest_path(self.G, source=self.get_router_index(next_router.ip_address), target=self.get_router_index(destination), weight='weight'))
+                    for j in range(len(new_path)-1):
+                        index = next(index for index, value in enumerate(self.links) if value.source ==
+                                self.routers[new_path[j]].ip_address and value.destination == self.routers[new_path[j+1]].ip_address)
+                        latency[i] += self.links[index].delay
+                    break
+                else:
+                    new_path =  list(nx.shortest_path(self.G, source=self.get_router_index(next_router.ip_address), target=self.get_router_index(destination), weight='weight'))
+                    for j in range(len(new_path)-1):
+                        index = next(index for index, value in enumerate(self.links) if value.source ==
+                                self.routers[new_path[j]].ip_address and value.destination == self.routers[new_path[j+1]].ip_address)
+                        latency[i] += self.links[index].delay
+                    break
         # Return the latency array
         return latency
+
+    def create_link_failure(self, link):
+        link.failure = True
+        self.link_failed.append(link)
+            
+    def restore_link_failure(self):
+        self.link_failure = False
+        for link in self.link_failed:
+            link.failure = False
+        self.link_failed = []
+            
+        
