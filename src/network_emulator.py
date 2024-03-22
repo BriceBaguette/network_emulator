@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 class NetworkEmulator:
 
     # Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations
-    def __init__(self, node_file, link_file, generation_rate, num_generation, max_fib_break = 1, fib_break_spread = 1):
+    def __init__(self, node_file, link_file, generation_rate, num_generation, max_fib_break = 2, fib_break_spread = 1):
         self.routers = list()  # List to store routers
         self.links = list()  # List to store links
 
@@ -227,9 +227,9 @@ class NetworkEmulator:
                 self.routers) if value.ip_address == source)
             source_router = self.routers[index]
             latencies = self.send_probs(source=source_router, destination=destination)
-            print(latencies)
         end = time.time()
         print(f"Network emulated in: {end-start} for {self.num_generation} generations of {self.generation_rate} probes")
+        
     def emulate_all(self):
         
         start = time.time()
@@ -261,16 +261,12 @@ class NetworkEmulator:
         # For each generation, calculate the latency from source to destination
         for i in range(self.generation_rate):
             # Look if we create a link failure
-            if not (self.router_failure or self.max_fib_break == len(self.link_failed)):
-                for link in self.links:
-                    x = stats.norm.rvs()
-                    # Compute the confidence interval
-                    confidence_level = 0.995
-                    confidence_interval = stats.norm.interval(confidence_level,)
-                    if x < confidence_interval[0] or x > confidence_interval[1]:
-                        self.create_link_failure(link)
-                    
+            if (not self.router_failure) and  len(self.link_failed) < self.max_fib_break:
+                self.create_link_failure()
                 
+            if len(self.link_failed) > 0:
+                self.restore_link_failure()
+                    
             # Find the next hop from the source to the destination
             indices = [index for index, value in enumerate(
                 source.forward_table) if value.destination == destination]
@@ -293,7 +289,7 @@ class NetworkEmulator:
                 index = next(index for index, value in enumerate(self.links) if value.source ==
                              next_router.ip_address and value.destination == next_router.forward_table[indices[chosen_route]].next_hop)
                 # Look different case based on the link failure or not
-                if not self.links[index].failure:
+                if not self.links[index] in self.link_failed:
                     latency[i] += self.links[index].delay
                     index = next(index for index, value in enumerate(
                         self.routers) if value.ip_address == next_router.forward_table[indices[0]].next_hop)
@@ -316,14 +312,57 @@ class NetworkEmulator:
         # Return the latency array
         return latency
 
-    def create_link_failure(self, link):
-        link.failure = True
-        self.link_failed.append(link)
+    def latency_histogram(self, data):
+        
+        value_counts = {}
+        for item in data:
+            if item in value_counts:
+                value_counts[item] += 1
+            else:
+                value_counts[item] = 1
+
+        # Extract the values and counts
+        values = list(value_counts.keys())
+        counts = list(value_counts.values())
+
+        # Plot the data
+        plt.bar(values, counts)
+        plt.xlabel('Value')
+        plt.ylabel('Occurrences')
+        plt.title('Occurrences of Values in List')
+        plt.show()
+
+    def create_link_failure(self):
+        for link in self.links:
+            if len(self.link_failed) < self.max_fib_break:
+                x = stats.norm.rvs()
+                # Compute the confidence interval
+                confidence_level = 0.995
+                confidence_interval = stats.norm.interval(confidence_level,)
+                if x < confidence_interval[0] or x > confidence_interval[1]:
+                    self.link_failed.append(link)
             
     def restore_link_failure(self):
-        self.link_failure = False
-        for link in self.link_failed:
-            link.failure = False
-        self.link_failed = []
+        indices = []
+        for i in range(len(self.link_failed)):
+            link = self.link_failed[i]
+            x = stats.norm.rvs()
+            # Compute the confidence interval
+            confidence_level = 0.1 * (1+ link.break_time/30)
+            
+            if confidence_level > 1:
+                confidence_level = 1
+                
+            confidence_interval = stats.norm.interval(confidence_level)
+            
+            if  confidence_interval[0] < x < confidence_interval[1]:
+                indices.append(i)
+                
+            link.break_time += 1
+        indices.sort(reverse=True) 
+        for i in indices:
+            link = self.link_failed.pop(i)
+            self.G.add_edge(self.get_router_index(link.source), self.get_router_index(link.destination), weight=link.cost)
+            
             
         
