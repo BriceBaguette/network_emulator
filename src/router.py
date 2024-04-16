@@ -32,9 +32,12 @@ class Router:
         # If no matching element found, add the new element to the forward table
         self.forward_table.append(element)
 
-    def ecmp_hash(self, dest_ip, packet_nmbr):
+    def ecmp_hash(self, dest_ip, packet_nmbr, distribution_key = None):
         # Concatenate the input values to create a unique key
-        hash_input = f"{self.ip_address}{dest_ip}{packet_nmbr}".encode('utf-8')
+        if distribution_key is not None:
+            hash_input = f"{self.ip_address}{dest_ip}{distribution_key}".encode('utf-8')
+        else:
+            hash_input = f"{self.ip_address}{dest_ip}{packet_nmbr}".encode('utf-8')
 
         # Use SHA-256 hash function to generate a hash value
         hash_value = hashlib.sha256(hash_input).hexdigest()

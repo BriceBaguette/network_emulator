@@ -68,13 +68,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 25
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 25,
-              "max_delay": 25
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -128,13 +128,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -372,13 +372,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 35
+              "delay": 15
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 35,
-              "max_delay": 35
+              "min_delay": 15,
+              "max_delay": 15
             },
             "adj_sids": [
               {
@@ -437,8 +437,8 @@
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 15,
+                    "max_delay": 15
                   }
                 }
               }
@@ -524,13 +524,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 25
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 25,
-              "max_delay": 25
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -584,13 +584,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -736,13 +736,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 30
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 30,
+                    "max_delay": 30
                   }
                 }
               }
@@ -828,13 +828,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 40
+              "delay": 15
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 25,
-              "max_delay": 25
+              "min_delay": 15,
+              "max_delay": 15
             },
             "adj_sids": [
               {
@@ -888,13 +888,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 15
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 15,
+                    "max_delay": 15
                   }
                 }
               }
@@ -927,7 +927,7 @@
               "local_node_descriptor": {
                 "igp_router_id": {
                   "$binary": {
-                    "base64": "kAAAAAAB",
+                    "base64": "kAAAAAAC",
                     "subType": "00"
                   }
                 }
@@ -935,7 +935,7 @@
               "remote_node_descriptor": {
                 "igp_router_id": {
                   "$binary": {
-                    "base64": "kAAAAAAC",
+                    "base64": "kAAAAAAD",
                     "subType": "00"
                   }
                 }
@@ -980,13 +980,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 25
+              "delay": 0
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 25,
-              "max_delay": 25
+              "min_delay": 0,
+              "max_delay": 0
             },
             "adj_sids": [
               {
@@ -1040,13 +1040,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 0
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 0,
+                    "max_delay": 0
                   }
                 }
               }
@@ -1132,13 +1132,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 25
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 25,
-              "max_delay": 25
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -1192,13 +1192,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -1344,13 +1344,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 30
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 30,
+                    "max_delay": 30
                   }
                 }
               }
@@ -1436,13 +1436,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 35
+              "delay": 15
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 35,
-              "max_delay": 35
+              "min_delay": 15,
+              "max_delay": 15
             },
             "adj_sids": [
               {
@@ -1496,13 +1496,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 15
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 15,
+                    "max_delay": 15
                   }
                 }
               }
@@ -1588,13 +1588,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 25
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 25,
-              "max_delay": 25
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -1648,13 +1648,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -1800,13 +1800,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 30
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 30,
+                    "max_delay": 30
                   }
                 }
               }
@@ -1892,13 +1892,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 40
+              "delay": 15
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 25,
-              "max_delay": 25
+              "min_delay": 15,
+              "max_delay": 15
             },
             "adj_sids": [
               {
@@ -1952,13 +1952,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 15
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 15,
+                    "max_delay": 15
                   }
                 }
               }
@@ -2044,13 +2044,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 25
+              "delay": 0
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 25,
-              "max_delay": 25
+              "min_delay": 0,
+              "max_delay": 0
             },
             "adj_sids": [
               {
@@ -2104,13 +2104,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 0
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
+                    "min_delay": 0,
+                    "max_delay": 0
                   }
                 }
               }

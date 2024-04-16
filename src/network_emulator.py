@@ -5,12 +5,15 @@ import numpy as np
 import json
 import base64
 import random
+import pandas as pd
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import time
 import networkx as nx
 from tqdm import tqdm
 from scipy import stats
+from datetime import datetime
 import matplotlib.pyplot as plt
+import os
 
 # Define the NetworkEmulator class
 
@@ -18,17 +21,19 @@ import matplotlib.pyplot as plt
 class NetworkEmulator:
 
     # Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations
-    def __init__(self, node_file, link_file, generation_rate, num_generation, max_fib_break = 2, fib_break_spread = 1):
+    def __init__(self, node_file, link_file, generation_rate, num_generation, duration, max_fib_break = 1, fib_break_spread = 1):
         self.routers = list()  # List to store routers
         self.links = list()  # List to store links
-
+        
         self.node_file = node_file  # Node file
         self.link_file = link_file  # Link file
         self.generation_rate = generation_rate  # Generation rate
         self.num_generation = num_generation  # Number of generations
+        self.duration = duration  # Duration of the simulation  
         
         self.net_graph = None # Network graph
         self.G = None # Networkx graph
+        self.net_state_graph = None # Network state matrix
         
         self.router_failure = False # Status of router failure
         self.link_failure = False # Status of link failure
@@ -36,6 +41,11 @@ class NetworkEmulator:
         
         self.max_fib_break = max_fib_break # Maximum number of FIB breaks
         self.fib_break_spread = fib_break_spread # Spread of FIB breaks, between 0 and 1 (default: 1)
+        
+        self.prob_start = 0
+        self.link_failure_time = []
+        
+        self.session_id = None
 
 
     # Method to build the network
@@ -125,7 +135,12 @@ class NetworkEmulator:
         for i in range(number_of_routers):
             for j in range(number_of_routers):
                 net_graph[i, j] = []
-
+                
+        # Create the array
+        self.net_state_graph = np.empty((number_of_routers, number_of_routers), dtype=object)
+        for i in range(number_of_routers):
+            for j in range(number_of_routers):
+                self.net_state_graph[i, j] = []
 
         # Fill the network graph with link costs
         for i, router in enumerate(self.routers):
@@ -139,6 +154,7 @@ class NetworkEmulator:
                     self.routers) if value.ip_address == link.destination)
                 # Update the network graph with the link cost
                 net_graph[i, destination].append(self.links[value].cost)
+                self.net_state_graph[i,destination].append(1)
                 
         for i in range(number_of_routers):
             for j in range(number_of_routers):
@@ -219,15 +235,87 @@ class NetworkEmulator:
                         dest=self.routers[path[len(path) - 1]].ip_address
                     ))
 
+    def export_sink_data(self, source, destination, time_array, latencies, gen_number):
+        
+        # Export the data to a CSV file
+        sink_csv_file = './src/results/sink.csv'
+        
+        if os.path.isfile(sink_csv_file):
+            sink = pd.read_csv  (sink_csv_file)
+            if self.session_id == None:
+                self.session_id = sink.iloc[-1]['Session ID'] + 1
+        else: 
+            sink = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'TimeStamp' ,'Histogram template', 'Histogram values', 'Histogram type', 'Liveness flag'])
+            self.session_id = 1
+        histogram_type = None
+        if gen_number%2 == 0:
+            histogram_type = 'Black'
+        else:
+            histogram_type = 'White'
+
+        source = source
+        destination = destination
+
+        new_row = {'Session ID': self.session_id,
+                'Source': source,
+                'Destination': destination,
+                'TimeStamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'Histogram template': time_array,
+                'Histogram values': latencies,
+                'Histogram type': histogram_type,
+                'Liveness flag': True}
+
+        # Append the new row to the DataFrame
+        sink.loc[len(sink)] = new_row
+        pd.DataFrame.to_csv(sink, sink_csv_file,index=False)
+        
+    def export_source_data(self, source, destination, gen_number):
+                # Export the data to a CSV file
+        source_csv_file = './src/results/source.csv'
+        
+        if os.path.isfile(source_csv_file):
+            sink = pd.read_csv (source_csv_file)
+            if self.session_id == None:
+                self.session_id = sink.iloc[-1]['Session ID'] + 1
+        else: 
+            sink = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'TimeStamp' ,'Probe GenRate', 'Packet Counter', 'Packet Counter Type'])
+            self.session_id = 1
+        packet_type = None
+        if gen_number%2 == 0:
+            packet_type = 'Black'
+        else:
+            packet_type = 'White'
+
+        source = source
+        destination = destination
+        
+        new_row = {'Session ID': self.session_id,
+                'Source': source,
+                'Destination': destination,
+                'TimeStamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'Probe GenRate': self.generation_rate,
+                'Packet Counter': self.generation_rate * self.duration,
+                'Packet Counter Type': packet_type}
+
+        # Append the new row to the DataFrame
+        sink.loc[len(sink)] = new_row
+        pd.DataFrame.to_csv(sink, source_csv_file,index=False)
+        
+
     def emulate(self, source, destination):
         # Generate traffic between the source and destination for a number of generations
         start = time.time()
-        for _ in range(self.num_generation):
+        for gen_number in range(self.num_generation):
             index = next(index for index, value in enumerate(
                 self.routers) if value.ip_address == source)
             source_router = self.routers[index]
+            time_array = np.linspace(0,self.duration,self.generation_rate)
             latencies = self.send_probs(source=source_router, destination=destination)
+            self.export_sink_data(source, destination, time_array, latencies, gen_number)
+            self.export_source_data(source,destination,gen_number)
         end = time.time()
+        if len(self.link_failure_time) > 0:
+            print(f"Min time: {min(self.link_failure_time)}, Max time: {max(self.link_failure_time)}, average time {sum(self.link_failure_time)/len(self.link_failure_time)}, number of breaks {len(self.link_failure_time)}")
         print(f"Network emulated in: {end-start} for {self.num_generation} generations of {self.generation_rate} probes")
         
     def emulate_all(self):
@@ -256,16 +344,16 @@ class NetworkEmulator:
 
     def send_probs(self, source, destination):
         # Initialize a latency array
-        latency = np.zeros(self.generation_rate)
+        latency = np.zeros(self.generation_rate* self.duration)
         base_pkt_nmbr = random.randint(1, 100000000)
         # For each generation, calculate the latency from source to destination
-        for i in range(self.generation_rate):
+        for i in range(self.generation_rate * self.duration):
             # Look if we create a link failure
             if (not self.router_failure) and  len(self.link_failed) < self.max_fib_break:
-                self.create_link_failure()
+                self.create_link_failure(i)
                 
             if len(self.link_failed) > 0:
-                self.restore_link_failure()
+                self.restore_link_failure(i)
                     
             # Find the next hop from the source to the destination
             indices = [index for index, value in enumerate(
@@ -327,28 +415,35 @@ class NetworkEmulator:
 
         # Plot the data
         plt.bar(values, counts)
-        plt.xlabel('Value')
-        plt.ylabel('Occurrences')
-        plt.title('Occurrences of Values in List')
+        plt.xlabel('Latency in ms')
+        plt.ylabel('Number of probes')
+        plt.title('Number of probes vs Latency')
         plt.show()
 
-    def create_link_failure(self):
+    def create_link_failure(self, i):
+        confidence_level = self.get_confidence_level()
         for link in self.links:
             if len(self.link_failed) < self.max_fib_break:
                 x = stats.norm.rvs()
                 # Compute the confidence interval
-                confidence_level = 0.995
+
                 confidence_interval = stats.norm.interval(confidence_level,)
                 if x < confidence_interval[0] or x > confidence_interval[1]:
+                    self.prob_start = i
                     self.link_failed.append(link)
-            
-    def restore_link_failure(self):
+                    link.failure = 1
+                    
+    def get_confidence_level(self):
+        return 1 - (self.duration * len(self.links))/100000
+        
+
+    def restore_link_failure(self, j):
         indices = []
         for i in range(len(self.link_failed)):
             link = self.link_failed[i]
             x = stats.norm.rvs()
             # Compute the confidence interval
-            confidence_level = 0.1 * (1+ link.break_time/30)
+            confidence_level = 0.05 * (1+ link.break_time/100**link.failure)
             
             if confidence_level > 1:
                 confidence_level = 1
@@ -356,6 +451,7 @@ class NetworkEmulator:
             confidence_interval = stats.norm.interval(confidence_level)
             
             if  confidence_interval[0] < x < confidence_interval[1]:
+                self.link_failure_time.append(j-self.prob_start)
                 indices.append(i)
                 
             link.break_time += 1
@@ -363,6 +459,13 @@ class NetworkEmulator:
         for i in indices:
             link = self.link_failed.pop(i)
             self.G.add_edge(self.get_router_index(link.source), self.get_router_index(link.destination), weight=link.cost)
+            
+    def output_matrix_reset(self):
+        for i in range(len(self.net_state_graph)):
+            for j in range(len(self.net_state_graph[i])):
+                for k in range(len(self.net_state_graph[i, j])):
+                    if self.net_state_graph[i, j][k] != 0:
+                        self.net_state_graph[i, j][k] = 1
             
             
         
