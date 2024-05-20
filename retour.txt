@@ -1,9 +1,0 @@
-Mettre une cle de distribution plutot que le numero de paquet dans la fonction de hashage et pouvoir definir de le comportement
-
-Definir un taux de paquet par secondes et simuler x secondes
-
-Duree * nombre de lien pour definir le taux de chance qu'un lien tombe
-
-Definir trois type de rupture: fast-slow-average avec une distribution probabilistique en fonction de la duree
-
-Bien justifier les choses dans le rapport.

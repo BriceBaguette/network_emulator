@@ -1,6 +1,7 @@
 import itertools
 import numpy as np
 import heapq
+import math
 
 def saveECMP(dist, pred, number_of_routers, pathList):
     # Get the maximum possible integer value
@@ -123,3 +124,26 @@ def dijkstra(graph, source):
 
     # Return the list of shortest paths
     return pathList
+
+def list_to_matrix(list): 
+    n = int(math.sqrt(len(list)))
+
+    # Check if the length of the list is a perfect square
+    if n * n != len(list):
+        raise ValueError("The list length is not a perfect square, cannot form an n x n matrix")
+
+    # Create the n x n matrix
+    matrix = []
+    for i in range(n):
+        row = list[i*n:(i+1)*n]
+        matrix.append(row)
+        
+    return matrix
+def sort_latency_list(latency_list):
+    """
+    Sorts a list of lists based on the second element (numeric value) of each inner list.
+
+    :param latency_list: List of lists, where each inner list contains an object and a numeric value.
+    :return: Sorted list of lists.
+    """
+    return sorted(latency_list, key=lambda x: (x[2], x[3], x[1]), reverse=True)

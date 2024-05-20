@@ -1,7 +1,8 @@
 
 class Link:
 
-    def __init__(self, source, destination, delay, cost):
+    def __init__(self,id, source, destination, delay, cost):
+        self.id = id
         self.source = source # IP address of the source router
         self.destination = destination # IP address of the destination router
         self.delay = delay # Delay of the link
