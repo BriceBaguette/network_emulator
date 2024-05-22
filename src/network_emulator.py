@@ -3,7 +3,7 @@ from router import Router, ForwardTableElement
 from link import Link
 import numpy as np
 import json
-import base64
+import ast
 import random
 import pandas as pd
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
@@ -22,7 +22,7 @@ import utils
 class NetworkEmulator:
 
     # Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations
-    def __init__(self, node_file, link_file, generation_rate, num_generation, duration, max_fib_break=1, fib_break_spread=1):
+    def __init__(self, node_file, link_file, generation_rate, num_generation, duration, max_fib_break=1, fib_break_spread=1, input_file=None):
         self.routers = list()  # List to store routers
         self.links = list()  # List to store links
 
@@ -50,12 +50,24 @@ class NetworkEmulator:
         self.link_failure_time = []
 
         self.session_id = None
-
+        self.input_file = input_file
+            
+    def __load_combination(self, input_file):
+        data = pd.read_csv(input_file)
+        for i in range(len(data)):
+            links = []
+            link_ids = ast.literal_eval(data.iloc[i]['Links ID'])
+            for link_id in link_ids:
+                index = next(index for index, value in enumerate(self.links) if value.id == link_id)
+                links.append(self.links[index])
+            self.failure_combinations.append(links)
+        print(len(self.failure_combinations))
     # Method to build the network
-
     def build(self):
         self.__build_routers()  # Build routers
         self.__build_links()  # Build links
+        if(self.input_file != None):
+            self.__load_combination(self.input_file)
         # Print the number of routers and links in the network
         print("Network build with " + str(len(self.routers)) +
               " routers and " + str(len(self.links)) + " links")
@@ -349,11 +361,12 @@ class NetworkEmulator:
     def network_resilience_testing(self):
 
         link_score = []
-        # Generate all possible failure scenarios
-        self.generate_failure_scenarios()
+        if(len(self.failure_combinations) == 0):
+            # Generate all possible failure scenarios
+            self.generate_failure_scenarios()
+            
         # Generate default latencies for the network as a matrix for all possibles routes
         default_latencies = utils.list_to_matrix(self.get_all_routes_delay())
-
         for combination in self.failure_combinations:
             self.link_failed = combination
             for link in combination:

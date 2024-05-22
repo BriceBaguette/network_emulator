@@ -1,5 +1,6 @@
 from network_emulator import NetworkEmulator
 import argparse
+import time
 
 
 def main():
@@ -19,16 +20,13 @@ def main():
                         default=1, help='Depth of failure (default: 1)')
     parser.add_argument('-o', '--type', type=str,
                         default='resilience', help='type of test to run (default: resilience)')
+    parser.add_argument('-i', '--input_file', type=str, default=None)
     
 
     args = parser.parse_args()
-
-    print("Node file:", args.node_file)
-    print("Link file:", args.link_file)
-    print("Generation rate:", args.generation_rate)
-    print("Number of generations:", args.num_generations)
+    start = time.time()
     net_sim = NetworkEmulator(node_file=args.node_file,link_file=args.link_file ,generation_rate=args.generation_rate,
-                              num_generation=args.num_generations, duration=args.time, max_fib_break=args.depth)
+                              num_generation=args.num_generations, duration=args.time, max_fib_break=args.depth, input_file=args.input_file)
     net_sim.build()
     net_sim.start()
     if args.type == 'resilience':
@@ -38,7 +36,8 @@ def main():
     else:
         print("Invalid test type: either resilience or generate")
     #net_sim.emulate_all()
-
+    end = time.time()
+    print("Time taken: {}".format(end-start))
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 [
     {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592669"
+          "$oid": "1"
         },
         "nlri": {
           "afi": 16388,
@@ -153,7 +153,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592668"
+          "$oid": "2"
         },
         "nlri": {
           "afi": 16388,
@@ -305,7 +305,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592667"
+          "$oid": "3"
         },
         "nlri": {
           "afi": 16388,
@@ -457,7 +457,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592666"
+          "$oid": "4"
         },
         "nlri": {
           "afi": 16388,
@@ -609,7 +609,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592665"
+          "$oid": "5"
         },
         "nlri": {
           "afi": 16388,
@@ -761,7 +761,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592664"
+          "$oid": "6"
         },
         "nlri": {
           "afi": 16388,
@@ -913,7 +913,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592663"
+          "$oid": "7"
         },
         "nlri": {
           "afi": 16388,
@@ -974,8 +974,8 @@
             }
           },
           "ls_attribute": {
-            "te_metric": 200000,
-            "igp_metric": 200000,
+            "te_metric": 200,
+            "igp_metric": 200,
             "admin_groups": 0,
             "unidir_delay": {
               "bitvector": 0,
@@ -1035,7 +1035,7 @@
                   "x_flag": true
                 },
                 "attributes": {
-                  "te_metric": 200000,
+                  "te_metric": 200,
                   "admin_groups": 0,
                   "unidir_delay": {
                     "bitvector": 0,
@@ -1065,7 +1065,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592669"
+          "$oid": "8"
         },
         "nlri": {
           "afi": 16388,
@@ -1217,7 +1217,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592668"
+          "$oid": "9"
         },
         "nlri": {
           "afi": 16388,
@@ -1369,7 +1369,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592667"
+          "$oid": "10"
         },
         "nlri": {
           "afi": 16388,
@@ -1521,7 +1521,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592666"
+          "$oid": "11"
         },
         "nlri": {
           "afi": 16388,
@@ -1673,7 +1673,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592665"
+          "$oid": "12"
         },
         "nlri": {
           "afi": 16388,
@@ -1825,7 +1825,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592664"
+          "$oid": "13"
         },
         "nlri": {
           "afi": 16388,
@@ -1977,7 +1977,7 @@
       },
       {
         "_id": {
-          "$oid": "6569f30442e7f25d7a592663"
+          "$oid": "14"
         },
         "nlri": {
           "afi": 16388,
@@ -1991,7 +1991,7 @@
               "local_node_descriptor": {
                 "igp_router_id": {
                   "$binary": {
-                    "base64": "kAAAAAAC",
+                    "base64": "kAAAAAAD",
                     "subType": "00"
                   }
                 }
@@ -1999,7 +1999,7 @@
               "remote_node_descriptor": {
                 "igp_router_id": {
                   "$binary": {
-                    "base64": "kAAAAAAB",
+                    "base64": "kAAAAAAC",
                     "subType": "00"
                   }
                 }
@@ -2111,6 +2111,158 @@
                     "a_flag": false,
                     "min_delay": 0,
                     "max_delay": 0
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      },
+      {
+        "_id": {
+          "$oid": "15"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAA",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAB",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
+            "te_metric": 2,
+            "igp_metric": 2,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 20
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 10,
+              "max_delay": 10
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 2,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 20
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 20,
+                    "max_delay": 20
                   }
                 }
               }
