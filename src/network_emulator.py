@@ -22,7 +22,7 @@ import utils
 class NetworkEmulator:
 
     # Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations
-    def __init__(self, node_file, link_file, generation_rate, num_generation, duration, max_fib_break=1, fib_break_spread=1, input_file=None):
+    def __init__(self, node_file, link_file, generation_rate, num_generation, duration, max_fib_break=1, fib_break_spread=1, input_file=None, load_folder=None, save_folder=None):
         self.routers = list()  # List to store routers
         self.links = list()  # List to store links
 
@@ -51,6 +51,8 @@ class NetworkEmulator:
 
         self.session_id = None
         self.input_file = input_file
+        self.load_folder = load_folder
+        self.save_folder = save_folder
             
     def __load_combination(self, input_file):
         data = pd.read_csv(input_file)
@@ -64,13 +66,67 @@ class NetworkEmulator:
         print(len(self.failure_combinations))
     # Method to build the network
     def build(self):
-        self.__build_routers()  # Build routers
-        self.__build_links()  # Build links
+        if(self.load_folder != None):
+            print("Loading network")
+            self.__load_network()
+        else:
+            self.__build_routers()  # Build routers
+            self.__build_links()  # Build links
         if(self.input_file != None):
             self.__load_combination(self.input_file)
         # Print the number of routers and links in the network
         print("Network build with " + str(len(self.routers)) +
               " routers and " + str(len(self.links)) + " links")
+        
+    def __load_network(self):
+        # Open the node file and load the JSON data
+        with open(f"{self.load_folder}/routers.json", 'r') as file:
+            try:
+                json_data = json.load(file)
+            except json.JSONDecodeError:
+                # Handle JSON parsing errors
+                print(f"Error: JSON parsing failed for file '{
+                      self.load_folder}'/routers.json")
+                return 1
+
+        # Iterate over each object in the JSON data
+        for obj in json_data:
+            # Extract necessary information from the object
+            node_name = obj.get('node_name', None)
+            active = obj.get('active', 1)
+            ip_address = obj.get('ip_address', None)
+
+            # Create a new Router object and append it to the routers list
+            self.routers.append(
+                Router(node_name=node_name, active=active, ip_address=ip_address))
+            
+            for element in obj.get('forward_table', []):
+                dest = element.get('destination', None)
+                next_hop = element.get('next_hop', None)
+                self.routers[-1].update_forward_table(ForwardTableElement(dest=dest, next_hop=next_hop))
+
+        # Open the link file and load the JSON data
+        with open(f"{self.load_folder}/links.json", 'r') as file:
+            try:
+                json_data = json.load(file)
+            except json.JSONDecodeError:
+                # Handle JSON parsing errors
+                print(f"Error: JSON parsing failed for file '{
+                      self.link_file}'")
+                return 1
+
+        # Iterate over each object in the JSON data
+        for obj in json_data:
+            # Extract necessary information from the object
+            id = obj.get('id', None)
+            source = obj.get('source', None)
+            destination = obj.get('destination', None)
+            delay = obj.get('delay', 0)
+            cost = obj.get('cost', 0)
+
+            # Create a new Link object and append it to the links list
+            self.links.append(
+                Link(id=id, source=source, destination=destination, delay=delay, cost=cost))
 
     def __build_routers(self):
         # Open the node file and load the JSON data
@@ -138,6 +194,20 @@ class NetworkEmulator:
             link = Link(id = id, source=source, destination=destination,
                         delay=delay, cost=igp_metric)
             self.links.append(link)
+            
+    def __save_network(self):
+        print("Saving network")
+        # Look if the folder and files exists
+        if not os.path.exists(self.save_folder):
+            os.makedirs(self.save_folder)
+        
+        # Save the routers to a json file
+        with open(f"{self.save_folder}/routers.json", 'w') as file:
+            json.dump([router.toJson() for router in self.routers], file, indent=4)
+
+        # Save the links to a json file
+        with open(f"{self.save_folder}/links.json", 'w') as file:
+            json.dump([link.toJson() for link in self.links], file, indent=4)
 
     def start(self):
         # Record the start time and get the number of routers
@@ -214,26 +284,34 @@ class NetworkEmulator:
                         cost=elements[k][2]
                     ))
         '''
-        with ThreadPoolExecutor() as executor:
-            # Use submit to asynchronously submit tasks to the executor
-            futures = []
-            for i in range(number_of_routers):
-                for j in range(number_of_routers):
-                    if i != j:
-                        futures.append(executor.submit(
-                            self.update_forward_table, G, i, j))
+        if(self.load_folder == None):
+            with ThreadPoolExecutor() as executor:
+                # Use submit to asynchronously submit tasks to the executor
+                futures = []
+                for i in range(number_of_routers):
+                    for j in range(number_of_routers):
+                        if i != j:
+                            futures.append(executor.submit(
+                                self.update_forward_table, G, i, j))
 
-            # Wait for all tasks to complete
-            progress_bar = tqdm(total=len(futures), desc="Processing")
+                # Wait for all tasks to complete
+                progress_bar = tqdm(total=len(futures), desc="Processing")
 
-            for future in futures:
-                future.result()
-                progress_bar.update(1)
+                for future in futures:
+                    future.result()
+                    progress_bar.update(1)
 
-            progress_bar.close()
+                progress_bar.close()
+            
+            if(self.save_folder != None):
+                self.__save_network()
 
-        # Print the time taken to start the network
+            # Print the time taken to start the network
         end = time.time()
+        
+        #Save the network graph to a text file, the links as json and the routers as json
+        
+        
         print("Network started in: {}".format(end - start))
 
     def update_forward_table(self, G, source, target):
@@ -378,6 +456,7 @@ class NetworkEmulator:
             for link in combination:
                 self.G.add_edge(self.get_router_index(link.source), self.get_router_index(
                     link.destination), weight=link.cost)
+
         for j in range(len(self.failure_combinations)):
             if j in self.isolated_routers:
                 count = 0
@@ -429,14 +508,14 @@ class NetworkEmulator:
                     latency = 0
 
                     for j in range(len(new_path)-1):
-                        index = next(index for indeex, value in enumerate(self.links) if value.source ==
+                        index = next(index for index, value in enumerate(self.links) if value.source ==
                                      self.routers[new_path[j]].ip_address and value.destination == self.routers[new_path[j+1]].ip_address)
                         latency += self.links[index].delay
 
                 except:
                     latency = 1000000000
                     isolated_routers = self.get_isolated_routers(
-                        destination.ip_address)
+                        source.ip_address)
                     if self.failure_combinations.index(self.link_failed) in self.isolated_routers:
                         if(isolated_routers not in self.isolated_routers[self.failure_combinations.index(self.link_failed)]):
                             self.isolated_routers[self.failure_combinations.index(self.link_failed)].append(isolated_routers)
@@ -446,11 +525,17 @@ class NetworkEmulator:
                     latencies.append(latency)
         return latencies
 
-    def get_isolated_routers(self, destination):
-        isolated_routers = [destination]
+    def get_isolated_routers(self, source):
+        isolated_routers = set()
+        isolated_routers.add(source)
         for router in self.routers:
-            if self.G.has_edge(self.get_router_index(router.ip_address), self.get_router_index(destination)):
-                isolated_routers.append(router.ip_address)
+            if router.ip_address == source:
+                continue
+            try: 
+                nx.shortest_path_length(self.G, source=self.get_router_index(source), target=self.get_router_index(router.ip_address), weight='weight') 
+                isolated_routers.add(router.ip_address)
+            except:
+                continue
         return isolated_routers
 
     def generate_failure_scenarios(self):

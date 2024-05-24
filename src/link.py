@@ -10,3 +10,13 @@ class Link:
         self.failure = 0 # Status of the link: 0 is safe, 1 is fast, 2 is medium, 3 is long
         self.break_time = 0 # Counter to determine the time since the link is broken
         
+    def toJson(self):
+        return {
+            "id": self.id,
+            "source": self.source,
+            "destination": self.destination,
+            "delay": self.delay,
+            "cost": self.cost,
+            "failure": self.failure,
+            "break_time": self.break_time
+        }

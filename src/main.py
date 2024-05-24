@@ -20,14 +20,19 @@ def main():
                         default=1, help='Depth of failure (default: 1)')
     parser.add_argument('-o', '--type', type=str,
                         default='resilience', help='type of test to run (default: resilience)')
-    parser.add_argument('-i', '--input_file', type=str, default=None)
+    parser.add_argument('-i', '--input_file', type=str, default=None, help='Input file for the network')
+    parser.add_argument('-l', '--load_folder', type=str, default=None, help='Folder to load the network')
+    parser.add_argument('-s', '--save_folder', type=str, default=None, help='Folder to save the network')
     
 
     args = parser.parse_args()
     start = time.time()
+    print("Init network emulator")
     net_sim = NetworkEmulator(node_file=args.node_file,link_file=args.link_file ,generation_rate=args.generation_rate,
-                              num_generation=args.num_generations, duration=args.time, max_fib_break=args.depth, input_file=args.input_file)
+                              num_generation=args.num_generations, duration=args.time, max_fib_break=args.depth, input_file=args.input_file, load_folder=args.load_folder, save_folder=args.save_folder)
+    print("Building network")
     net_sim.build()
+    print("Starting network")
     net_sim.start()
     if args.type == 'resilience':
         net_sim.network_resilience_testing()

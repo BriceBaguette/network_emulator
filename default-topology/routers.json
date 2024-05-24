@@ -1,0 +1,153 @@
+[
+    {
+        "node_name": "ar25.BCN",
+        "ip_address": "kAAAAAAA",
+        "active": 1,
+        "forward_table": [
+            {
+                "destination": "kAAAAAAB",
+                "next_hop": "kAAAAAAB"
+            },
+            {
+                "destination": "kAAAAAAC",
+                "next_hop": "kAAAAAAC"
+            },
+            {
+                "destination": "kAAAAAAD",
+                "next_hop": "kAAAAAAD"
+            },
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAB"
+            },
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAC"
+            },
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAD"
+            }
+        ]
+    },
+    {
+        "node_name": "ar26.BCN",
+        "ip_address": "kAAAAAAB",
+        "active": 1,
+        "forward_table": [
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAE"
+            },
+            {
+                "destination": "kAAAAAAA",
+                "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAC",
+                "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAD",
+                "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAD",
+                "next_hop": "kAAAAAAE"
+            }
+        ]
+    },
+    {
+        "node_name": "ar27.BCN",
+        "ip_address": "kAAAAAAC",
+        "active": 1,
+        "forward_table": [
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAE"
+            },
+            {
+                "destination": "kAAAAAAA",
+                "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAB",
+                "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAB",
+                "next_hop": "kAAAAAAE"
+            },
+            {
+                "destination": "kAAAAAAD",
+                "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAD",
+                "next_hop": "kAAAAAAE"
+            }
+        ]
+    },
+    {
+        "node_name": "ar28.BCN",
+        "ip_address": "kAAAAAAD",
+        "active": 1,
+        "forward_table": [
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAE"
+            },
+            {
+                "destination": "kAAAAAAA",
+                "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAB",
+                "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAB",
+                "next_hop": "kAAAAAAE"
+            },
+            {
+                "destination": "kAAAAAAC",
+                "next_hop": "kAAAAAAA"
+            }
+        ]
+    },
+    {
+        "node_name": "ar29.BCN",
+        "ip_address": "kAAAAAAE",
+        "active": 1,
+        "forward_table": [
+            {
+                "destination": "kAAAAAAD",
+                "next_hop": "kAAAAAAD"
+            },
+            {
+                "destination": "kAAAAAAB",
+                "next_hop": "kAAAAAAB"
+            },
+            {
+                "destination": "kAAAAAAA",
+                "next_hop": "kAAAAAAB"
+            },
+            {
+                "destination": "kAAAAAAA",
+                "next_hop": "kAAAAAAD"
+            },
+            {
+                "destination": "kAAAAAAC",
+                "next_hop": "kAAAAAAC"
+            },
+            {
+                "destination": "kAAAAAAC",
+                "next_hop": "kAAAAAAB"
+            },
+            {
+                "destination": "kAAAAAAC",
+                "next_hop": "kAAAAAAD"
+            }
+        ]
+    }
+]

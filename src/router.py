@@ -8,6 +8,12 @@ class ForwardTableElement:
     def __init__(self,dest, next_hop, ):
         self.destination = dest # IP address of the destination router
         self.next_hop = next_hop # IP address of the next hop router
+        
+    def toJson(self):
+        return {
+            "destination": self.destination,
+            "next_hop": self.next_hop
+        }
 
 class Router:
         
@@ -51,3 +57,11 @@ class Router:
         # Determine the route index based on the hash value and the number of paths
         route_index = self.ecmp_hash(dest_ip=dest_ip, packet_nmbr= pkt_nbr) % num_paths
         return route_index
+    
+    def toJson(self):
+        return {
+            "node_name": self.node_name,
+            "ip_address": self.ip_address,
+            "active": self.active,
+            "forward_table": [entry.toJson() for entry in self.forward_table]
+        }
