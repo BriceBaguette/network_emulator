@@ -67,7 +67,6 @@ class NetworkEmulator:
     # Method to build the network
     def build(self):
         if(self.load_folder != None):
-            print("Loading network")
             self.__load_network()
         else:
             self.__build_routers()  # Build routers
@@ -196,7 +195,6 @@ class NetworkEmulator:
             self.links.append(link)
             
     def __save_network(self):
-        print("Saving network")
         # Look if the folder and files exists
         if not os.path.exists(self.save_folder):
             os.makedirs(self.save_folder)

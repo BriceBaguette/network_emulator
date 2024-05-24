@@ -27,12 +27,9 @@ def main():
 
     args = parser.parse_args()
     start = time.time()
-    print("Init network emulator")
     net_sim = NetworkEmulator(node_file=args.node_file,link_file=args.link_file ,generation_rate=args.generation_rate,
                               num_generation=args.num_generations, duration=args.time, max_fib_break=args.depth, input_file=args.input_file, load_folder=args.load_folder, save_folder=args.save_folder)
-    print("Building network")
     net_sim.build()
-    print("Starting network")
     net_sim.start()
     if args.type == 'resilience':
         net_sim.network_resilience_testing()
