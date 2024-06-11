@@ -1,67 +1,130 @@
-import numpy as np
-import networkx as nx
+"""
+This module defines the Router class, which represents a router in a network 
+and the ForwardTableElement class, which represents an element in the forwarding 
+table of a router.
+"""
 import hashlib
-import random
 
 class ForwardTableElement:
-    
-    def __init__(self,dest, next_hop, ):
-        self.destination = dest # IP address of the destination router
-        self.next_hop = next_hop # IP address of the next hop router
-        
-    def toJson(self):
+    """
+    Represents an element in the forwarding table of a router.
+    """
+
+    def __init__(self, dest, next_hop):
+        """
+        Initializes a ForwardTableElement object.
+
+        Parameters:
+        - dest (str): IP address of the destination router.
+        - next_hop (str): IP address of the next hop router.
+        """
+        self.destination = dest
+        self.next_hop = next_hop
+
+    def to_json(self):
+        """
+        Converts the ForwardTableElement object to a JSON representation.
+
+        Returns:
+        - dict: JSON representation of the ForwardTableElement object.
+        """
         return {
             "destination": self.destination,
             "next_hop": self.next_hop
         }
 
 class Router:
-        
-    def __init__(self,node_name, active,
-                 ip_address,):
-        self.node_name = node_name # Name of the router
-        self.ip_address = ip_address # IP address of the router
-        self.active = active # Status of the router
-        self.forward_table = list() # Forwarding table for the router
-        
+    """
+    Represents a router in a network.
+    """
+
+    def __init__(self, node_name, active, ip_address):
+        """
+        Initializes a Router object.
+
+        Parameters:
+        - node_name (str): Name of the router.
+        - active (bool): Status of the router.
+        - ip_address (str): IP address of the router.
+        """
+        self.node_name = node_name
+        self.ip_address = ip_address
+        self.active = active
+        self.forward_table = list()
+
     def has_entry_for_destination(self, dest_ip):
-        # Check if the router has an entry for the given destination IP address
+        """
+        Checks if the router has an entry for the given destination IP address.
+
+        Parameters:
+        - dest_ip (str): Destination IP address to check.
+
+        Returns:
+        - bool: True if the router has an entry for the destination IP address, False otherwise.
+        """
         for entry in self.forward_table:
             if entry.destination == dest_ip:
                 return True
         return False
-        
+
     def update_forward_table(self, element):
+        """
+        Updates the forward table of the router with the given element.
+
+        Parameters:
+        - element (ForwardTableElement): Element to add to the forward table.
+        """
         for entry in self.forward_table:
             if entry.destination == element.destination and entry.next_hop == element.next_hop:
                 return
-        # If no matching element found, add the new element to the forward table
         self.forward_table.append(element)
 
-    def ecmp_hash(self, dest_ip, packet_nmbr, distribution_key = None):
-        # Concatenate the input values to create a unique key
-        if distribution_key is not None:
-            hash_input = f"{self.ip_address}{dest_ip}{distribution_key}".encode('utf-8')
-        else:
-            hash_input = f"{self.ip_address}{dest_ip}{packet_nmbr}".encode('utf-8')
+    def ecmp_hash(self, dest_ip, flow_label):
+        """
+        Performs ECMP hashing to select a route based on the destination IP address, packet number, 
+        and distribution key.
+        
+        Parameters:
+        - dest_ip (str): Destination IP address.
+        - flow_label (str): Flow label.
 
-        # Use SHA-256 hash function to generate a hash value
+        Returns:
+        - int: Hash value used for route selection.
+        """
+       
+        hash_input = f"{self.ip_address}{dest_ip}{flow_label}".encode('utf-8')
+
         hash_value = hashlib.sha256(hash_input).hexdigest()
-
-        # Convert the hash value to an integer for ECMP hashing
         hash_int = int(hash_value, 16)
 
         return hash_int
-    
-    def select_route(self, dest_ip, num_paths, pkt_nbr):
-        # Determine the route index based on the hash value and the number of paths
-        route_index = self.ecmp_hash(dest_ip=dest_ip, packet_nmbr= pkt_nbr) % num_paths
+
+    def select_route(self, dest_ip, num_paths, flow_label):
+        """
+        Selects a route index based on the destination IP address, number of paths, 
+        and packet number.
+
+        Parameters:
+        - dest_ip (str): Destination IP address.
+        - num_paths (int): Number of available paths.
+        - flow_label (int): flow_label.
+
+        Returns:
+        - int: Route index.
+        """
+        route_index = self.ecmp_hash(dest_ip=dest_ip, flow_label=flow_label) % num_paths
         return route_index
-    
-    def toJson(self):
+
+    def to_json(self):
+        """
+        Converts the Router object to a JSON representation.
+
+        Returns:
+        - dict: JSON representation of the Router object.
+        """
         return {
             "node_name": self.node_name,
             "ip_address": self.ip_address,
             "active": self.active,
-            "forward_table": [entry.toJson() for entry in self.forward_table]
+            "forward_table": [entry.to_json() for entry in self.forward_table]
         }

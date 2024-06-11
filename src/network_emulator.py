@@ -1,52 +1,101 @@
-# Import necessary modules
-from router import Router, ForwardTableElement
-from link import Link
-import numpy as np
-import json
+"""
+This module defines the Network Emulator class, which can represent a network,
+test his resilience and generate data for the network.
+"""
 import ast
+import json
+import os
 import random
-import pandas as pd
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+import sys
 import time
 import networkx as nx
-from tqdm import tqdm
-from scipy import stats
+import numpy as np
+import pandas as pd
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-import matplotlib.pyplot as plt
-import os
+from tqdm import tqdm
 import utils
-import sys
+from link import Link
+from router import Router, ForwardTableElement
 
-# Define the NetworkEmulator class
+# Import necessary modules
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+
 class NetworkEmulator:
+    """
+    This class represents a network emulator that simulates the behavior of a network.
 
-    # Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations
-    def __init__(self, node_file, link_file, generation_rate, num_generation, duration, max_fib_break=1, fib_break_spread=1, input_file=None, load_folder=None, save_folder=None):
-        self.routers = list()  # List to store routers
-        self.links = list()  # List to store links
+    Attributes:
+        routers (list): List to store routers.
+        links (list): List to store links.
+        node_file (str): Node file.
+        link_file (str): Link file.
+        generation_rate (float): Generation rate.
+        num_generation (int): Number of generations.
+        duration (int): Duration of the simulation.
+        net_graph (None or numpy.ndarray): Network graph.
+        G (None or networkx.Graph): Networkx graph.
+        net_state_graph (None or numpy.ndarray): Network state matrix.
+        router_failure (bool): Status of router failure.
+        link_failure (bool): Status of link failure.
+        link_failed (list): List of failed links.
+        isolated_routers (dict): Dictionary of isolated routers.
+        node_degree (None or numpy.ndarray): Node degree.
+        total_paths (int): Total number of paths in the network.
+        max_fib_break (int): Maximum number of FIB breaks.
+        fib_break_spread (float): Spread of FIB breaks, between 0 and 1 (default: 1).
+        failure_combinations (list): List of failure combinations.
+        prob_start (int): Probability start.
+        link_failure_time (list): List of link failure times.
+        session_id (None or str): Session ID.
+        input_file (None or str): Input file.
+        load_folder (None or str): Load folder.
+        save_folder (None or str): Save folder.
+    """
 
-        self.node_file = node_file  # Node file
-        self.link_file = link_file  # Link file
-        self.generation_rate = generation_rate  # Generation rate
-        self.num_generation = num_generation  # Number of generations
-        self.duration = duration  # Duration of the simulation
+    def __init__(self, node_file, link_file, generation_rate, num_generation,
+                 duration, max_fib_break=1, fib_break_spread=1, input_file=None, 
+                 load_folder=None, save_folder=None):
+        """
+        Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations.
 
-        self.net_graph = None  # Network graph
-        self.G = None  # Networkx graph
-        self.net_state_graph = None  # Network state matrix
+        Args:
+            node_file (str): Node file.
+            link_file (str): Link file.
+            generation_rate (float): Generation rate.
+            num_generation (int): Number of generations.
+            duration (int): Duration of the simulation.
+            max_fib_break (int, optional): Maximum number of FIB breaks. Defaults to 1.
+            fib_break_spread (float, optional): Spread of FIB breaks, between 0 and 1 (default: 1). Defaults to 1.
+            input_file (str, optional): Input file. Defaults to None.
+            load_folder (str, optional): Load folder. Defaults to None.
+            save_folder (str, optional): Save folder. Defaults to None.
+        """
+        self.routers = list()
+        self.links = list()
 
-        self.router_failure = False  # Status of router failure
-        self.link_failure = False  # Status of link failure
-        self.link_failed = []  # List of failed links
-        self.isolated_routers = {}  # Dictionary of isolated routers
-        
-        self.node_degree = None  # Node degree
-        self.total_paths = 0  # Total number of paths in the network
+        self.node_file = node_file
+        self.link_file = link_file
+        self.generation_rate = generation_rate
+        self.num_generation = num_generation
+        self.duration = duration
 
-        self.max_fib_break = max_fib_break  # Maximum number of FIB breaks
-        # Spread of FIB breaks, between 0 and 1 (default: 1)
+        self.net_graph = None
+        self.g = None
+        self.net_state_graph = None
+
+        self.router_failure = False
+        self.link_failure = False
+        self.link_failed = []
+        self.isolated_routers = {}
+
+        self.node_degree = None
+        self.total_paths = 0
+
+        self.max_fib_break = max_fib_break
         self.fib_break_spread = fib_break_spread
-        self.failure_combinations = [] # List of failure combinations
+        self.failure_combinations = []
 
         self.prob_start = 0
         self.link_failure_time = []
@@ -55,93 +104,72 @@ class NetworkEmulator:
         self.input_file = input_file
         self.load_folder = load_folder
         self.save_folder = save_folder
-            
-    def __load_combination(self, input_file):
-        data = pd.read_csv(input_file)
-        for i in range(len(data)):
-            links = []
-            link_ids = ast.literal_eval(data.iloc[i]['Links ID'])
-            for link_id in link_ids:
-                index = next(index for index, value in enumerate(self.links) if value.id == link_id)
-                links.append(self.links[index])
-            self.failure_combinations.append(links)
-    # Method to build the network
+
     def build(self):
-        if(self.load_folder != None):
+        """
+        Build the network by building routers and links.
+        """
+        if self.load_folder is not None:
             self.__load_network()
         else:
-            self.__build_routers()  # Build routers
-            self.__build_links()  # Build links
-        if(self.input_file != None):
-            self.__load_combination(self.input_file)
-        # Print the number of routers and links in the network
+            self.__build_routers()
+            self.__build_links()
         print("Network build with " + str(len(self.routers)) +
               " routers and " + str(len(self.links)) + " links")
-        
+
     def __load_network(self):
-        # Open the node file and load the JSON data
+        """
+        Load the network from saved files.
+        """
         with open(f"{self.load_folder}/routers.json", 'r') as file:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
-                # Handle JSON parsing errors
-                print(f"Error: JSON parsing failed for file '{
-                      self.load_folder}'/routers.json")
+                print(f"Error: JSON parsing failed for file '{self.load_folder}'/routers.json")
                 return 1
 
-        # Iterate over each object in the JSON data
         for obj in json_data:
-            # Extract necessary information from the object
             node_name = obj.get('node_name', None)
             active = obj.get('active', 1)
             ip_address = obj.get('ip_address', None)
 
-            # Create a new Router object and append it to the routers list
             self.routers.append(
                 Router(node_name=node_name, active=active, ip_address=ip_address))
-            
+
             for element in obj.get('forward_table', []):
                 dest = element.get('destination', None)
                 next_hop = element.get('next_hop', None)
                 self.routers[-1].update_forward_table(ForwardTableElement(dest=dest, next_hop=next_hop))
 
-        # Open the link file and load the JSON data
         with open(f"{self.load_folder}/links.json", 'r') as file:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
-                # Handle JSON parsing errors
-                print(f"Error: JSON parsing failed for file '{
-                      self.link_file}'")
+                print(f"Error: JSON parsing failed for file '{self.link_file}'")
                 return 1
 
-        # Iterate over each object in the JSON data
         for obj in json_data:
-            # Extract necessary information from the object
-            id = obj.get('id', None)
+            link_id = obj.get('id', None)
             source = obj.get('source', None)
             destination = obj.get('destination', None)
             delay = obj.get('delay', 0)
             cost = obj.get('cost', 0)
 
-            # Create a new Link object and append it to the links list
             self.links.append(
-                Link(id=id, source=source, destination=destination, delay=delay, cost=cost))
+                Link(link_id=link_id, source=source, destination=destination, delay=delay, cost=cost))
 
     def __build_routers(self):
-        # Open the node file and load the JSON data
+        """
+        Build routers from the node file.
+        """
         with open(self.node_file, 'r') as file:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
-                # Handle JSON parsing errors
-                print(f"Error: JSON parsing failed for file '{
-                      self.node_file}' ")
+                print(f"Error: JSON parsing failed for file '{self.node_file}' ")
                 return 1
 
-        # Iterate over each object in the JSON data
         for obj in json_data:
-            # Extract necessary information from the object
             attributes_obj = obj.get('attributes', {})
             ls_attribute_obj = attributes_obj.get('ls_attribute', {})
             node_name_obj = ls_attribute_obj.get('node_name', {})
@@ -153,83 +181,54 @@ class NetworkEmulator:
                 'igp_router_id', {}).get('$binary', {}).get('base64', None)
             base64_str = igp_router_id.strip() if igp_router_id else None
 
-            # Create a new Router object and append it to the routers list
             self.routers.append(
                 Router(node_name=node_name, active=1, ip_address=base64_str))
 
     def __build_links(self):
-        # Open the link file and load the JSON data
+        """
+        Build links from the link file.
+        """
         with open(self.link_file, 'r') as file:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
-                # Handle JSON parsing errors
-                print(f"Error: JSON parsing failed for file '{
-                      self.link_file}'")
+                print(f"Error: JSON parsing failed for file '{self.link_file}'")
                 return 1
 
-        # Iterate over each object in the JSON data
         for obj in json_data:
-            # Initialize source, destination, delay, and igp_metric
             source, destination, delay, igp_metric = None, None, 0, 0
-            id = obj.get('_id', {}).get('$oid', None)
-            # Extract necessary information from the object
+            link_id = obj.get('_id', {}).get('$oid', None)
             nlri = obj.get('nlri', {}).get('nlri_data', {}).get('lsnlri', {})
             local_node_descriptor = nlri.get('local_node_descriptor', {})
             remote_node_descriptor = nlri.get('remote_node_descriptor', {})
             attributes_obj = obj.get('attributes', {})
             ls_attribute_obj = attributes_obj.get('ls_attribute', {})
 
-            # Get source and destination from the descriptors
             source = local_node_descriptor.get('igp_router_id', {}).get(
                 '$binary', {}).get('base64', None)
             destination = remote_node_descriptor.get(
                 'igp_router_id', {}).get('$binary', {}).get('base64', None)
 
-            # Get igp_metric and delay from the attributes
             igp_metric = ls_attribute_obj.get('igp_metric', 0)
             delay = ls_attribute_obj.get('unidir_delay', {}).get('delay', 0)
 
-            # Create a new Link object and append it to the links list
-            link = Link(id = id, source=source, destination=destination,
+            link = Link(link_id=link_id, source=source, destination=destination,
                         delay=delay, cost=igp_metric)
             self.links.append(link)
-            
+
     def __save_network(self):
-        # Look if the folder and files exists
+        """
+        Save the network to files.
+        """
         if not os.path.exists(self.save_folder):
             os.makedirs(self.save_folder)
-        
-        # Save the routers to a json file
-        with open(f"{self.save_folder}/routers.json", 'w') as file:
-            json.dump([router.toJson() for router in self.routers], file, indent=4)
 
-        # Save the links to a json file
+        with open(f"{self.save_folder}/routers.json", 'w') as file:
+            json.dump([router.to_json() for router in self.routers], file, indent=4)
+
         with open(f"{self.save_folder}/links.json", 'w') as file:
-            json.dump([link.toJson() for link in self.links], file, indent=4)
-            
-    def __init_failure_probs(self):
-        self.node_degree = np.zeros(len(self.routers))
-        for i in range(self.net_graph.shape[0]):
-            for j in range(self.net_graph.shape[1]):
-                self.node_degree[i] += len(self.net_graph[i, j])
-                
-        for i in range(len(self.routers)):
-            for j in range(len(self.routers)):
-                if i!=j :
-                    forward_table = self.routers[i].forward_table
-                    entries = [entry for entry in forward_table if entry.dest == self.routers[j].ip_address]
-                    for entry in entries:
-                        indicies = [index for index, value in enumerate(self.links) if value.source == self.routers[i].ip_address and value.destination == entry.next_hop]
-                        cost = sys.maxsize
-                        for index in indicies:
-                            if self.links[index].cost < cost:
-                                cost = self.links[index].cost
-                        for index in indicies:
-                            if self.links[index].cost == cost:
-                                self.links[index].number_of_paths += 1
-        for i in range(len(self.links)):
-            self.total_paths += self.links[i].number_of_paths
+            json.dump([link.to_json() for link in self.links], file, indent=4)
+        
                 
                     
 
@@ -286,7 +285,7 @@ class NetworkEmulator:
                     if net_graph[i, j][k] != 0:
                         G.add_edge(i, j, weight=net_graph[i, j][k])
         self.net_graph = net_graph
-        self.G = G
+        self.g = G
         # Print the time taken to build the graph
         end = time.time()
         print("Build graph in: {}".format(end - start))
@@ -332,10 +331,6 @@ class NetworkEmulator:
 
             # Print the time taken to start the network
         end = time.time()
-        
-        #Save the network graph to a text file, the links as json and the routers as json
-        
-        
         print("Network started in: {}".format(end - start))
 
     def update_forward_table(self, G, source, target):
@@ -472,13 +467,13 @@ class NetworkEmulator:
         for combination in self.failure_combinations:
             self.link_failed = combination
             for link in combination:
-                self.G.remove_edge(self.get_router_index(
+                self.g.remove_edge(self.get_router_index(
                     link.source), self.get_router_index(link.destination))
             latencies = utils.list_to_matrix(self.get_all_routes_delay())
             link_score.append(
                 [combination, self.compare_latencies(default_latencies, latencies)])
             for link in combination:
-                self.G.add_edge(self.get_router_index(link.source), self.get_router_index(
+                self.g.add_edge(self.get_router_index(link.source), self.get_router_index(
                     link.destination), weight=link.cost)
 
         for j in range(len(self.failure_combinations)):
@@ -527,7 +522,7 @@ class NetworkEmulator:
                     latencies.append(latency + next_latency)
             else:
                 try:
-                    new_path = list(nx.shortest_path(self.G, source=self.get_router_index(
+                    new_path = list(nx.shortest_path(self.g, source=self.get_router_index(
                         source.ip_address), target=self.get_router_index(destination.ip_address), weight='weight'))
                     latency = 0
 
@@ -556,7 +551,7 @@ class NetworkEmulator:
             if router.ip_address == source:
                 continue
             try: 
-                nx.shortest_path_length(self.G, source=self.get_router_index(source), target=self.get_router_index(router.ip_address), weight='weight') 
+                nx.shortest_path_length(self.g, source=self.get_router_index(source), target=self.get_router_index(router.ip_address), weight='weight') 
                 isolated_routers.add(router.ip_address)
             except:
                 continue
@@ -583,28 +578,21 @@ class NetworkEmulator:
     def emulate_all(self):
 
         start = time.time()
-        trigger = (1/self.generation_rate)/10**(-5)
         df = pd.DataFrame(columns=['source', 'destination', 'latency'])
+        time_array = []
         for gen_number in range(self.num_generation):
-            base_pkt_nmbr = random.randint(1, 100000)
-            counter = 0
+            flow_label = 0
             with ThreadPoolExecutor() as executor:
-                for t in range(self.duration * 100000):
+                for t in range(self.generation_rate):
                     # Submit tasks for each source
                     futures = []
-                    if counter >= trigger:
-                        counter = 0
-                        for source in self.routers:
-                            for destination in self.routers:
-                                if source != destination:
-                                    if (not self.router_failure) and len(self.link_failed) < self.max_fib_break:
-                                        self.create_link_failure(t)
-
-                                    if len(self.link_failed) > 0:
-                                        self.restore_link_failure(t)
-                                    future = executor.submit(
-                                        self.send_prob, source, destination.ip_address, base_pkt_nmbr + t)
-                                    futures.append(future)
+                    
+                    for source in self.routers:
+                        for destination in self.routers:
+                            if source != destination:
+                                future = executor.submit(
+                                        self.send_prob, source, destination.ip_address, flow_label)
+                                futures.append(future)
 
                     # Wait for all tasks to complete
                     for future in futures:
@@ -617,14 +605,17 @@ class NetworkEmulator:
                         else: 
                             new_row = {'source': result[0].ip_address, 'destination': result[1], 'latency': [result[2]]}
                             df.loc[len(df)] = new_row
-                    
-                    counter += 1
-                
-        print(df)
+            
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            print(df)
+            for index, row in df.iterrows():
+                self.export_sink_data(row['source'], row['destination'], [], row['latency'], gen_number, timestamp)
+                self.export_source_data(row['source'], row['destination'], gen_number, timestamp)
+            df = pd.DataFrame(columns=['source', 'destination', 'latency'])
         print("Emulated all network for " + str(self.num_generation) + " generations with " +
               str(self.generation_rate) + " probes in " + str(time.time() - start))
         
-    def send_prob(self, source, destination, pkt_number):
+    def send_prob(self, source, destination, flow_label):
         # Initialize a latency array
         latency = 0
         # For each generation, calculate the latency from source to destination
@@ -632,7 +623,7 @@ class NetworkEmulator:
         source.forward_table) if value.destination == destination]
         # Using hash function to determine which route to take
         chosen_route = source.select_route(
-                destination, len(indices), pkt_number)
+                destination, len(indices), flow_label)
         index = next(index for index, value in enumerate(self.links) if value.source ==
                         source.ip_address and value.destination == source.forward_table[indices[chosen_route]].next_hop)
         latency += self.links[index].delay
@@ -647,7 +638,7 @@ class NetworkEmulator:
             indices = [index for index, value in enumerate(
                 next_router.forward_table) if value.destination == destination]
             chosen_route = next_router.select_route(
-                destination, len(indices), pkt_number)
+                destination, len(indices), flow_label)
             index = next(index for index, value in enumerate(self.links) if value.source ==
                             next_router.ip_address and value.destination == next_router.forward_table[indices[chosen_route]].next_hop)
             # Look different case based on the link failure or not
@@ -656,10 +647,10 @@ class NetworkEmulator:
                 index = next(index for index, value in enumerate(
                     self.routers) if value.ip_address == next_router.forward_table[indices[0]].next_hop)
                 next_router = self.routers[index]
-            elif self.G.has_edge(self.get_router_index(next_router.ip_address), self.get_router_index(next_router.forward_table[indices[chosen_route]].next_hop)):
-                self.G.remove_edge(self.get_router_index(next_router.ip_address), self.get_router_index(
+            elif self.g.has_edge(self.get_router_index(next_router.ip_address), self.get_router_index(next_router.forward_table[indices[chosen_route]].next_hop)):
+                self.g.remove_edge(self.get_router_index(next_router.ip_address), self.get_router_index(
                     next_router.forward_table[indices[chosen_route]].next_hop))
-                new_path = list(nx.shortest_path(self.G, source=self.get_router_index(
+                new_path = list(nx.shortest_path(self.g, source=self.get_router_index(
                     next_router.ip_address), target=self.get_router_index(destination), weight='weight'))
                 for j in range(len(new_path)-1):
                     index = next(index for index, value in enumerate(self.links) if value.source ==
@@ -667,7 +658,7 @@ class NetworkEmulator:
                     latency += self.links[index].delay
                 break
             else:
-                new_path = list(nx.shortest_path(self.G, source=self.get_router_index(
+                new_path = list(nx.shortest_path(self.g, source=self.get_router_index(
                     next_router.ip_address), target=self.get_router_index(destination), weight='weight'))
                 for j in range(len(new_path)-1):
                     index = next(index for index, value in enumerate(self.links) if value.source ==
@@ -710,12 +701,6 @@ class NetworkEmulator:
         base_pkt_nmbr = random.randint(1, 100000000)
         # For each generation, calculate the latency from source to destination
         for i in range(self.generation_rate * self.duration):
-            # Look if we create a link failure
-            if (not self.router_failure) and len(self.link_failed) < self.max_fib_break:
-                self.create_link_failure(i)
-
-            if len(self.link_failed) > 0:
-                self.restore_link_failure(i)
 
             # Find the next hop from the source to the destination
             indices = [index for index, value in enumerate(
@@ -746,10 +731,10 @@ class NetworkEmulator:
                     index = next(index for index, value in enumerate(
                         self.routers) if value.ip_address == next_router.forward_table[indices[0]].next_hop)
                     next_router = self.routers[index]
-                elif self.G.has_edge(self.get_router_index(next_router.ip_address), self.get_router_index(next_router.forward_table[indices[chosen_route]].next_hop)):
-                    self.G.remove_edge(self.get_router_index(next_router.ip_address), self.get_router_index(
+                elif self.g.has_edge(self.get_router_index(next_router.ip_address), self.get_router_index(next_router.forward_table[indices[chosen_route]].next_hop)):
+                    self.g.remove_edge(self.get_router_index(next_router.ip_address), self.get_router_index(
                         next_router.forward_table[indices[chosen_route]].next_hop))
-                    new_path = list(nx.shortest_path(self.G, source=self.get_router_index(
+                    new_path = list(nx.shortest_path(self.g, source=self.get_router_index(
                         next_router.ip_address), target=self.get_router_index(destination), weight='weight'))
                     for j in range(len(new_path)-1):
                         index = next(index for index, value in enumerate(self.links) if value.source ==
@@ -757,7 +742,7 @@ class NetworkEmulator:
                         latency[i] += self.links[index].delay
                     break
                 else:
-                    new_path = list(nx.shortest_path(self.G, source=self.get_router_index(
+                    new_path = list(nx.shortest_path(self.g, source=self.get_router_index(
                         next_router.ip_address), target=self.get_router_index(destination), weight='weight'))
                     for j in range(len(new_path)-1):
                         index = next(index for index, value in enumerate(self.links) if value.source ==
@@ -767,68 +752,3 @@ class NetworkEmulator:
         # Return the latency array
         return latency
 
-    def latency_histogram(self, data):
-
-        value_counts = {}
-        for item in data:
-            if item in value_counts:
-                value_counts[item] += 1
-            else:
-                value_counts[item] = 1
-
-        # Extract the values and counts
-        values = list(value_counts.keys())
-        counts = list(value_counts.values())
-
-        # Plot the data
-        plt.bar(values, counts)
-        plt.xlabel('Latency in ms')
-        plt.ylabel('Number of probes')
-        plt.title('Number of probes vs Latency')
-        plt.show()
-
-    def create_link_failure(self, t):
-        Z = 10**-2
-        r = 10**3 
-        for link in self.links:
-            if len(self.link_failed) < self.max_fib_break:
-                source = link.source
-                destination = link.destination
-                source_degree = self.node_degree[self.get_router_index(source)]
-                destination_degree = self.node_degree[self.get_router_index(destination)]
-                total_degree = sum(self.node_degree)
-                max_degree = max(source_degree, destination_degree)
-                link_prob = Z * ((total_degree/max_degree) * (self.total_paths/link.number_of_paths))**r
-                
-                random_number = random.uniform(0, 1)
-                if random_number < link_prob:
-                    self.link_failed.append(link)
-                    self.G.remove_edge(self.get_router_index(source), self.get_router_index(destination))
-                    link.break_time = t + 10**(self.get_failure_time()[0]) * 10**5
-                    
-    def get_failure_time(self):
-        mu = 0
-        sigma = 1
-
-        # Generate values from the distribution
-        x = np.logspace(-1, 3, 100) 
-
-        # Calculate the CDF for these values
-        pdf_values = stats.norm.pdf(np.log(x), mu, sigma)
-
-        return np.random.choice(x, 1, p=pdf_values/sum(pdf_values))
-                
-
-    def restore_link_failure(self, t):
-        for link in self.link_failed:
-            if link.break_time >= t:
-                self.G.add_edge(self.get_router_index(link.source), self.get_router_index(link.destination), weight=link.cost)
-                link.break_time = 0
-                self.link_failed.remove(link)
-
-    def output_matrix_reset(self):
-        for i in range(len(self.net_state_graph)):
-            for j in range(len(self.net_state_graph[i])):
-                for k in range(len(self.net_state_graph[i, j])):
-                    if self.net_state_graph[i, j][k] != 0:
-                        self.net_state_graph[i, j][k] = 1
