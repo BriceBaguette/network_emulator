@@ -1,5 +1,6 @@
 [
     {
+        "id": "6569f30442e7f25d7a592660",
         "node_name": "ar25.BCN",
         "ip_address": "kAAAAAAA",
         "active": 1,
@@ -31,15 +32,12 @@
         ]
     },
     {
+        "id": "6569f30442e7f25d7a592661",
         "node_name": "ar26.BCN",
         "ip_address": "kAAAAAAB",
         "active": 1,
         "forward_table": [
             {
-                "destination": "kAAAAAAE",
-                "next_hop": "kAAAAAAE"
-            },
-            {
                 "destination": "kAAAAAAA",
                 "next_hop": "kAAAAAAA"
             },
@@ -54,19 +52,20 @@
             {
                 "destination": "kAAAAAAD",
                 "next_hop": "kAAAAAAE"
+            },
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAE"
             }
         ]
     },
     {
+        "id": "6569f30442e7f25d7a592662",
         "node_name": "ar27.BCN",
         "ip_address": "kAAAAAAC",
         "active": 1,
         "forward_table": [
             {
-                "destination": "kAAAAAAE",
-                "next_hop": "kAAAAAAE"
-            },
-            {
                 "destination": "kAAAAAAA",
                 "next_hop": "kAAAAAAA"
             },
@@ -85,18 +84,19 @@
             {
                 "destination": "kAAAAAAD",
                 "next_hop": "kAAAAAAE"
+            },
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAE"
             }
         ]
     },
     {
+        "id": "6569f30442e7f25d7a592663",
         "node_name": "ar28.BCN",
         "ip_address": "kAAAAAAD",
         "active": 1,
         "forward_table": [
-            {
-                "destination": "kAAAAAAE",
-                "next_hop": "kAAAAAAE"
-            },
             {
                 "destination": "kAAAAAAA",
                 "next_hop": "kAAAAAAA"
@@ -112,29 +112,30 @@
             {
                 "destination": "kAAAAAAC",
                 "next_hop": "kAAAAAAA"
+            },
+            {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAE"
             }
         ]
     },
     {
+        "id": "6569f30442e7f25d7a592664",
         "node_name": "ar29.BCN",
         "ip_address": "kAAAAAAE",
         "active": 1,
         "forward_table": [
             {
-                "destination": "kAAAAAAD",
+                "destination": "kAAAAAAA",
+                "next_hop": "kAAAAAAB"
+            },
+            {
+                "destination": "kAAAAAAA",
                 "next_hop": "kAAAAAAD"
             },
             {
                 "destination": "kAAAAAAB",
                 "next_hop": "kAAAAAAB"
-            },
-            {
-                "destination": "kAAAAAAA",
-                "next_hop": "kAAAAAAB"
-            },
-            {
-                "destination": "kAAAAAAA",
-                "next_hop": "kAAAAAAD"
             },
             {
                 "destination": "kAAAAAAC",
@@ -146,6 +147,10 @@
             },
             {
                 "destination": "kAAAAAAC",
+                "next_hop": "kAAAAAAD"
+            },
+            {
+                "destination": "kAAAAAAD",
                 "next_hop": "kAAAAAAD"
             }
         ]
