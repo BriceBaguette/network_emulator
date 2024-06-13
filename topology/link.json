@@ -62,6 +62,158 @@
             }
           },
           "ls_attribute": {
+            "te_metric": 2,
+            "igp_metric": 2,
+            "admin_groups": 0,
+            "unidir_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "delay": 100
+            },
+            "unidir_minmax_delay": {
+              "bitvector": 0,
+              "a_flag": false,
+              "min_delay": 100,
+              "max_delay": 100
+            },
+            "adj_sids": [
+              {
+                "flags": {
+                  "bitvector": 112,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": true,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24002
+              },
+              {
+                "flags": {
+                  "bitvector": 48,
+                  "isis_flags": {
+                    "f_flag": false,
+                    "b_flag": false,
+                    "v_flag": true,
+                    "l_flag": true,
+                    "s_flag": false,
+                    "p_flag": false
+                  }
+                },
+                "weight": 0,
+                "sid_label": 24003
+              }
+            ],
+            "asla": [
+              {
+                "sabm": {
+                  "bitvector": {
+                    "$binary": {
+                      "base64": "EAAAAA==",
+                      "subType": "00"
+                    }
+                  },
+                  "r_flag": false,
+                  "s_flag": false,
+                  "f_flag": false,
+                  "x_flag": true
+                },
+                "attributes": {
+                  "te_metric": 200000,
+                  "admin_groups": 0,
+                  "unidir_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "delay": 100
+                  },
+                  "unidir_minmax_delay": {
+                    "bitvector": 0,
+                    "a_flag": false,
+                    "min_delay": 100,
+                    "max_delay": 100
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "source": [
+          {
+            "collector": "bgp-collector",
+            "peer": "172.23.0.3"
+          }
+        ],
+        "timestamp": {
+          "$numberLong": "1701442307895"
+        }
+      },
+      {
+        "_id": {
+          "$oid": "2"
+        },
+        "nlri": {
+          "afi": 16388,
+          "safi": 71,
+          "nlri_data": {
+            "routetype": 2,
+            "len": 89,
+            "lsnlri": {
+              "protocol_id": 2,
+              "domain_id": 0,
+              "local_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAA",
+                    "subType": "00"
+                  }
+                }
+              },
+              "remote_node_descriptor": {
+                "igp_router_id": {
+                  "$binary": {
+                    "base64": "kAAAAAAC",
+                    "subType": "00"
+                  }
+                }
+              },
+              "link_descriptor": {
+                "local_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVQ==",
+                    "subType": "00"
+                  }
+                },
+                "neighbor_interface_ipv4": {
+                  "$binary": {
+                    "base64": "wXKpVA==",
+                    "subType": "00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "origin": {
+            "value": 2
+          },
+          "aspath": {
+            "value": 0
+          },
+          "local_preference": {
+            "value": 100
+          },
+          "nexthop": {
+            "$binary": {
+              "base64": "AQEBAQ==",
+              "subType": "00"
+            }
+          },
+          "ls_attribute": {
             "te_metric": 1,
             "igp_metric": 1,
             "admin_groups": 0,
@@ -153,158 +305,6 @@
       },
       {
         "_id": {
-          "$oid": "2"
-        },
-        "nlri": {
-          "afi": 16388,
-          "safi": 71,
-          "nlri_data": {
-            "routetype": 2,
-            "len": 89,
-            "lsnlri": {
-              "protocol_id": 2,
-              "domain_id": 0,
-              "local_node_descriptor": {
-                "igp_router_id": {
-                  "$binary": {
-                    "base64": "kAAAAAAA",
-                    "subType": "00"
-                  }
-                }
-              },
-              "remote_node_descriptor": {
-                "igp_router_id": {
-                  "$binary": {
-                    "base64": "kAAAAAAC",
-                    "subType": "00"
-                  }
-                }
-              },
-              "link_descriptor": {
-                "local_interface_ipv4": {
-                  "$binary": {
-                    "base64": "wXKpVQ==",
-                    "subType": "00"
-                  }
-                },
-                "neighbor_interface_ipv4": {
-                  "$binary": {
-                    "base64": "wXKpVA==",
-                    "subType": "00"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "attributes": {
-          "origin": {
-            "value": 2
-          },
-          "aspath": {
-            "value": 0
-          },
-          "local_preference": {
-            "value": 100
-          },
-          "nexthop": {
-            "$binary": {
-              "base64": "AQEBAQ==",
-              "subType": "00"
-            }
-          },
-          "ls_attribute": {
-            "te_metric": 1,
-            "igp_metric": 1,
-            "admin_groups": 0,
-            "unidir_delay": {
-              "bitvector": 0,
-              "a_flag": false,
-              "delay": 30
-            },
-            "unidir_minmax_delay": {
-              "bitvector": 0,
-              "a_flag": false,
-              "min_delay": 30,
-              "max_delay": 30
-            },
-            "adj_sids": [
-              {
-                "flags": {
-                  "bitvector": 112,
-                  "isis_flags": {
-                    "f_flag": false,
-                    "b_flag": true,
-                    "v_flag": true,
-                    "l_flag": true,
-                    "s_flag": false,
-                    "p_flag": false
-                  }
-                },
-                "weight": 0,
-                "sid_label": 24002
-              },
-              {
-                "flags": {
-                  "bitvector": 48,
-                  "isis_flags": {
-                    "f_flag": false,
-                    "b_flag": false,
-                    "v_flag": true,
-                    "l_flag": true,
-                    "s_flag": false,
-                    "p_flag": false
-                  }
-                },
-                "weight": 0,
-                "sid_label": 24003
-              }
-            ],
-            "asla": [
-              {
-                "sabm": {
-                  "bitvector": {
-                    "$binary": {
-                      "base64": "EAAAAA==",
-                      "subType": "00"
-                    }
-                  },
-                  "r_flag": false,
-                  "s_flag": false,
-                  "f_flag": false,
-                  "x_flag": true
-                },
-                "attributes": {
-                  "te_metric": 200000,
-                  "admin_groups": 0,
-                  "unidir_delay": {
-                    "bitvector": 0,
-                    "a_flag": false,
-                    "delay": 25
-                  },
-                  "unidir_minmax_delay": {
-                    "bitvector": 0,
-                    "a_flag": false,
-                    "min_delay": 25,
-                    "max_delay": 25
-                  }
-                }
-              }
-            ]
-          }
-        },
-        "source": [
-          {
-            "collector": "bgp-collector",
-            "peer": "172.23.0.3"
-          }
-        ],
-        "timestamp": {
-          "$numberLong": "1701442307895"
-        }
-      },
-      {
-        "_id": {
           "$oid": "3"
         },
         "nlri": {
@@ -372,13 +372,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 15
+              "delay": 12
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 15,
-              "max_delay": 15
+              "min_delay": 12,
+              "max_delay": 12
             },
             "adj_sids": [
               {
@@ -432,13 +432,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 25
+                    "delay": 12
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 15,
-                    "max_delay": 15
+                    "min_delay": 12,
+                    "max_delay": 12
                   }
                 }
               }
@@ -676,13 +676,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 30
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 30,
-              "max_delay": 30
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -736,13 +736,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 30
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 30,
-                    "max_delay": 30
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -828,13 +828,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 15
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 15,
-              "max_delay": 15
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -888,13 +888,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 15
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 15,
-                    "max_delay": 15
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -1284,13 +1284,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 30
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 30,
-              "max_delay": 30
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -1344,13 +1344,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 30
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 30,
-                    "max_delay": 30
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -1436,13 +1436,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 15
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 15,
-              "max_delay": 15
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -1496,13 +1496,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 15
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 15,
-                    "max_delay": 15
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -1734,8 +1734,8 @@
             }
           },
           "ls_attribute": {
-            "te_metric": 3,
-            "igp_metric": 3,
+            "te_metric": 5,
+            "igp_metric": 5,
             "admin_groups": 0,
             "unidir_delay": {
               "bitvector": 0,
@@ -1892,13 +1892,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 15
+              "delay": 10
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 15,
-              "max_delay": 15
+              "min_delay": 10,
+              "max_delay": 10
             },
             "adj_sids": [
               {
@@ -1952,13 +1952,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 15
+                    "delay": 10
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 15,
-                    "max_delay": 15
+                    "min_delay": 10,
+                    "max_delay": 10
                   }
                 }
               }
@@ -2196,13 +2196,13 @@
             "unidir_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "delay": 20
+              "delay": 100
             },
             "unidir_minmax_delay": {
               "bitvector": 0,
               "a_flag": false,
-              "min_delay": 10,
-              "max_delay": 10
+              "min_delay": 100,
+              "max_delay": 100
             },
             "adj_sids": [
               {
@@ -2256,13 +2256,13 @@
                   "unidir_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "delay": 20
+                    "delay": 200
                   },
                   "unidir_minmax_delay": {
                     "bitvector": 0,
                     "a_flag": false,
-                    "min_delay": 20,
-                    "max_delay": 20
+                    "min_delay": 200,
+                    "max_delay": 200
                   }
                 }
               }

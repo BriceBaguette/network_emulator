@@ -19,10 +19,6 @@
             },
             {
                 "destination": "kAAAAAAE",
-                "next_hop": "kAAAAAAB"
-            },
-            {
-                "destination": "kAAAAAAE",
                 "next_hop": "kAAAAAAC"
             },
             {
@@ -66,15 +62,15 @@
         "active": 1,
         "forward_table": [
             {
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAE"
+            },
+            {
                 "destination": "kAAAAAAA",
                 "next_hop": "kAAAAAAA"
             },
             {
                 "destination": "kAAAAAAB",
-                "next_hop": "kAAAAAAA"
-            },
-            {
-                "destination": "kAAAAAAB",
                 "next_hop": "kAAAAAAE"
             },
             {
@@ -83,10 +79,6 @@
             },
             {
                 "destination": "kAAAAAAD",
-                "next_hop": "kAAAAAAE"
-            },
-            {
-                "destination": "kAAAAAAE",
                 "next_hop": "kAAAAAAE"
             }
         ]
@@ -98,11 +90,11 @@
         "active": 1,
         "forward_table": [
             {
-                "destination": "kAAAAAAA",
-                "next_hop": "kAAAAAAA"
+                "destination": "kAAAAAAE",
+                "next_hop": "kAAAAAAE"
             },
             {
-                "destination": "kAAAAAAB",
+                "destination": "kAAAAAAA",
                 "next_hop": "kAAAAAAA"
             },
             {
@@ -112,10 +104,6 @@
             {
                 "destination": "kAAAAAAC",
                 "next_hop": "kAAAAAAA"
-            },
-            {
-                "destination": "kAAAAAAE",
-                "next_hop": "kAAAAAAE"
             }
         ]
     },
@@ -126,11 +114,7 @@
         "active": 1,
         "forward_table": [
             {
-                "destination": "kAAAAAAA",
-                "next_hop": "kAAAAAAB"
-            },
-            {
-                "destination": "kAAAAAAA",
+                "destination": "kAAAAAAD",
                 "next_hop": "kAAAAAAD"
             },
             {
@@ -138,8 +122,12 @@
                 "next_hop": "kAAAAAAB"
             },
             {
-                "destination": "kAAAAAAC",
-                "next_hop": "kAAAAAAC"
+                "destination": "kAAAAAAA",
+                "next_hop": "kAAAAAAB"
+            },
+            {
+                "destination": "kAAAAAAA",
+                "next_hop": "kAAAAAAD"
             },
             {
                 "destination": "kAAAAAAC",
@@ -147,10 +135,6 @@
             },
             {
                 "destination": "kAAAAAAC",
-                "next_hop": "kAAAAAAD"
-            },
-            {
-                "destination": "kAAAAAAD",
                 "next_hop": "kAAAAAAD"
             }
         ]

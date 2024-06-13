@@ -3,15 +3,15 @@
         "id": "1",
         "source": "kAAAAAAA",
         "destination": "kAAAAAAB",
-        "delay": 10,
-        "cost": 1,
+        "delay": 100,
+        "cost": 2,
         "failure": 0
     },
     {
         "id": "2",
         "source": "kAAAAAAA",
         "destination": "kAAAAAAC",
-        "delay": 30,
+        "delay": 10,
         "cost": 1,
         "failure": 0
     },
@@ -19,7 +19,7 @@
         "id": "3",
         "source": "kAAAAAAA",
         "destination": "kAAAAAAD",
-        "delay": 15,
+        "delay": 12,
         "cost": 1,
         "failure": 0
     },
@@ -35,7 +35,7 @@
         "id": "5",
         "source": "kAAAAAAC",
         "destination": "kAAAAAAE",
-        "delay": 30,
+        "delay": 10,
         "cost": 1,
         "failure": 0
     },
@@ -43,7 +43,7 @@
         "id": "6",
         "source": "kAAAAAAD",
         "destination": "kAAAAAAE",
-        "delay": 15,
+        "delay": 10,
         "cost": 1,
         "failure": 0
     },
@@ -67,7 +67,7 @@
         "id": "9",
         "source": "kAAAAAAC",
         "destination": "kAAAAAAA",
-        "delay": 30,
+        "delay": 10,
         "cost": 1,
         "failure": 0
     },
@@ -75,7 +75,7 @@
         "id": "10",
         "source": "kAAAAAAD",
         "destination": "kAAAAAAA",
-        "delay": 15,
+        "delay": 10,
         "cost": 1,
         "failure": 0
     },
@@ -92,14 +92,14 @@
         "source": "kAAAAAAE",
         "destination": "kAAAAAAC",
         "delay": 30,
-        "cost": 3,
+        "cost": 5,
         "failure": 0
     },
     {
         "id": "13",
         "source": "kAAAAAAE",
         "destination": "kAAAAAAD",
-        "delay": 15,
+        "delay": 10,
         "cost": 1,
         "failure": 0
     },
@@ -115,7 +115,7 @@
         "id": "15",
         "source": "kAAAAAAA",
         "destination": "kAAAAAAB",
-        "delay": 20,
+        "delay": 100,
         "cost": 2,
         "failure": 0
     }

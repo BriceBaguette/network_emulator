@@ -4,13 +4,14 @@ and the ForwardTableElement class, which represents an element in the forwarding
 table of a router.
 """
 import hashlib
+from typing import List
 
 class ForwardTableElement:
     """
     Represents an element in the forwarding table of a router.
     """
 
-    def __init__(self, dest, next_hop):
+    def __init__(self, dest: str, next_hop:str):
         """
         Initializes a ForwardTableElement object.
 
@@ -38,7 +39,7 @@ class Router:
     Represents a router in a network.
     """
 
-    def __init__(self, router_id, node_name, active, ip_address):
+    def __init__(self, router_id: str, node_name: str, active :int, ip_address: str):
         """
         Initializes a Router object.
 
@@ -51,9 +52,9 @@ class Router:
         self.ip_address = ip_address
         self.active = active
         self.id = router_id
-        self.forward_table = list()
+        self.forward_table: List[ForwardTableElement] = []
 
-    def has_entry_for_destination(self, dest_ip):
+    def has_entry_for_destination(self, dest_ip) -> bool:
         """
         Checks if the router has an entry for the given destination IP address.
 
@@ -68,7 +69,7 @@ class Router:
                 return True
         return False
 
-    def update_forward_table(self, element):
+    def update_forward_table(self, element) -> None: 
         """
         Updates the forward table of the router with the given element.
 

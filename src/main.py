@@ -4,7 +4,7 @@ import time
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Description of your script.')
+    parser = argparse.ArgumentParser(description='Network Emulator')
     parser.add_argument('node_file', type=str,
                         help='Path to the topology node file')
     parser.add_argument('link_file', type=str,
@@ -24,8 +24,11 @@ def main():
                               num_generation=args.num_generations,load_folder=args.load_folder, save_folder=args.save_folder)
     net_sim.build()
     net_sim.start()
-    net_sim.latency_test("6569f30442e7f25d7a592660", "6569f30442e7f25d7a592664")
+    #net_sim.latency_test("6569f30442e7f25d7a592660", "6569f30442e7f25d7a592664")
     #net_sim.ecmp_analysis("6569f30442e7f25d7a592675", show=True)
+    #net_sim.add_hw_issue(400,1000,"6569f30442e7f25d7a592660")
+    net_sim.all_ipm_session()
+    net_sim.hw_issue_detection(sink_measure_file="./src/results/sink.csv", source_measure_file="./src/results/source.csv",latency=True)
 
     end = time.time()
     print("Time taken: {}".format(end-start))
