@@ -6,6 +6,7 @@ import ast
 import json
 import os
 import random
+import re
 import sys
 import time
 import networkx as nx
@@ -13,6 +14,7 @@ import numpy as np
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
+from pathlib import Path
 from tqdm import tqdm
 from typing import List
 import utils
@@ -47,8 +49,8 @@ class NetworkEmulator:
         save_folder (None or str): Save folder.
     """
 
-    def __init__(self, node_file: str, link_file: str, generation_rate: int, num_generation: int,
-                 load_folder: str = None, save_folder: str =None, treshold:int =5):
+    def __init__(self, node_file: str, link_file: str, single_file: str ,generation_rate: int, num_generation: int,
+                 load_folder: str = None, save_folder: str =None, treshold:int = 5):
         """
         Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations.
 
@@ -62,7 +64,8 @@ class NetworkEmulator:
         """
         self.routers: List[Router] = []
         self.links: List[Link] = []
-
+        
+        self.single_file = single_file
         self.node_file = node_file
         self.link_file = link_file
         self.generation_rate = generation_rate
@@ -89,11 +92,56 @@ class NetworkEmulator:
         elif self.node_file is not None and self.link_file is not None:
             self.__build_routers()
             self.__build_links()
+        elif self.single_file is not None:
+            self.__build_network_from_file()
         else: 
             print("Error: No file to build a network.")
             exit(-1)
         print("Network build with " + str(len(self.routers)) +
               " routers and " + str(len(self.links)) + " links")
+        
+    def __build_network_from_file(self):
+        with open(self.single_file, "r") as file:
+            topo = file.read()
+
+        routers_info = topo.split("\n\n")
+
+        router_id_pattern = r"Router ID:\s*(\S+)"
+
+        hostname_pattern = r"Hostname:\s*(\S+)"
+
+        ip_address_pattern = r"IP Address:\s*(\S+)"
+
+        for router in routers_info:
+            router_match = re.search(router_id_pattern, router)
+            host_match = re.search(hostname_pattern, router)
+            ip_match = re.search(ip_address_pattern, router)
+            if router_match and host_match and ip_match:
+                router_id = router_match.group(1)
+                hostname = host_match.group(1)
+                ip_address = ip_match.group(1)
+                self.routers.append(Router(router_id=router_id, node_name=hostname, ip_address=ip_address, active=1))
+            
+        pattern = re.compile(r'Metric:\s*\d+\s+IS-Extended.*?(?=Metric:|\Z)', re.DOTALL)
+        
+        delay_pattern = r"Link Average Delay:\s*(\d+)"
+
+        neighbor_pattern = r"Metric:\s*(\d+).*IS-Extended (\S+)\.\d+"
+        for router in routers_info:
+            host_match = re.search(hostname_pattern, router)
+            if host_match:
+                hostname = host_match.group(1)
+                source: Router = self.get_router_by_name(hostname)
+                # Find all matches
+                matches = pattern.findall(router) 
+                for match in matches:
+                    neighbor_match = re.search(neighbor_pattern, match, re.DOTALL)
+                    delay_match = re.search(delay_pattern, match)
+                    if neighbor_match and delay_match:
+                        neighbor = self.get_router_by_name(neighbor_match.group(2))
+                        if neighbor:
+                            link = Link(link_id=len(self.links), source=source.ip_address, destination=neighbor.ip_address, delay=int(delay_match.group(1)), cost=int(neighbor_match.group(1)))
+                            self.links.append(link)
 
     def __load_network(self):
         """
@@ -196,6 +244,15 @@ class NetworkEmulator:
             self.links.append(link)
 
     def __save_network(self):
+
+        # Define the directory path
+        dir_path = Path(self.save_folder)
+
+        # Check if the directory exists
+        if not dir_path.exists():
+            # Create the directory
+            dir_path.mkdir(parents=True, exist_ok=True)
+        
         with open(f"{self.save_folder}/routers.json", 'w') as file:
             json.dump([router.to_json() for router in self.routers], file, indent=4)
 
@@ -511,15 +568,22 @@ class NetworkEmulator:
         # Return the latency array
         return [source, destination, latencies]
 
-    def get_router_index_from_ip(self, ip_address) -> int:
+    def get_router_index_from_ip(self, ip_address:str) -> int:
         for i in range(len(self.routers)):
             if (self.routers[i].ip_address == ip_address):
                 return i
     
-    def get_router_index_from_id(self, router_id) -> int:
+    def get_router_index_from_id(self, router_id:str) -> int:
         for i in range(len(self.routers)):
             if (self.routers[i].id == router_id):
                 return i
+    
+    def get_router_by_name(self, name: str ) -> Router:
+        for router in self.routers:
+            if router.node_name == name:
+                return router
+        return None
+
             
     def ipm_session(self, source_id, destination_id,gen_number=0, fl=None, t = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")):
         source = self.routers[self.get_router_index_from_id(source_id)]
@@ -535,6 +599,17 @@ class NetworkEmulator:
             if destination != source:
                 indices = [index for index, value in enumerate(
                     source.forward_table) if value.destination == destination.ip_address]
+                # Add a duplicate indices if there's two links to the same next_hop"
+                new_indices = []
+                for i in indices:
+                    next_hop = source.forward_table[i].next_hop
+                    link_indices = [index for index, value in enumerate(
+                        self.links) if value.destination == next_hop and value.source == source.ip_address]
+                    min_cost = min([self.links[index].cost for index in link_indices])
+                    min_cost_count = sum(1 for index in link_indices if self.links[index].cost == min_cost)
+                    for _ in range(min_cost_count-1):
+                        new_indices.append(i)
+                indices += new_indices
                 counter = 0
                 for i in indices:
                     counter += self.get_number_of_paths(source, destination, i)
@@ -542,8 +617,10 @@ class NetworkEmulator:
                     ecmp_dict[counter] += 1
                 else:   
                     ecmp_dict[counter] = 1
+                    
         if show:
             plt.bar(ecmp_dict.keys(), ecmp_dict.values())
+            plt.xlim(0, max(ecmp_dict.keys()))
             plt.xlabel('Number of paths')
             plt.ylabel('Number of destinations')
             plt.title('ECMP analysis for router ' + source_id)
@@ -554,6 +631,17 @@ class NetworkEmulator:
         next_router = self.routers[self.get_router_index_from_ip(next_hop)]
         indices = [index for index, value in enumerate(
             next_router.forward_table) if value.destination == destination.ip_address]
+        new_indices = []
+        for i in indices:
+            next_hop = next_router.forward_table[i].next_hop
+            link_indices = [index for index, value in enumerate(
+                self.links) if value.destination == next_hop and value.source == next_router.ip_address]
+            min_cost = min([self.links[index].cost for index in link_indices])
+            min_cost_count = sum(1 for index in link_indices if self.links[index].cost == min_cost)
+            for _ in range(min_cost_count-1):
+                new_indices.append(i)
+        indices += new_indices
+        
         counter = 0
         if next_router.ip_address == destination.ip_address:
             return 1

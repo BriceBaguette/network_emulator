@@ -17,7 +17,7 @@ class Link:
         number_of_paths (int): The number of paths that use this link.
     """
 
-    def __init__(self, link_id, source, destination, delay, cost):
+    def __init__(self, link_id: str, source: str, destination: str, delay: int, cost: int):
         self.id = link_id
         self.source = source
         self.destination = destination
