@@ -1322,12 +1322,12 @@
                 "next_hop": "1.1.1.4"
             },
             {
-                "destination": "1.1.1.39",
-                "next_hop": "1.1.1.5"
-            },
-            {
                 "destination": "1.1.1.38",
                 "next_hop": "1.1.1.4"
+            },
+            {
+                "destination": "1.1.1.39",
+                "next_hop": "1.1.1.5"
             }
         ]
     },
@@ -2486,10 +2486,6 @@
                 "next_hop": "1.1.1.5"
             },
             {
-                "destination": "1.1.1.4",
-                "next_hop": "1.1.1.10"
-            },
-            {
                 "destination": "1.1.1.6",
                 "next_hop": "1.1.1.5"
             },
@@ -2584,6 +2580,10 @@
             {
                 "destination": "1.1.1.3",
                 "next_hop": "1.1.1.8"
+            },
+            {
+                "destination": "1.1.1.4",
+                "next_hop": "1.1.1.10"
             }
         ]
     },
@@ -2974,6 +2974,14 @@
                 "next_hop": "1.1.1.10"
             },
             {
+                "destination": "1.1.1.11",
+                "next_hop": "1.1.1.10"
+            },
+            {
+                "destination": "1.1.1.11",
+                "next_hop": "1.1.1.14"
+            },
+            {
                 "destination": "1.1.1.12",
                 "next_hop": "1.1.1.10"
             },
@@ -3036,14 +3044,6 @@
             {
                 "destination": "1.1.1.38",
                 "next_hop": "1.1.1.19"
-            },
-            {
-                "destination": "1.1.1.11",
-                "next_hop": "1.1.1.10"
-            },
-            {
-                "destination": "1.1.1.11",
-                "next_hop": "1.1.1.14"
             }
         ]
     },
@@ -3158,6 +3158,10 @@
                 "next_hop": "1.1.1.17"
             },
             {
+                "destination": "1.1.1.11",
+                "next_hop": "1.1.1.11"
+            },
+            {
                 "destination": "1.1.1.17",
                 "next_hop": "1.1.1.17"
             },
@@ -3244,10 +3248,6 @@
             {
                 "destination": "1.1.1.10",
                 "next_hop": "1.1.1.13"
-            },
-            {
-                "destination": "1.1.1.11",
-                "next_hop": "1.1.1.11"
             },
             {
                 "destination": "1.1.1.12",
@@ -3434,14 +3434,6 @@
                 "next_hop": "1.1.1.14"
             },
             {
-                "destination": "1.1.1.27",
-                "next_hop": "1.1.1.13"
-            },
-            {
-                "destination": "1.1.1.27",
-                "next_hop": "1.1.1.14"
-            },
-            {
                 "destination": "1.1.1.28",
                 "next_hop": "1.1.1.13"
             },
@@ -3500,6 +3492,14 @@
             {
                 "destination": "1.1.1.39",
                 "next_hop": "1.1.1.13"
+            },
+            {
+                "destination": "1.1.1.27",
+                "next_hop": "1.1.1.13"
+            },
+            {
+                "destination": "1.1.1.27",
+                "next_hop": "1.1.1.14"
             }
         ]
     },
@@ -4582,6 +4582,10 @@
         "active": 1,
         "forward_table": [
             {
+                "destination": "1.1.1.1",
+                "next_hop": "1.1.1.19"
+            },
+            {
                 "destination": "1.1.1.2",
                 "next_hop": "1.1.1.20"
             },
@@ -4772,10 +4776,6 @@
             {
                 "destination": "1.1.1.39",
                 "next_hop": "1.1.1.20"
-            },
-            {
-                "destination": "1.1.1.1",
-                "next_hop": "1.1.1.19"
             }
         ]
     },
@@ -4934,10 +4934,6 @@
                 "next_hop": "1.1.1.23"
             },
             {
-                "destination": "1.1.1.21",
-                "next_hop": "1.1.1.19"
-            },
-            {
                 "destination": "1.1.1.31",
                 "next_hop": "1.1.1.13"
             },
@@ -4980,6 +4976,10 @@
             {
                 "destination": "1.1.1.39",
                 "next_hop": "1.1.1.13"
+            },
+            {
+                "destination": "1.1.1.21",
+                "next_hop": "1.1.1.19"
             }
         ]
     },
@@ -5554,6 +5554,10 @@
                 "next_hop": "1.1.1.26"
             },
             {
+                "destination": "1.1.1.24",
+                "next_hop": "1.1.1.22"
+            },
+            {
                 "destination": "1.1.1.31",
                 "next_hop": "1.1.1.22"
             },
@@ -5595,10 +5599,6 @@
             },
             {
                 "destination": "1.1.1.39",
-                "next_hop": "1.1.1.22"
-            },
-            {
-                "destination": "1.1.1.24",
                 "next_hop": "1.1.1.22"
             }
         ]
@@ -5946,10 +5946,6 @@
                 "next_hop": "1.1.1.25"
             },
             {
-                "destination": "1.1.1.26",
-                "next_hop": "1.1.1.26"
-            },
-            {
                 "destination": "1.1.1.28",
                 "next_hop": "1.1.1.25"
             },
@@ -6015,6 +6011,10 @@
             },
             {
                 "destination": "1.1.1.39",
+                "next_hop": "1.1.1.26"
+            },
+            {
+                "destination": "1.1.1.26",
                 "next_hop": "1.1.1.26"
             }
         ]
@@ -6982,10 +6982,6 @@
                 "next_hop": "1.1.1.31"
             },
             {
-                "destination": "1.1.1.21",
-                "next_hop": "1.1.1.17"
-            },
-            {
                 "destination": "1.1.1.22",
                 "next_hop": "1.1.1.17"
             },
@@ -7043,6 +7039,10 @@
             },
             {
                 "destination": "1.1.1.39",
+                "next_hop": "1.1.1.17"
+            },
+            {
+                "destination": "1.1.1.21",
                 "next_hop": "1.1.1.17"
             }
         ]
@@ -7918,10 +7918,6 @@
                 "next_hop": "1.1.1.16"
             },
             {
-                "destination": "1.1.1.13",
-                "next_hop": "1.1.1.16"
-            },
-            {
                 "destination": "1.1.1.14",
                 "next_hop": "1.1.1.35"
             },
@@ -8023,6 +8019,10 @@
             },
             {
                 "destination": "1.1.1.39",
+                "next_hop": "1.1.1.16"
+            },
+            {
+                "destination": "1.1.1.13",
                 "next_hop": "1.1.1.16"
             }
         ]
@@ -8278,6 +8278,10 @@
                 "next_hop": "1.1.1.13"
             },
             {
+                "destination": "1.1.1.17",
+                "next_hop": "1.1.1.20"
+            },
+            {
                 "destination": "1.1.1.18",
                 "next_hop": "1.1.1.13"
             },
@@ -8375,10 +8379,6 @@
             },
             {
                 "destination": "1.1.1.38",
-                "next_hop": "1.1.1.20"
-            },
-            {
-                "destination": "1.1.1.17",
                 "next_hop": "1.1.1.20"
             }
         ]

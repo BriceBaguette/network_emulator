@@ -54,7 +54,7 @@ class Router:
         self.id = router_id
         self.forward_table: List[ForwardTableElement] = []
 
-    def has_entry_for_destination(self, dest_ip) -> bool:
+    def has_entry_for_destination(self, dest_ip: str) -> bool:
         """
         Checks if the router has an entry for the given destination IP address.
 
@@ -69,7 +69,7 @@ class Router:
                 return True
         return False
 
-    def update_forward_table(self, element) -> None: 
+    def update_forward_table(self, element: ForwardTableElement) -> None: 
         """
         Updates the forward table of the router with the given element.
 
@@ -81,27 +81,28 @@ class Router:
                 return
         self.forward_table.append(element)
 
-    def ecmp_hash(self,source_ip, dest_ip, flow_label):
+    def ecmp_hash(self,source_ip: str, dest_ip: str, flow_label:int):
         """
         Performs ECMP hashing to select a route based on the destination IP address, packet number, 
         and distribution key.
         
         Parameters:
+        - source_ip (str): Source IP address.
         - dest_ip (str): Destination IP address.
-        - flow_label (str): Flow label.
+        - flow_label (int): Flow label.
 
         Returns:
         - int: Hash value used for route selection.
         """
        
-        hash_input = f"{self.id}{self.ip_address}{dest_ip}{flow_label}".encode('utf-8')
+        hash_input = f"{self.id}{source_ip}{dest_ip}{str(flow_label)}".encode('utf-8')
 
         hash_value = hashlib.sha256(hash_input).hexdigest()
         hash_int = int(hash_value, 16)
 
         return hash_int
 
-    def select_route(self,source_ip, dest_ip, num_paths, flow_label):
+    def select_route(self,source_ip: str, dest_ip:str , num_paths: int, flow_label: int):
         """
         Selects a route index based on the destination IP address, number of paths, 
         and packet number.
