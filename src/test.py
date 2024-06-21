@@ -9,10 +9,14 @@ def get_router_by_name(name: str, routers: List[Router]) -> Router:
             return router
     return None
 
-with open("../other_typo/my_topo.txt", "r") as file:
+with open("../other_topo/ecmp_topo.txt", "r") as file:
     topo = file.read()
 
 routers_info = topo.split("\n\n")
+
+for router in routers_info:
+    print(router)
+    print("\n")
 
 router_id_pattern = r"Router ID:\s*(\S+)"
 
@@ -48,6 +52,9 @@ for router in routers_info:
         for match in matches:
             neighbor_match = re.search(neighbor_pattern, match, re.DOTALL)
             delay_match = re.search(delay_pattern, match)
+            print(match)
+            print(neighbor_match)
+            print(delay_match)
             if neighbor_match and delay_match:
                 neighbor = get_router_by_name(neighbor_match.group(2), routers)
                 if neighbor:

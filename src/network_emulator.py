@@ -17,7 +17,7 @@ from datetime import datetime
 from pathlib import Path
 from scipy.interpolate import interp1d
 from tqdm import tqdm
-from typing import List
+from typing import List, Tuple
 import utils
 from link import Link
 from router import Router, ForwardTableElement
@@ -516,13 +516,11 @@ class NetworkEmulator:
         # For each generation, calculate the latency from source to destination
         indices = [index for index, value in enumerate(
         source.forward_table) if value.destination == destination.ip_address]
-        indices = self.get_multi_links(source, indices)
+        indices, link_indices = self.get_multi_links(source, indices)
         # Using hash function to determine which route to take
         chosen_route = source.select_route(source.ip_address,
                 destination.ip_address, len(indices), flow_label)
-        index = next(index for index, value in enumerate(self.links) if value.source ==
-                        source.ip_address and value.destination == source.forward_table[indices[chosen_route]].next_hop)
-        latency += self.links[index].delay
+        latency += self.links[link_indices[chosen_route]].delay
 
         # Find the next router
         index = next(index for index, value in enumerate(
@@ -533,14 +531,15 @@ class NetworkEmulator:
         while (next_router.ip_address != destination.ip_address):
             indices = [index for index, value in enumerate(
                 next_router.forward_table) if value.destination == destination.ip_address]
+            indices, link_indices = self.get_multi_links(next_router, indices)
+            
             chosen_route = next_router.select_route(source.ip_address,
                 destination.ip_address, len(indices), flow_label)
-            index = next(index for index, value in enumerate(self.links) if value.source ==
-                            next_router.ip_address and value.destination == next_router.forward_table[indices[chosen_route]].next_hop)
             
-            latency += self.links[index].delay
+            latency += self.links[link_indices[chosen_route]].delay
+            
             index = next(index for index, value in enumerate(
-                self.routers) if value.ip_address == next_router.forward_table[indices[0]].next_hop)
+                self.routers) if value.ip_address == next_router.forward_table[indices[chosen_route]].next_hop)
             next_router = self.routers[index]
         # Return the latency array
         return latency
@@ -594,18 +593,21 @@ class NetworkEmulator:
         self.export_source_data(source=source.ip_address, destination=destination.ip_address,fl=fl, gen_number=gen_number, timestamp=t)
         self.export_sink_data(source=source.ip_address, destination=destination.ip_address,fl=fl, latencies=latencies, gen_number=gen_number, timestamp=t)
         
-    def get_multi_links(self, source:Router, indices:List[int]) -> List[int]:
+    def get_multi_links(self, source:Router, indices:List[int]) -> Tuple[List[int], List[int]]:
         new_indices = []
+        multi_link_indices = [0 for _ in range(len(indices))]
         for i in indices:
             next_hop = source.forward_table[i].next_hop
             link_indices = [index for index, value in enumerate(
                 self.links) if value.destination == next_hop and value.source == source.ip_address]
             min_cost = min([self.links[index].cost for index in link_indices])
             min_cost_count = sum(1 for index in link_indices if self.links[index].cost == min_cost)
-            for _ in range(min_cost_count-1):
+            multi_link_indices[indices.index(i)] = link_indices[0]
+            for j in range(min_cost_count-1):
+                multi_link_indices.append(link_indices[j+1])
                 new_indices.append(i)
         indices += new_indices
-        return indices
+        return indices, multi_link_indices
         
 
     def ecmp_analysis(self, source_id: str, show: bool = False):
@@ -616,7 +618,7 @@ class NetworkEmulator:
                 indices = [index for index, value in enumerate(
                     source.forward_table) if value.destination == destination.ip_address]
                 # Add a duplicate indices if there's two links to the same next_hop"
-                indices = self.get_multi_links(source, indices)
+                indices, _ = self.get_multi_links(source, indices)
                 counter = 0
                 for i in indices:
                     counter += self.get_number_of_paths(source, destination, i)
@@ -632,6 +634,31 @@ class NetworkEmulator:
             plt.ylabel('Number of destinations')
             plt.title('ECMP analysis for router ' + source_id)
             plt.show()   
+        
+            # Sort ecmp_dict by number of paths
+        sorted_counts = sorted(ecmp_dict.items())
+        num_destinations = sum(ecmp_dict.values())
+        
+        # Compute CDF
+        cdf_values = []
+        cumulative_sum = 0
+        for count, freq in sorted_counts:
+            cumulative_sum += freq
+            cdf_values.append((count, cumulative_sum / num_destinations))
+        
+        # Extract x and y values for plotting
+        x_cdf = [item[0] for item in cdf_values]
+        y_cdf = [item[1] for item in cdf_values]
+        
+        # Plot CDF
+        if show:
+            plt.step(x_cdf, y_cdf, where='post')
+            plt.xlim(0, max(x_cdf) + max(x_cdf) / 10)
+            plt.xlabel('Number of paths')
+            plt.ylabel('CDF')
+            plt.title('ECMP CDF analysis for router ' + source_id)
+            plt.grid(True)
+            plt.show()
             
         print(f"ECMP analysis for router {source_id}:\n Max number of paths: {max(ecmp_dict.keys())}\n Min number of paths: {min(ecmp_dict.keys())}\n Average number of paths: {sum([key*value for key, value in ecmp_dict.items()])/sum(ecmp_dict.values())}\n")       
                     
@@ -640,7 +667,7 @@ class NetworkEmulator:
         next_router = self.routers[self.get_router_index_from_ip(next_hop)]
         indices = [index for index, value in enumerate(
             next_router.forward_table) if value.destination == destination.ip_address]
-        indices = self.get_multi_links(next_router, indices)
+        indices, _ = self.get_multi_links(next_router, indices)
         
         counter = 0
         if next_router.ip_address == destination.ip_address:
@@ -654,44 +681,51 @@ class NetworkEmulator:
             for destination in self.routers:
                 if source != destination:
                     self.latency_test(source.id, destination.id)
-    
+
     def latency_test(self, source_id: str, destination_id: str):
-        latencies =[]
+        latencies = []
         paths = []
         wrong_paths = []
-        
-        source:Router = self.routers[self.get_router_index_from_id(source_id)]
-        destination:Router = self.routers[self.get_router_index_from_id(destination_id)]
-        
-        indices = [index for index, value in enumerate(
-                source.forward_table) if value.destination == destination.ip_address]
-        indices = self.get_multi_links(source, indices)
+
+        source: Router = self.routers[self.get_router_index_from_id(source_id)]
+        destination: Router = self.routers[self.get_router_index_from_id(destination_id)]
+
+        indices = [index for index, value in enumerate(source.forward_table) if value.destination == destination.ip_address]
+        indices, link_indices = self.get_multi_links(source, indices)
+
         for i in range(len(indices)):
-            path, latency = self.get_latency_and_path(source, destination, i, [source.forward_table[i].next_hop], 0)
-            paths.append(path)
-            latencies.append(latency)
-        
-        min_latency = min(latencies)
-        
-        for i in range(len(latencies)):
-            if latencies[i] >= min_latency + self.treshold*1000:
-                wrong_paths.append((paths[i], latencies[i]-min_latency))
-        
-        print(f" {source.ip_address} to {destination.ip_address}, there's {len(paths)} paths, there's {len(wrong_paths)} paths with the latency difference: {wrong_paths}")
+            path_groups, _ = self.get_latency_and_path(source, destination, indices[i], [source.ip_address], link_indices[i], 0)
+            for path, latency in path_groups:
+                paths.append(path)
+                latencies.append(latency)
             
-    
-    def get_latency_and_path(self, current: Router, destination: Router, index: int, path: list, latency: int):
+        min_latency = min(latencies)
+
+        for i in range(len(latencies)):
+            if latencies[i] >= min_latency + self.treshold * 1000:
+                wrong_paths.append((paths[i], latencies[i] - min_latency))
+
+        print(f" {source.ip_address} to {destination.ip_address}, there's {len(paths)} paths, there's {len(wrong_paths)} paths with the latency difference: {wrong_paths}")
+
+    def get_latency_and_path(self, current: Router, destination: Router, index: int, path: list, link_index: int, latency: int):
         next_hop = current.forward_table[index].next_hop
-        next_router:Router = self.routers[self.get_router_index_from_ip(next_hop)]
-        indices = [index for index, value in enumerate(
-            next_router.forward_table) if value.destination == destination.ip_address]
-        indices = self.get_multi_links(next_router, indices)
+        next_router: Router = self.routers[self.get_router_index_from_ip(next_hop)]
+        path.append(next_router.ip_address)
+        latency += self.links[link_index].delay
+
         if next_router.ip_address == destination.ip_address:
-            return path, latency
-        for i in indices:
-            path.append(next_router.forward_table[i].next_hop)
-            latency += self.links[next(index for index, value in enumerate(self.links) if value.source == next_router.ip_address and value.destination == next_router.forward_table[i].next_hop)].delay
-            return self.get_latency_and_path(next_router, destination, i, path, latency)
+            return [(path, latency)], 0
+
+        all_paths = []
+        indices = [i for i, value in enumerate(next_router.forward_table) if value.destination == destination.ip_address]
+        indices, next_multi_links = self.get_multi_links(next_router, indices)
+
+        for i in range(len(indices)):
+            new_path_groups, _ = self.get_latency_and_path(next_router, destination, indices[i], path[:], next_multi_links[i], latency)
+            all_paths.extend(new_path_groups)
+
+        return all_paths, 0
+
     
     def hw_issue_detection(self, source_measure_file: str, sink_measure_file:str, latency:bool = False, loss:bool = False):
         sink_dataframe = pd.read_csv(sink_measure_file)
