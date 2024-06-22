@@ -704,8 +704,8 @@ class NetworkEmulator:
         for i in range(len(latencies)):
             if latencies[i] >= min_latency + self.treshold * 1000:
                 wrong_paths.append((paths[i], latencies[i] - min_latency))
-
-        print(f" {source.ip_address} to {destination.ip_address}, there's {len(paths)} paths, there's {len(wrong_paths)} paths with the latency difference: {wrong_paths}")
+        if(len(wrong_paths) > 0):
+            print(f" {source.ip_address} to {destination.ip_address}, there's {len(paths)} paths, there's {len(wrong_paths)} paths with the latency difference: {wrong_paths}")
 
     def get_latency_and_path(self, current: Router, destination: Router, index: int, path: list, link_index: int, latency: int):
         next_hop = current.forward_table[index].next_hop
