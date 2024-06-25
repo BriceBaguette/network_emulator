@@ -207,22 +207,20 @@ ecmp_analysis_layout = dbc.Container(
     Output('ecmp-id-dropdown', 'options'),
     Output('additional-id-dropdown-1', 'options'),
     Output('additional-id-dropdown-2', 'options'),
-    Input('interval-component', 'disabled'),
-    State('stored-file', 'data'),
+    Input('ecmp-analysis-btn', 'n_clicks'),
     prevent_initial_call=True
 )
-def update_dropdown_options(disabled, stored_file):
-    global sample_ids
-    print(f"Sample IDs {sample_ids}")  # Debug statement
-    if not disabled and stored_file is not None:
-        if net_sim.is_running():
-            sample_ids = net_sim.get_routers_ids()
-            # Return options for dropdowns
-            dropdown_options = [{'label': id, 'value': id} for id in sample_ids]
-            return dropdown_options, dropdown_options, dropdown_options
-
-    # If disabled or no file uploaded yet, return empty options
+def update_dropdown_options(n_clicks):
+    # Assuming net_sim and sample_ids are defined and accessible
+    if net_sim.is_running():
+        print("Network is running")  # Debug statement
+        sample_ids = net_sim.get_routers_ids()  # Assuming this retrieves router IDs
+        dropdown_options = [{'label': id, 'value': id} for id in sample_ids]
+        return dropdown_options, dropdown_options, dropdown_options
+    
+    # If net_sim is not running or sample_ids is not populated, return empty options
     return [], [], []
+
 
 
 # Define the callback to store the uploaded file contents and navigate to the loading screen

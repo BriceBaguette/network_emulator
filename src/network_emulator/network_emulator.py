@@ -94,7 +94,7 @@ class NetworkEmulator:
         """
         return self.__is_running
     
-    def get_routers_ids(self):
+    def get_routers_ids(self) -> List[str]:
         return [router.id for router in self.routers]
 
     def build(self):
