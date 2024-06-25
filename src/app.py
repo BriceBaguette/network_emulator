@@ -104,7 +104,7 @@ menu_layout = dbc.Container(
                     className="d-flex justify-content-center"  # Center the button within the column
                 ),
                 dbc.Col(
-                    dbc.Button("ECMP Analysis", color="primary", size="lg", id="ecmp-analysis-btn"),
+                    dbc.Button("Topology Analysis", color="primary", size="lg", id="ecmp-analysis-btn"),
                     width=6,  # 50% of the available space in this row
                     className="d-flex justify-content-center"  # Center the button within the column
                 )
@@ -133,11 +133,12 @@ start_simulation_layout = dbc.Container(
     ]
 )
 
-ecmp_analysis_layout = dbc.Container(
+def ecmp_analysis_layout(dropdown_options) ->dbc.Container : 
+    return dbc.Container(
     [
         dbc.Row(
             dbc.Col(
-                html.H1("ECMP Analysis Page", className="text-center my-4")
+                html.H1("Topology Analysis Page", className="text-center my-4")
             )
         ),
         dbc.Row(
@@ -149,6 +150,7 @@ ecmp_analysis_layout = dbc.Container(
             dbc.Col(
                 dcc.Dropdown(
                     id='ecmp-id-dropdown',
+                    options=dropdown_options,
                     placeholder="Select an ID"
                 ),
                 width=6,
@@ -162,14 +164,14 @@ ecmp_analysis_layout = dbc.Container(
         ),
         dbc.Row(
             dbc.Col(
-                html.H2("Additional Analysis", className="text-center my-4")
+                html.H2("Latency Imbalance Analysis", className="text-center my-4")
             )
         ),
         dbc.Row(
             dbc.Col(
                 dcc.Dropdown(
                     id='additional-id-dropdown-1',
-                    options=[{'label': id, 'value': id} for id in sample_ids],
+                    options=dropdown_options,
                     placeholder="Select an ID"
                 ),
                 width=6,
@@ -180,7 +182,7 @@ ecmp_analysis_layout = dbc.Container(
             dbc.Col(
                 dcc.Dropdown(
                     id='additional-id-dropdown-2',
-                    options=[{'label': id, 'value': id} for id in sample_ids],
+                    options=dropdown_options,
                     placeholder="Select an ID"
                 ),
                 width=6,
@@ -196,32 +198,12 @@ ecmp_analysis_layout = dbc.Container(
         ),
         dbc.Row(
             dbc.Col(
-                html.Div(id='additional-analysis-graph', className="mt-4")
+                html.Div(id='additional-analysis-output', className="mt-4")
             )
         )
     ],
     fluid=True
 )
-
-@app.callback(
-    Output('ecmp-id-dropdown', 'options'),
-    Output('additional-id-dropdown-1', 'options'),
-    Output('additional-id-dropdown-2', 'options'),
-    Input('ecmp-analysis-btn', 'n_clicks'),
-    prevent_initial_call=True
-)
-def update_dropdown_options(n_clicks):
-    # Assuming net_sim and sample_ids are defined and accessible
-    if net_sim.is_running():
-        print("Network is running")  # Debug statement
-        sample_ids = net_sim.get_routers_ids()  # Assuming this retrieves router IDs
-        dropdown_options = [{'label': id, 'value': id} for id in sample_ids]
-        return dropdown_options, dropdown_options, dropdown_options
-    
-    # If net_sim is not running or sample_ids is not populated, return empty options
-    return [], [], []
-
-
 
 # Define the callback to store the uploaded file contents and navigate to the loading screen
 @app.callback(
@@ -232,27 +214,31 @@ def update_dropdown_options(n_clicks):
 )
 def store_file_and_redirect(contents):
     if contents is not None:
-        print("File uploaded successfully")  # Debug statement
         return contents, '/loading'
     return None, '/'
 
 # Define the callback to update the content based on button click
-@app.callback(
+@app.callback( 
     Output('button-output', 'children'),
     [Input('start-simulation-btn', 'n_clicks'),
      Input('ecmp-analysis-btn', 'n_clicks')],
     prevent_initial_call=True
 )
-def update_output(start_simulation_n, ecmp_analysis_n):
+def update_output(_, __):
     ctx = dash.callback_context
     if not ctx.triggered:
         return dash.no_update
-
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    if button_id == 'start-simulation-btn':
+    if button_id == 'ecmp-analysis-btn':
+        dropdown_options = []
+        if net_sim == None:
+            dcc.Location(id='url', refresh=True, pathname='/')
+        if net_sim.is_running():
+            sample_ids = net_sim.get_routers_ids()  # Assuming this retrieves router IDs
+            dropdown_options = [{'label': id, 'value': id} for id in sample_ids]
+        return ecmp_analysis_layout(dropdown_options)
+    elif button_id == 'start-simulation-btn':
         return start_simulation_layout
-    elif button_id == 'ecmp-analysis-btn':
-        return ecmp_analysis_layout
     return dash.no_update
 
 # Define the callback to update the ECMP Analysis content based on dropdown selection
@@ -262,29 +248,42 @@ def update_output(start_simulation_n, ecmp_analysis_n):
     prevent_initial_call=True
 )
 def update_ecmp_graphs(selected_id):
-    print(f"Sample IDs {sample_ids}")  # Debug statement
     if selected_id:
-        ecmp_values = net_sim.ecmp_analysis(selected_id)
+        ecmp_values, path = net_sim.ecmp_analysis(selected_id)
         # Replace with actual graph generation based on the selected ID
         return html.Div([
-            dcc.Graph(figure={'data': [{'x': ecmp_values.keys, 'y': ecmp_values.values, 'type': 'line', 'name': selected_id}]}),
-            dcc.Graph(figure={'data': [{'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': selected_id}]})
+            dcc.Graph(figure={'data': [{'x': list(ecmp_values.keys()), 'y': list(ecmp_values.values()), 'type': 'bar', 'name': selected_id}],
+                              'layout': {'title': f'Number of destinations by number of paths for {selected_id}',
+                                         'xaxis': {'title': 'Number of paths'},
+                                         'yaxis': {'title': 'Number of destinations'}}}),
+            dcc.Graph(figure={'data': [{'x': list(path.keys()), 'y': list(path.values()), 'type': 'linear', 'name': selected_id}],  
+                              'layout': {'title': f'Latency with number of hops with {selected_id} as source',
+                                         'xaxis': {'title': 'Number of hops'},
+                                         'yaxis': {'title': 'Latency in ms'}}}),
         ])
     return dash.no_update
 
 # Define the callback to update the Additional Analysis content based on dropdowns and button click
 @app.callback(
-    Output('additional-analysis-graph', 'children'),
+    Output('additional-analysis-output', 'children'),
     [Input('submit-additional-analysis', 'n_clicks')],
     [State('additional-id-dropdown-1', 'value'),
      State('additional-id-dropdown-2', 'value')],
     prevent_initial_call=True
 )
 def update_additional_analysis(n_clicks, id1, id2):
+    wrong_paths = []
     if n_clicks and id1 and id2:
-        # Replace with actual graph generation based on the selected IDs
-        return dcc.Graph(figure={'data': [{'x': [1, 2, 3], 'y': [3, 1, 4], 'type': 'line', 'name': f'{id1} vs {id2}'}]})
-    return dash.no_update
+        wrong_paths = net_sim.latency_test(id1, id2)[1]
+    elif n_clicks and id1 and not id2:
+        for id in sample_ids:
+            if id != id1:
+                _, wrong_path = net_sim.latency_test(id1, id)
+                wrong_paths.extend(wrong_path)
+    else:
+        wrong_paths = net_sim.all_latency_test()
+    text_items = [html.Li(f"Path from {path[0][0]} to {path[0][-1]} going through {path[0][1:-1]} has a latency imbalance of {path[1]/1000} ms") for path in wrong_paths]
+    return html.Ul(text_items) if text_items else dash.no_update
 
 # Define the callback to build the network
 @app.callback(

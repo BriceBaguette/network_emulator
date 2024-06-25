@@ -626,7 +626,7 @@ class NetworkEmulator:
         return indices, multi_link_indices
         
 
-    def ecmp_analysis(self, source_id: str, show: bool = False) -> dict:
+    def ecmp_analysis(self, source_id: str, show: bool = False) -> Tuple[dict, dict]:
         source = self.routers[self.get_router_index_from_id(source_id)]
         ecmp_dict = {}
         for destination in self.routers:
@@ -675,10 +675,31 @@ class NetworkEmulator:
             plt.title('ECMP CDF analysis for router ' + source_id)
             plt.grid(True)
             plt.show()
-            
         
-        print(f"ECMP analysis for router {source_id}:\n Max number of paths: {max(ecmp_dict.keys())}\n Min number of paths: {min(ecmp_dict.keys())}\n Average number of paths: {sum([key*value for key, value in ecmp_dict.items()])/sum(ecmp_dict.values())}\n")       
-        return ecmp_dict
+        path = []    
+            
+        for router in self.routers:
+            if router != source:
+                new_path, _ = self.latency_test(source.id, router.id)
+                path.append(new_path)
+        
+        number_of_hop_count = {}
+        latency_hop_count = {}
+        
+        for item in path:
+            for path, latency in item:
+                if len(path) in number_of_hop_count:
+                    number_of_hop_count[len(path)] += 1
+                    latency_hop_count[len(path)] += latency
+                else:
+                    number_of_hop_count[len(path)] = 1
+                    latency_hop_count[len(path)] = latency
+                    
+        hop_latency = {}
+        for key, value in number_of_hop_count.items():
+            hop_latency[key] = latency_hop_count[key]/(value * 1000)
+        
+        return ecmp_dict, dict(sorted(hop_latency.items()))
                 
     def get_number_of_paths(self, source:Router, destination:Router, index:int):
         next_hop = source.forward_table[index].next_hop
@@ -694,11 +715,14 @@ class NetworkEmulator:
             counter += self.get_number_of_paths(next_router, destination, i)
         return counter
     
-    def all_latency_test(self):
+    def all_latency_test(self) -> List[Tuple[list, int]]:
+        wrong_paths = []
         for source in self.routers:
             for destination in self.routers:
                 if source != destination:
-                    self.latency_test(source.id, destination.id)
+                    _, wrong_path = self.latency_test(source.id, destination.id)
+                    wrong_paths.extend(wrong_path)
+        return wrong_paths
 
     def latency_test(self, source_id: str, destination_id: str):
         latencies = []
@@ -722,8 +746,8 @@ class NetworkEmulator:
         for i in range(len(latencies)):
             if latencies[i] >= min_latency + self.treshold * 1000:
                 wrong_paths.append((paths[i], latencies[i] - min_latency))
-        if(len(wrong_paths) > 0):
-            print(f" {source.ip_address} to {destination.ip_address}, there's {len(paths)} paths, there's {len(wrong_paths)} paths with the latency difference: {wrong_paths}")
+            
+        return zip(paths, latencies), wrong_paths
 
     def get_latency_and_path(self, current: Router, destination: Router, index: int, path: list, link_index: int, latency: int):
         next_hop = current.forward_table[index].next_hop
