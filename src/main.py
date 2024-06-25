@@ -1,4 +1,4 @@
-from network_emulator import NetworkEmulator
+from network_emulator.network_emulator import NetworkEmulator
 import argparse
 import time
 
@@ -25,8 +25,9 @@ def main():
                               num_generation=args.num_generations,load_folder=args.load_folder, save_folder=args.save_folder)
     net_sim.build()
     net_sim.start()
-    net_sim.ecmp_analysis("1.1.1.1", show=True)
-    net_sim.latency_test("1.1.1.1", "1.1.1.13")
+    #net_sim.ecmp_analysis("1.1.1.1", show=True)
+    #net_sim.all_latency_test()
+    net_sim.ipm_session("1", "5")
     #net_sim.add_hw_issue(400,1000,"6569f30442e7f25d7a592660")
     #net_sim.all_ipm_session()
     #net_sim.hw_issue_detection(sink_measure_file="./src/results/sink.csv", source_measure_file="./src/results/source.csv",latency=True)

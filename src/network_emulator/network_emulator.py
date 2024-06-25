@@ -19,8 +19,8 @@ from scipy.interpolate import interp1d
 from tqdm import tqdm
 from typing import List, Tuple
 import utils
-from link import Link
-from router import Router, ForwardTableElement
+from network_emulator.link import Link
+from network_emulator.router import Router, ForwardTableElement
 
 # Import necessary modules
 import matplotlib.pyplot as plt
@@ -77,12 +77,25 @@ class NetworkEmulator:
         self.net_graph = None
         self.g = None
         self.net_state_graph = None
+        self.__is_running = False
 
         self.session_id = None
         self.load_folder = load_folder
         self.save_folder = save_folder
         
         self.hw_issue : pd.DataFrame = pd.DataFrame(columns=['Router ID', 'Start', 'End', 'Previous Table Element', 'New Table Element', 'Entry Index'])
+
+    def is_running(self) -> bool:
+        """
+        Check if the network is running.
+
+        Returns:
+            bool: True if the network is running, False otherwise.
+        """
+        return self.__is_running
+    
+    def get_routers_ids(self):
+        return [router.id for router in self.routers]
 
     def build(self):
         """
@@ -345,6 +358,7 @@ class NetworkEmulator:
 
             # Print the time taken to start the network
         end = time.time()
+        self.__is_running = True
         print("Network started in: {}".format(end - start))
 
     def update_forward_table(self, G, source: int, target:int):
@@ -590,6 +604,8 @@ class NetworkEmulator:
         source = self.routers[self.get_router_index_from_id(source_id)]
         destination = self.routers[self.get_router_index_from_id(destination_id)]
         latencies = self.send_probs(source, destination, fl)[2]
+        latencies = [x/1000 for x in latencies]
+
         self.export_source_data(source=source.ip_address, destination=destination.ip_address,fl=fl, gen_number=gen_number, timestamp=t)
         self.export_sink_data(source=source.ip_address, destination=destination.ip_address,fl=fl, latencies=latencies, gen_number=gen_number, timestamp=t)
         
@@ -610,7 +626,7 @@ class NetworkEmulator:
         return indices, multi_link_indices
         
 
-    def ecmp_analysis(self, source_id: str, show: bool = False):
+    def ecmp_analysis(self, source_id: str, show: bool = False) -> dict:
         source = self.routers[self.get_router_index_from_id(source_id)]
         ecmp_dict = {}
         for destination in self.routers:
@@ -660,8 +676,10 @@ class NetworkEmulator:
             plt.grid(True)
             plt.show()
             
+        
         print(f"ECMP analysis for router {source_id}:\n Max number of paths: {max(ecmp_dict.keys())}\n Min number of paths: {min(ecmp_dict.keys())}\n Average number of paths: {sum([key*value for key, value in ecmp_dict.items()])/sum(ecmp_dict.values())}\n")       
-                    
+        return ecmp_dict
+                
     def get_number_of_paths(self, source:Router, destination:Router, index:int):
         next_hop = source.forward_table[index].next_hop
         next_router = self.routers[self.get_router_index_from_ip(next_hop)]
