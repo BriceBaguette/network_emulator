@@ -13,9 +13,11 @@ RUN pip install --upgrade pip setuptools wheel
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+# Expose the port Dash will run on (8050 by default)
+EXPOSE 8050
 
 # Define environment variable
 ENV NAME NetSim-env
 
+# Command to run the app
+CMD ["python", "src/app.py"]
