@@ -203,86 +203,78 @@ ecmp_analysis_layout = dbc.Container(
     fluid=True
 )
 
-# Define the callbacks
-
-# Callback to update dropdown options and page content based on URL pathname
 @app.callback(
-    [Output('ecmp-id-dropdown', 'options'),
-     Output('additional-id-dropdown-1', 'options'),
-     Output('additional-id-dropdown-2', 'options'),
-     Output('page-content', 'children')],
-    [Input('url', 'pathname')],
-    [State('stored-file', 'data')],
+    Output('ecmp-id-dropdown', 'options'),
+    Output('additional-id-dropdown-1', 'options'),
+    Output('additional-id-dropdown-2', 'options'),
+    Input('interval-component', 'disabled'),
+    State('stored-file', 'data'),
     prevent_initial_call=True
 )
-def update_page_content_and_dropdowns(pathname, stored_file):
+def update_dropdown_options(disabled, stored_file):
     global sample_ids
+    print(f"Sample IDs {sample_ids}")  # Debug statement
+    if not disabled and stored_file is not None:
+        if net_sim.is_running():
+            sample_ids = net_sim.get_routers_ids()
+            # Return options for dropdowns
+            dropdown_options = [{'label': id, 'value': id} for id in sample_ids]
+            return dropdown_options, dropdown_options, dropdown_options
 
-    if pathname == '/loading' and stored_file:
-        global net_sim
-        # Initialize NetworkEmulator and build network
-        net_sim = NetworkEmulator()
-        net_sim.build_network()
-        sample_ids = net_sim.get_router_ids()  # Assuming method to get router IDs
-
-        # Define menu layout for navigation after loading
-        menu_layout = dbc.Container(
-            [
-                dbc.Row(
-                    [
-                        dbc.Col(
-                            dbc.Button("Start Simulation", color="primary", size="lg", id="start-simulation-btn"),
-                            width=6,  # 50% of the available space in this row
-                            className="d-flex justify-content-center"  # Center the button within the column
-                        ),
-                        dbc.Col(
-                            dbc.Button("ECMP Analysis", color="primary", size="lg", id="ecmp-analysis-btn"),
-                            width=6,  # 50% of the available space in this row
-                            className="d-flex justify-content-center"  # Center the button within the column
-                        )
-                    ],
-                    justify="around",  # Space around the columns
-                    className="my-4",  # Optional: add vertical margin for better spacing
-                ),
-                dbc.Row(
-                    dbc.Col(
-                        html.Div(id='button-output', className="mt-4")
-                    )
-                )
-            ],
-            fluid=True,
-            style={"width": "80%"}  # Set the container width to 80% of the viewport
-        )
-
-        return ([{'label': id, 'value': id} for id in sample_ids],
-                [{'label': id, 'value': id} for id in sample_ids],
-                [{'label': id, 'value': id} for id in sample_ids],
-                menu_layout)
-
-    return ([], [], [], upload_layout)
+    # If disabled or no file uploaded yet, return empty options
+    return [], [], []
 
 
-# Callback to update ECMP analysis graphs based on dropdown selection
+# Define the callback to store the uploaded file contents and navigate to the loading screen
+@app.callback(
+    [Output('stored-file', 'data'),
+     Output('url', 'pathname')],
+    [Input('upload-data', 'contents')],
+    prevent_initial_call=True
+)
+def store_file_and_redirect(contents):
+    if contents is not None:
+        print("File uploaded successfully")  # Debug statement
+        return contents, '/loading'
+    return None, '/'
+
+# Define the callback to update the content based on button click
+@app.callback(
+    Output('button-output', 'children'),
+    [Input('start-simulation-btn', 'n_clicks'),
+     Input('ecmp-analysis-btn', 'n_clicks')],
+    prevent_initial_call=True
+)
+def update_output(start_simulation_n, ecmp_analysis_n):
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        return dash.no_update
+
+    button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    if button_id == 'start-simulation-btn':
+        return start_simulation_layout
+    elif button_id == 'ecmp-analysis-btn':
+        return ecmp_analysis_layout
+    return dash.no_update
+
+# Define the callback to update the ECMP Analysis content based on dropdown selection
 @app.callback(
     Output('ecmp-graphs', 'children'),
-    [Input('ecmp-id-dropdown', 'value')],
+    Input('ecmp-id-dropdown', 'value'),
     prevent_initial_call=True
 )
 def update_ecmp_graphs(selected_id):
-    global net_sim
-
+    print(f"Sample IDs {sample_ids}")  # Debug statement
     if selected_id:
-        ecmp_values = net_sim.run_ecmp_analysis(selected_id)
+        ecmp_values = net_sim.ecmp_analysis(selected_id)
         # Replace with actual graph generation based on the selected ID
         return html.Div([
             dcc.Graph(figure={'data': [{'x': ecmp_values.keys, 'y': ecmp_values.values, 'type': 'line', 'name': selected_id}]}),
             dcc.Graph(figure={'data': [{'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': selected_id}]})
         ])
-
     return dash.no_update
 
-
-# Callback to update Additional Analysis graph based on dropdowns and button click
+# Define the callback to update the Additional Analysis content based on dropdowns and button click
 @app.callback(
     Output('additional-analysis-graph', 'children'),
     [Input('submit-additional-analysis', 'n_clicks')],
@@ -294,41 +286,63 @@ def update_additional_analysis(n_clicks, id1, id2):
     if n_clicks and id1 and id2:
         # Replace with actual graph generation based on the selected IDs
         return dcc.Graph(figure={'data': [{'x': [1, 2, 3], 'y': [3, 1, 4], 'type': 'line', 'name': f'{id1} vs {id2}'}]})
-
     return dash.no_update
 
-
-# Callback to build network and update loading screen
+# Define the callback to build the network
 @app.callback(
     Output('interval-component', 'disabled'),
-    [Input('url', 'pathname')],
-    [State('stored-file', 'data')],
+    Input('url', 'pathname'),
+    State('stored-file', 'data'),
     prevent_initial_call=True
 )
-def build_network_and_update_loading(pathname, stored_file):
-    if pathname == '/loading' and stored_file:
+def build_network(pathname, stored_file):
+    if pathname == '/loading' and stored_file is not None:
         global net_sim
-        # Initialize NetworkEmulator and build network
-        net_sim = NetworkEmulator()
-        net_sim.build_network()
-        return False  # Disable interval component after network build
+        # Decode the base64 string
+        content_type, content_string = stored_file.split(',')
+        decoded = base64.b64decode(content_string)
+        # Create a temporary file to save the uploaded content
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(decoded)
+            temp_file_path = temp_file.name
 
+        net_sim = NetworkEmulator(node_file=None, link_file=None, single_file=temp_file_path,
+                                  generation_rate=20, num_generation=1, load_folder=None, save_folder=None)
+        net_sim.build()
+        net_sim.start()
+        global sample_ids
+        sample_ids = net_sim.get_routers_ids()
+        # Clean up the temporary file after use
+        os.remove(temp_file_path)
+
+        return False  # Enable the interval component
     return True
 
-
-# Callback to redirect based on network status
+# Define the interval callback to handle redirection to the final page
 @app.callback(
-    Output('url', 'pathname'),
-    [Input('interval-component', 'n_intervals')],
+    Output('url', 'pathname', allow_duplicate=True),
+    Input('interval-component', 'n_intervals'),
     prevent_initial_call=True
 )
-def redirect_to_menu(n_intervals):
-    global net_sim
-
-    if net_sim and net_sim.is_running():
+def redirect_to_final(_):
+    if net_sim and net_sim.is_running():  # Assuming there's a method to check the network status
         return '/menu'
-
     return '/loading'
+
+
+# Define the callback to update the layout based on the URL
+@app.callback(
+    Output('page-content', 'children'),
+    Input('url', 'pathname'),
+    prevent_initial_call=True
+)
+def display_page(pathname):
+    if pathname == '/loading':
+        return loading_layout
+    elif pathname == '/menu':
+        return menu_layout
+    else:
+        return upload_layout
 
 
 # Run the app
