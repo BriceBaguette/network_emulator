@@ -73,11 +73,13 @@ class NetworkEmulator:
         self.num_generation = num_generation
         self.treshold = treshold
         self.duration = 300
+        self.current_step = 0
 
         self.net_graph = None
         self.g = None
         self.net_state_graph = None
         self.__is_running = False
+        self.working = False
 
         self.session_id = None
         self.load_folder = load_folder
@@ -94,8 +96,17 @@ class NetworkEmulator:
         """
         return self.__is_running
     
+    def get_router_from_id(self,id) -> Router:
+        for router in self.routers:
+            if router.id == id:
+                return router
+        return None
+    
     def get_routers_ids(self) -> List[str]:
         return [router.id for router in self.routers]
+    
+    def get_topology(self) -> nx.MultiDiGraph:
+        return self.g
 
     def build(self):
         """
@@ -378,18 +389,21 @@ class NetworkEmulator:
                         dest=self.routers[path[len(path) - 1]].ip_address
                     ))
 
-    def export_sink_data(self, source, destination,fl, latencies, gen_number, timestamp, vrf="Measurement"):
+    def export_sink_data(self, source, destination,fl, latencies, gen_number, timestamp, vrf="Measurement", file = None):
 
         # Export the data to a CSV file
-        sink_csv_file = './src/results/sink.csv'
-
-        if os.path.isfile(sink_csv_file):
-            sink = pd.read_csv(sink_csv_file)
-            if self.session_id == None:
-                self.session_id = sink.iloc[-1]['Session ID'] + 1
+        if file == None:
+            sink_csv_file = './src/results/sink.csv'
         else:
-            sink = pd.DataFrame(columns=['Session ID', 'Source', 'Destination','FL', 'VRF', 'TimeStamp',
-                                'Min Latency', 'Max Latency', 'D flag', 'Packet Counter', 'Histogram type', 'Liveness flag', 'Telemetry Period'])
+            sink_csv_file = file
+
+        try:
+            sink = pd.read_csv(sink_csv_file)
+            if self.session_id is None:
+                self.session_id = sink.iloc[-1]['Session ID'] + 1
+        except:
+            sink = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'FL', 'VRF', 'TimeStamp',
+                                            'Min Latency', 'Max Latency', 'I flag', 'Packet Counter', 'Histogram type', 'Liveness flag', 'Telemetry Period'])
             self.session_id = 1
         histogram_type = None
         if gen_number % 2 == 0:
@@ -413,7 +427,7 @@ class NetworkEmulator:
                    'TimeStamp': timestamp,
                    'Min Latency': min(latencies),
                    'Max Latency': max(latencies),
-                   'D flag': max(latencies) - min(latencies) >= self.treshold,
+                   'I flag': max(latencies) - min(latencies) >= self.treshold,
                    'Packet Counter': len(latencies),
                    'Histogram type': histogram_type,
                    'Liveness flag': True,
@@ -423,14 +437,14 @@ class NetworkEmulator:
         sink.loc[len(sink)] = new_row
         pd.DataFrame.to_csv(sink, sink_csv_file, index=False)
 
-    def export_source_data(self, source, destination,fl, gen_number, timestamp, vrf="Measurement"):
+    def export_source_data(self, source, destination,fl, gen_number, timestamp, vrf="Measurement", file = None):
         # Export the data to a CSV file
         source_csv_file = './src/results/source.csv'
-        if os.path.isfile(source_csv_file):
+        try:
             sink = pd.read_csv(source_csv_file)
             if self.session_id == None:
                 self.session_id = sink.iloc[-1]['Session ID'] + 1
-        else:
+        except:
             sink = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'FL', 'VRF',
                                 'TimeStamp', 'Probe GenRate', 'Packet Counter', 'Packet Counter Type', 'Telemetry Period'])
             self.session_id = 1
@@ -467,12 +481,14 @@ class NetworkEmulator:
             source_id = random.choice(self.routers).id
         if destination_id == None:
             destination_id = random.choice(self.routers).id
-        if next_hop_id == None:
-            next_hop_id = random.choice(self.routers).id
         
         router = self.routers[self.get_router_index_from_id(source_id)]
         
         destination = self.routers[self.get_router_index_from_id(destination_id)]
+        
+        if next_hop_id == None:
+            next_hop_ids = [router.forward_table[index].next_hop for index in range(len(router.forward_table)) if router.forward_table[index].destination == destination.ip_address]
+            next_hop_id = random.choice(next_hop_ids)
         
         next_hop = self.routers[self.get_router_index_from_id(next_hop_id)]
         
@@ -504,25 +520,14 @@ class NetworkEmulator:
         
         for gen_number in range(self.num_generation):
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            with ThreadPoolExecutor() as executor:
-                # Submit tasks for each source
-                futures = []
-                
-                for source in self.routers:
-                    for destination in self.routers:
-                        if source != destination:
-                            future = executor.submit(
-                                    self.send_probs, source, destination, flow_label)
-                            futures.append(future)
+            for source in self.routers:
+                for destination in self.routers:
+                    if source != destination:
+                        result = self.send_probs(source, destination, flow_label)
+                        #self.export_sink_data(result[0].ip_address, result[1].ip_address, flow_label, result[2], gen_number, timestamp)
+                        #self.export_source_data(result[0].ip_address, result[1].ip_address, flow_label, gen_number, timestamp)
 
-                # Wait for all tasks to complete
-                for future in futures:
-                    result =  future.result()
-                    self.export_sink_data(result[0].ip_address, result[1].ip_address, flow_label, result[2], gen_number, timestamp)
-                    self.export_source_data(result[0].ip_address, result[1].ip_address, flow_label, gen_number, timestamp)
-
-        print("Emulated all ipm sessions for " + str(self.num_generation) + " generations with " +
-              str(self.generation_rate*self.duration) + " probes in " + str(time.time() - start))
+        return "Emulated all ipm sessions for " + str(self.num_generation) + " generations with " + str(self.generation_rate*self.duration) + " probes in " + str(time.time() - start)
         
     def send_prob(self, source: Router, destination: Router, flow_label: int):
         # Initialize a latency array
@@ -783,7 +788,6 @@ class NetworkEmulator:
                     self.path_hw_detection(source=source_router, destination=destination_router, index=indices[0], routers_id=routers_id, sink_dataframe=sink_dataframe)
                     if len(routers_id) == 0: 
                         routers_id.append(source_router.id)
-                    print(f"HW issue on: {routers_id}")
         elif loss:
             pass
         

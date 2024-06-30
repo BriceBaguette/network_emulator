@@ -1,74 +1,100 @@
-import re
-from typing import List
-from router import Router
-from link import Link
+import dash
+from dash import dcc, html, Input, Output
+import dash_bootstrap_components as dbc
+import networkx as nx
+import plotly.graph_objs as go
 
-def get_router_by_name(name: str, routers: List[Router]) -> Router:
-    for router in routers:
-        if router.node_name == name:
-            return router
-    return None
+# Initialize the Dash app
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-with open("../other_topo/ecmp_topo.txt", "r") as file:
-    topo = file.read()
+# Function to create a network graph figure
+def create_network_graph():
+    # Create a simple networkx graph
+    G = nx.karate_club_graph()
 
-routers_info = topo.split("\n\n")
+    # Get the positions of the nodes using a layout algorithm
+    pos = nx.spring_layout(G)
 
-for router in routers_info:
-    print(router)
-    print("\n")
+    # Create the edge traces
+    edge_trace = []
+    for edge in G.edges():
+        x0, y0 = pos[edge[0]]
+        x1, y1 = pos[edge[1]]
+        edge_trace.append(
+            go.Scatter(
+                x=[x0, x1, None],
+                y=[y0, y1, None],
+                line=dict(width=1, color='#888'),
+                hoverinfo='none',
+                mode='lines'
+            )
+        )
 
-router_id_pattern = r"Router ID:\s*(\S+)"
+    # Create the node trace
+    node_trace = go.Scatter(
+        x=[pos[node][0] for node in G.nodes()],
+        y=[pos[node][1] for node in G.nodes()],
+        text=[str(node) for node in G.nodes()],
+        mode='markers+text',
+        hoverinfo='text',
+        marker=dict(
+            showscale=True,
+            colorscale='YlGnBu',
+            color=[],
+            size=10,
+            colorbar=dict(
+                thickness=15,
+                title='Node Connections',
+                xanchor='left',
+                titleside='right'
+            )
+        )
+    )
 
-hostname_pattern = r"Hostname:\s*(\S+)"
+    # Color nodes by their degree
+    node_adjacencies = []
+    for node, adjacencies in enumerate(G.adjacency()):
+        node_adjacencies.append(len(adjacencies[1]))
+    node_trace.marker.color = node_adjacencies
 
-ip_address_pattern = r"IP Address:\s*(\S+)"
+    # Create the figure
+    fig = go.Figure(
+        data=edge_trace + [node_trace],
+        layout=go.Layout(
+            showlegend=False,
+            hovermode='closest',
+            margin=dict(b=0, l=0, r=0, t=40),
+            annotations=[dict(
+                text="Network graph made with Python",
+                showarrow=False,
+                xref="paper", yref="paper"
+            )],
+            xaxis=dict(showgrid=False, zeroline=False),
+            yaxis=dict(showgrid=False, zeroline=False)
+        )
+    )
+    return fig
 
-routers: List[Router] = []
-links: List[Link] = []
+# Define the layout of the app
+app.layout = dbc.Container(
+    [
+        dbc.Row(
+            dbc.Col(
+                html.H1("Network Graph Visualization", className="text-center my-4")
+            )
+        ),
+        dbc.Row(
+            dbc.Col(
+                dcc.Graph(
+                    id='network-graph',
+                    figure=create_network_graph()
+                )
+            )
+        )
+    ],
+    fluid=True
+)
 
-for router in routers_info:
-    router_match = re.search(router_id_pattern, router)
-    host_match = re.search(hostname_pattern, router)
-    ip_match = re.search(ip_address_pattern, router)
-    if router_match and host_match and ip_match:
-        router_id = router_match.group(1)
-        hostname = host_match.group(1)
-        ip_address = ip_match.group(1)
-        routers.append(Router(router_id=router_id, node_name=hostname, ip_address=ip_address, active=1))
-    
-pattern = re.compile(r'Metric:\s*\d+\s+IS-Extended.*?(?=Metric:|\Z)', re.DOTALL)
-  
-delay_pattern = r"Link Average Delay:\s*(\d+)"
-
-neighbor_pattern = r"Metric:\s*(\d+).*IS-Extended (\S+)\.\d+"
-for router in routers_info:
-    host_match = re.search(hostname_pattern, router)
-    if host_match:
-        hostname = host_match.group(1)
-        source: Router = get_router_by_name(hostname, routers)
-        # Find all matches
-        matches = pattern.findall(router) 
-        for match in matches:
-            neighbor_match = re.search(neighbor_pattern, match, re.DOTALL)
-            delay_match = re.search(delay_pattern, match)
-            print(match)
-            print(neighbor_match)
-            print(delay_match)
-            if neighbor_match and delay_match:
-                neighbor = get_router_by_name(neighbor_match.group(2), routers)
-                if neighbor:
-                    link = Link(link_id=len(links), source=source.ip_address, destination=neighbor.ip_address, delay=delay_match.group(1), cost=neighbor_match.group(1))
-                    links.append(link)
-            
-for router in routers:
-    print(f"Router ID: {router.id}, Hostname: {router.node_name}, IP Address: {router.ip_address}")
-    print("\n")
-        
-for link in links:
-    print(f"Link ID: {link.id}, Source: {link.source}, Destination: {link.destination}, Delay: {link.delay}, Cost: {link.cost}")
-    print("\n")
-
-
-
-
+# Run the app
+if __name__ == '__main__':
+    app.run_server(debug=True, host='0.0.0.0')
