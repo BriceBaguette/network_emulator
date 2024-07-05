@@ -12,6 +12,8 @@ from dash.long_callback import DiskcacheLongCallbackManager
 import diskcache
 import datetime
 import zipfile
+import pandas as pd
+import plotly.express as px
 
 
 cache = diskcache.Cache("./cache")
@@ -36,7 +38,6 @@ app.layout = dbc.Container(
         dcc.Interval(id='emulate-interval', interval=100,
                      n_intervals=0, disabled=True),
         html.Div(id='page-content'),
-        dcc.Store(id='latency-data', data={}),
     ],
     fluid=True,
 )
@@ -115,14 +116,19 @@ menu_layout = dbc.Container(
             [
                 dbc.Col(
                     dbc.Button("Emulation", color="primary",
-                               size="lg", id="start-simulation-btn"),
-                    width=6,  # 50% of the available space in this row
+                               size="lg", id="start-simulation-btn", className="w-100"),
+                    
                     className="d-flex justify-content-center"  # Center the button within the column
                 ),
                 dbc.Col(
                     dbc.Button("Topology Analysis", color="primary",
-                               size="lg", id="ecmp-analysis-btn"),
-                    width=6,  # 50% of the available space in this row
+                               size="lg", id="ecmp-analysis-btn", className="w-100"),
+
+                    className="d-flex justify-content-center"  # Center the button within the column
+                ),
+                dbc.Col(
+                    dbc.Button("Measurements Analysis", color="primary",
+                               size="lg", id="analysis-btn", className="w-100"),
                     className="d-flex justify-content-center"  # Center the button within the column
                 )
             ],
@@ -214,7 +220,7 @@ def start_simulation_layout() -> dbc.Container:
                     html.H1("Emulation", className="text-center my-4")
                 )
             ),
-            #dbc.Row(dbc.Col(dcc.Graph(id='network-graph',
+            # dbc.Row(dbc.Col(dcc.Graph(id='network-graph',
             #      figure=create_network_graph()))),
             dbc.Row(
                 dbc.Col(
@@ -250,37 +256,33 @@ def start_simulation_layout() -> dbc.Container:
                 )
             ),
             dbc.Row([
-            dbc.Col(
-                dcc.Dropdown(
-                    id='hw-failure-dropdown',
-                    options=sample_ids,
-                    placeholder="Select a router that encounters hardware failure"
+                dbc.Col(
+                    dcc.Dropdown(
+                        id='hw-failure-dropdown',
+                        options=sample_ids,
+                        placeholder="Select a router that encounters hardware failure"
+                    ),
                 ),
-            ),
-            dbc.Form([
-                            dbc.CardGroup(
-                                [
-                                    dbc.Label("Start Probe",
-                                              html_for="start-probe"),
-                                    dbc.Input(type="number", id="start_probe",
-                                              value = 0),
-                                ]
-                            ),
-                            dbc.CardGroup(
-                                [
-                                    dbc.Label("End Probe",
-                                              html_for="end-probe"),
-                                    dbc.Input(
-                                        type="number", id="end-probe", value=0),
-                                ]
-                            ),]),
-            dbc.Col(
-                dbc.Button("Submit", id='submit-hw-failure', color="primary",
-                           className="mt-3", style={'justifyContent': 'center'}),
-            )
+                dbc.Form([
+                    dbc.CardGroup(
+                        [
+                            dbc.Label("Start Probe",
+                                      html_for="start-probe"),
+                            dbc.Input(type="number", id="start_probe",
+                                      value=0),
+                        ]
+                    ),
+                    dbc.CardGroup(
+                        [
+                            dbc.Label("End Probe",
+                                      html_for="end-probe"),
+                            dbc.Input(
+                                type="number", id="end-probe", value=0),
+                        ]
+                    ),]),
             ],
-                    
-        ),
+
+            ),
             dbc.Row(dbc.Col(dbc.Button("Emulate Now", color="primary", size="lg", id="emulate-btn"),
                             width="auto"
                             ),
@@ -367,6 +369,65 @@ def ecmp_analysis_layout(dropdown_options) -> dbc.Container:
         fluid=True
     )
 
+def measurements_analysis_layout() -> dbc.Container: 
+    return dbc.Container(
+    [
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dcc.Upload(
+                            id='upload-source',
+                            children=html.Div(['Drag and Drop or ', html.A('Select a Source CSV File')]),
+                            style={
+                                'width': '100%',
+                                'height': '60px',
+                                'lineHeight': '60px',
+                                'borderWidth': '1px',
+                                'borderStyle': 'dashed',
+                                'borderRadius': '5px',
+                                'textAlign': 'center',
+                                'margin': '10px'
+                            },
+                            multiple=False
+                        ),
+                        html.Div(id='source-upload-output')
+                    ],
+                    width=6
+                ),
+                dbc.Col(
+                    [
+                        dcc.Upload(
+                            id='upload-sink',
+                            children=html.Div(['Drag and Drop or ', html.A('Select a Sink CSV File')]),
+                            style={
+                                'width': '100%',
+                                'height': '60px',
+                                'lineHeight': '60px',
+                                'borderWidth': '1px',
+                                'borderStyle': 'dashed',
+                                'borderRadius': '5px',
+                                'textAlign': 'center',
+                                'margin': '10px'
+                            },
+                            multiple=False
+                        ),
+                        html.Div(id='sink-upload-output')
+                    ],
+                    width=6
+                ),
+            ]
+        ),
+        dbc.Row(
+            dbc.Col(
+                html.Div(id='combined-output', style={'marginTop': '20px'}),
+                width=12
+            )
+        )
+    ],
+    fluid=True
+)
+
 
 @app.callback([Input('probe-rate', 'value'),
                Input('number-of-generation', 'value'),
@@ -399,10 +460,11 @@ def store_file_and_redirect(contents):
 @app.callback(
     Output('button-output', 'children'),
     [Input('start-simulation-btn', 'n_clicks'),
-     Input('ecmp-analysis-btn', 'n_clicks')],
+     Input('ecmp-analysis-btn', 'n_clicks'),
+     Input('analysis-btn', 'n_clicks')],
     prevent_initial_call=True
 )
-def update_output(_, __):
+def update_output(_, __, ___):
     ctx = dash.callback_context
     if not ctx.triggered:
         return dash.no_update
@@ -418,6 +480,8 @@ def update_output(_, __):
         return ecmp_analysis_layout(dropdown_options)
     elif button_id == 'start-simulation-btn':
         return start_simulation_layout()
+    elif button_id == 'analysis-btn':
+        return measurements_analysis_layout()
     return dash.no_update
 
 # Define the callback to update the ECMP Analysis content based on dropdown selection
@@ -456,8 +520,15 @@ def update_ecmp_graphs(selected_id):
 )
 def update_additional_analysis(n_clicks, id1, id2):
     wrong_paths = []
+    graph_value = {}
     if n_clicks and id1 and id2:
-        wrong_paths = net_sim.latency_test(id1, id2)[1]
+        paths, wrong_paths = net_sim.latency_test(id1, id2)
+        for path in paths:
+            key = path[1]/1000
+            if key not in graph_value or graph_value[key] is None:
+                graph_value[key] = 1
+            else:
+                graph_value[key] += 1
     elif n_clicks and id1 and not id2:
         for id in sample_ids:
             if id != id1:
@@ -465,9 +536,18 @@ def update_additional_analysis(n_clicks, id1, id2):
                 wrong_paths.extend(wrong_path)
     else:
         wrong_paths = net_sim.all_latency_test()
-    print(wrong_paths)
-    text_items = [html.Li(f"Path from {wrong_paths[0][0]} to {path[0][-1]} going through {path[0][1:-1]} has a latency imbalance of {path[1]/1000} ms") for path in wrong_paths]
-    return html.Ul(text_items) if text_items else dash.no_update
+    if len(wrong_paths) > 0:
+        text_items = [html.Li(f"Path from {wrong_paths[0][0]} to {path[0][-1]} going through {
+                              path[0][1:-1]} has a latency imbalance of {path[1]/1000} ms") for path in wrong_paths]
+    else:
+        text_items = html.Li("No wrong paths found")
+
+    return html.Div([
+        dcc.Graph(figure={'data': [{'x': list(graph_value.keys()), 'y': list(graph_value.values()), 'type': 'bar', 'name': f"Latency for number of paths between {id1} and {id2}"}],
+                          'layout': {'title': f"Latency for number of paths between {id1} and {id2}",
+                                     'xaxis': {'title': 'Latency in ms'},
+                                     'yaxis': {'title': 'Number of paths'}}}) if len(graph_value.items()) > 0 else html.Div(),
+        html.Ul(text_items)])
 
 # Define the callback to build the network
 
@@ -510,7 +590,7 @@ def build_network(pathname, stored_file):
     prevent_initial_call=True
 )
 def redirect_to_final(_):
-    if net_sim and net_sim.is_running():  
+    if net_sim and net_sim.is_running():
         return '/menu'
     return '/loading'
 
@@ -520,27 +600,28 @@ def redirect_to_final(_):
         Output('progress-output', 'children'),
         Output('emulate-btn', 'disabled'),
         Output('emulate-interval', 'disabled'),
-        Output('latency-data', 'data')
     ],
     [
         Input('emulate-btn', 'n_clicks'),
         Input('emulate-interval', 'n_intervals')
     ],
-    [State('latency-data', 'data')],
+    [State('hw-failure-dropdown', 'value'),
+     State('start_probe', 'value'),
+     State('end-probe', 'value')],
     prevent_initial_call=True
 )
-def start_emulation(n_clicks, n_intervals, data):
+def start_emulation(n_clicks, n_intervals, router_id, start, end):
     if n_clicks is None or n_clicks == 0:
-        return dash.no_update, False, True, data
+        return dash.no_update, False, True,
 
     if net_sim.working:
-        return dash.no_update, True, False, data
+        return dash.no_update, True, False, 
     
-    # Initialize data if empty
-    if data is None or net_sim.current_step == 0:
-        data = {}
+    if net_sim.current_step == 0 and router_id is not None:
+        net_sim.add_hw_issue(start=start, end=end, source_id=router_id)
 
-    total_steps = net_sim.num_generation * net_sim.duration * net_sim.generation_rate
+    total_steps = net_sim.num_generation * \
+        net_sim.duration * net_sim.generation_rate
 
     net_sim.working = True
 
@@ -551,9 +632,11 @@ def start_emulation(n_clicks, n_intervals, data):
         for _, row in net_sim.hw_issue.iterrows():
             start_time.append(row['Start'])
             end_time.append(row['End'])
-        
-        start_indices = [index for index, value in enumerate(start_time) if value == net_sim.current_step]
-        end_indices = [index for index, value in enumerate(end_time) if value == net_sim.current_step]
+
+        start_indices = [index for index, value in enumerate(
+            start_time) if value == net_sim.current_step]
+        end_indices = [index for index, value in enumerate(
+            end_time) if value == net_sim.current_step]
         for s in start_indices:
             net_sim.hw_update_interface(net_sim.hw_issue.iloc[s])
         for e in end_indices:
@@ -561,11 +644,19 @@ def start_emulation(n_clicks, n_intervals, data):
         for source in routers:
             for destination in routers:
                 if source != destination:
-                    key = source.ip_address + "-" + destination.ip_address
-                    if key not in data or data[key] is None:
-                        data[key] = []
                     fl = random.randint(0, 256)
-                    data[key].append(net_sim.send_prob(source=source, destination=destination, flow_label=fl))
+                    net_sim.send_prob(
+                        source=source, destination=destination, flow_label=fl)
+
+        if net_sim.current_step % (net_sim.generation_rate*net_sim.duration) == 0 and net_sim.current_step != 0:
+            timestamp = datetime.datetime.now()
+            print(f"Exporting data at {timestamp}")
+            for router in routers:
+                net_sim.export_source_data(source_router=router, fl=None, gen_number=net_sim.current_step //
+                                           (net_sim.generation_rate*net_sim.duration), timestamp=timestamp)
+                net_sim.export_sink_data(sink_router=router, fl=None, gen_number=net_sim.current_step //
+                                         (net_sim.generation_rate*net_sim.duration), timestamp=timestamp)
+                router.update_bins()
 
         net_sim.current_step += 1
         net_sim.working = False
@@ -579,61 +670,39 @@ def start_emulation(n_clicks, n_intervals, data):
             color="primary"
         )
         progress_display = dbc.Container([
-            dbc.Row(dbc.Col(f"{net_sim.current_step}/{total_steps} steps completed", className="text-center"), className="mt-4"),
+            dbc.Row(dbc.Col(f"{net_sim.current_step}/{total_steps} steps completed",
+                    className="text-center"), className="mt-4"),
             dbc.Row(dbc.Col(progress_bar), className="mt-4"),
         ], className="my-4")
 
-        return progress_display, True, False, data
+        return progress_display, True, False, 
 
     net_sim.current_step = 0
     net_sim.working = False
+    net_sim.session_id += 1
     # Simulation completed, enable the button and provide download option
     download_button = dbc.Row(
         dbc.Col(
-            dbc.Button("Download Output", color="primary", size="lg", id="download-btn"),
+            dbc.Button("Download Output", color="primary",
+                       size="lg", id="download-btn"),
             width="auto"
         ),
         justify="center",
         className="mb-4"
     )
 
-    return download_button, False, True, data
-
-
-
-@app.callback(
-    Output('submit-hw-failure', 'disabled'),
-    Input('submit-hw-failure', 'n_clicks'),
-    [State('hw-failure-dropdown', 'value'),
-     State('start_probe', 'value'),
-     State('end-probe', 'value')],
-    prevent_initial_call=True
-)
-def simulate_hw_failure(n_clicks, router_id, start, end):
-    if n_clicks is None or n_clicks == 0:
-        return dash.no_update
-    net_sim.add_hw_issue(start = start, end = end, source_id=router_id)
-    return True
+    return download_button, False, True, 
 
 @app.callback(
     Output('download-link', 'data'),
     Input('download-btn', 'n_clicks'),
-    State('latency-data', 'data'),
     prevent_initial_call=True
 )
-def download_output(n_click, data: dict):
+def download_output(n_click):
     if n_click is None or n_click == 0:
         return dash.no_update
         # Example data extraction and function call (replace with actual logic)
     os.makedirs('./src/results/', exist_ok=True)
-    
-    for key, latencies in data.items():
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        source, destination = key.split('-')
-        for i in range(net_sim.num_generation):
-            net_sim.export_sink_data(source, destination, None, latencies[i*net_sim.duration*net_sim.generation_rate:(i+1)*net_sim.duration*net_sim.generation_rate - 1], i, timestamp=timestamp)
-            net_sim.export_source_data(source, destination, None, i, timestamp=timestamp)
-
     sink_file_path = './src/results/sink.csv'
     source_file_path = './src/results/source.csv'
     zip_file_path = './src/results/output_files.zip'
@@ -645,7 +714,131 @@ def download_output(n_click, data: dict):
 
     print(f"Downloaded output files to {zip_file_path}")
     return dcc.send_file(zip_file_path, 'output_files.zip', type='zip')
+
+@app.callback(
+    [Output('source-upload-output', 'children'),
+     Output('sink-upload-output', 'children'),
+     Output('combined-output', 'children')],
+    [Input('upload-source', 'filename'),
+     Input('upload-sink', 'filename')],
+    [State('upload-source', 'contents'),
+     State('upload-sink', 'contents')]
+)
+def upload_measurement_files(source_filename, sink_filename, source_contents, sink_contents):
+    source_message = ''
+    sink_message = ''
+    analysis_layout = dbc.Container()
+
+    if source_filename is not None:
+        if 'source' in source_filename.lower():
+            source_message = f'File "{source_filename}" uploaded successfully.'
+        else:
+            source_message = 'Please upload a CSV file containing "source" in its name.'
+
+    if sink_filename is not None:
+        if 'sink' in sink_filename.lower():
+            sink_message = f'File "{sink_filename}" uploaded successfully.'
+        else:
+            sink_message = 'Please upload a CSV file containing "sink" in its name.'
+
+    if source_message and sink_message and 'uploaded successfully' in source_message and 'uploaded successfully' in sink_message:
+        analysis_layout = dbc.Container(
+            [
+                dbc.Row(
+                    dbc.Col(
+                        html.H1("Measurements Analysis", className="text-center my-4")
+                    )
+                ),
+                            dbc.Row(
+                dbc.Col(
+                    dcc.Dropdown(
+                        id='source-id-dropdown',
+                        options=sample_ids,
+                        placeholder="Select the ID of source router"
+                    ),
+                    width=6,
+                    className="mx-auto"
+                )
+            ),
+            dbc.Row(
+                dbc.Col(
+                    dcc.Dropdown(
+                        id='sink-id-dropdown',
+                        options=sample_ids,
+                        placeholder="Select an ID of sink router"
+                    ),
+                    width=6,
+                    className="mx-auto mt-3"
+                )
+            ),
+            dbc.Row(
+                dbc.Col(
+                    dbc.Button("Submit", id='submit-measurement-analysis',
+                               color="primary", className="mt-3"),
+                    width=6,
+                    className="d-flex justify-content-center mx-auto"
+                )
+            ),
+            dbc.Row(
+                dbc.Col(
+                    html.Div(id='measurement-analysis-output', className="mt-4")
+                )
+            ),
+
+            ],
+            fluid=True
+        )
+
+    return html.Div(source_message), html.Div(sink_message), html.Div(analysis_layout)
+
+def save_base64_to_csv(base64_str, file_path):
+    content_type, content_string = base64_str.split(',')
+    decoded = base64.b64decode(content_string)
+    with open(file_path, 'wb') as f:
+        f.write(decoded)
+
+@app.callback(
+    Output('measurement-analysis-output', 'children'),
+    [Input('submit-measurement-analysis', 'n_clicks')],
+    [State('source-id-dropdown', 'value'),
+     State('sink-id-dropdown', 'value'),
+     State('upload-source', 'contents'),
+     State('upload-sink', 'contents')],
+    prevent_initial_call=True
+)
+def measurement_analysis(n_click, source_id, sink_id, source_file, sink_file):
+    if n_click is None or n_click == 0:
+        return dash.no_update
+    if source_file is None or sink_file is None:
+        return html.Div("Please upload both source and sink files")
+    if not os.path.exists('uploads'):
+            os.makedirs('uploads')
+    source_file_path = os.path.join('uploads', 'source.csv')
+    save_base64_to_csv(source_file, source_file_path)
     
+    # Save the uploaded sink file
+    sink_file_path = os.path.join('uploads', 'sink.csv')
+    save_base64_to_csv(sink_file, sink_file_path)
+    
+    # Read the saved CSV files
+    source_df = pd.read_csv(source_file_path)
+    sink_df = pd.read_csv(sink_file_path)
+    
+    # Find the last row with the given source and destination
+    source_router = net_sim.get_router_from_id(source_id)
+    sink_router = net_sim.get_router_from_id(sink_id)
+    filtered_df = sink_df[(sink_df['Source'] == source_router.ip_address) & (sink_df['Destination'] == sink_router.ip_address)]
+    last_entry = filtered_df.iloc[-1]
+    
+    # Extract histogram template and values
+    histogram_template = eval(last_entry['Histogram Template'])
+    histogram_values = eval(last_entry['Histogram Value'])
+    
+    # Create histogram plot
+    fig = px.bar(x=histogram_template, y=histogram_values, labels={'x': 'Latency (ms)', 'y': 'Count'},
+                    title=f'Latency Histogram for Source {source_id} and Destination {sink_id}')
+    
+    return dcc.Graph(figure=fig)
 
 # Define the callback to update the layout based on the URL
 @app.callback(
