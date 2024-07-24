@@ -492,17 +492,17 @@ class NetworkEmulator:
         pd.DataFrame.to_csv(source_df, source_csv_file, index=False)
 
     def add_hw_issue(self, start: int, end: int, source_id: str = None, destination_id: str = None, next_hop_id: str = None, new_next_hop_id: str = None):
-        if source_id == None:
+        if source_id is None:
             source_id = random.choice(self.routers).id
-        if destination_id == None:
-            destination_id = random.choice(self.routers).id
-
+        if destination_id is None:
+            while destination_id == source_id or destination_id == None:
+                destination_id = random.choice(self.routers).id
         router = self.routers[self.get_router_index_from_id(source_id)]
 
         destination = self.routers[self.get_router_index_from_id(
             destination_id)]
 
-        if next_hop_id == None:
+        if next_hop_id is None:
             next_hop_ips = [router.forward_table[index].next_hop for index in range(len(
                 router.forward_table)) if router.forward_table[index].destination == destination.ip_address]
             next_hop_ip = random.choice(next_hop_ips)
@@ -516,7 +516,9 @@ class NetworkEmulator:
 
         previous_element = router.forward_table[entry_index]
 
-        if new_next_hop_id != None:
+        new_element = None
+
+        if new_next_hop_id is not None:
             new_next_hop = self.routers[self.get_router_index_from_id(
                 new_next_hop_id)]
             new_element = ForwardTableElement(
@@ -531,6 +533,8 @@ class NetworkEmulator:
 
         self.hw_issue.loc[len(self.hw_issue)] = {'Router ID': source_id, 'Start': start, 'End': end, 'Previous Table Element': previous_element.to_json(
         ), 'New Table Element': new_element.to_json(), 'Entry Index': entry_index}
+        
+        print(f"Hardware issue added to router {source_id} from {start} to {end} with destination {destination_id} and new next hop {new_element.next_hop} instead of {next_hop_id}")
 
     def hw_update_interface(self, row: pd.Series):
         router = self.routers[self.get_router_index_from_id(row['Router ID'])]
@@ -812,27 +816,41 @@ class NetworkEmulator:
 
         return all_paths, 0
 
-    def hw_issue_detection(self, source_measure_file: str, sink_measure_file: str, latency: bool = False, loss: bool = False):
-        sink_dataframe = pd.read_csv(sink_measure_file)
-        source_dataframe = pd.read_csv(source_measure_file)
+    def hw_issue_detection(self, source_dataframe: pd.DataFrame, sink_dataframe: pd.DataFrame, latency: bool = False, loss: bool = False) -> List[str]:
+
+        gen_mark = sink_dataframe.iloc[-1]['Histogram type']
+        mark = 'Black' if gen_mark == 'White' else 'White'
+        session_id = sink_dataframe.iloc[-1]['Session ID']
+        # Use boolean indexing to filter rows
+        filtered_sink: pd.DataFrame = sink_dataframe[(sink_dataframe['Session ID'] == session_id) & 
+                                    (sink_dataframe['Histogram type'] == mark)]
+        
+        if filtered_sink.empty:
+            filtered_sink = sink_dataframe[sink_dataframe['Session ID'] == session_id]
+        else:
+            # Use the last index from the filtered data
+            last_index = filtered_sink.index[-1]
+            filtered_sink = sink_dataframe.loc[last_index:]
+        
+        routers_id: List[str] = []
+        
         if latency:
-            for _, row in sink_dataframe.iterrows():
-                if row['D flag'] == True:
+            for _, row in filtered_sink.iterrows():
+                if (row['Max'] - row['Min']) >= self.treshold:
                     source_router = self.routers[self.get_router_index_from_ip(
                         row['Source'])]
                     destination_router = self.routers[self.get_router_index_from_ip(
                         row['Destination'])]
                     indices = [index for index, value in enumerate(
                         source_router.forward_table) if value.destination == destination_router.ip_address]
-                    routers_id: List[str] = []
                     self.path_hw_detection(source=source_router, destination=destination_router,
-                                           index=indices[0], routers_id=routers_id, sink_dataframe=sink_dataframe)
+                                           index=indices[0], routers_id=routers_id, sink_dataframe=filtered_sink)
                     if len(routers_id) == 0:
                         routers_id.append(source_router.id)
         elif loss:
             pass
 
-        return
+        return routers_id
 
     def path_hw_detection(self, source: Router, destination: Router, index: int, routers_id: List[str], sink_dataframe: pd.DataFrame):
         next_hop = source.forward_table[index].next_hop
@@ -841,7 +859,8 @@ class NetworkEmulator:
             next_router.forward_table) if value.destination == destination.ip_address]
         if next_router.ip_address == destination.ip_address:
             return
-        if sink_dataframe[(sink_dataframe['Source'] == next_router.ip_address) & (sink_dataframe['Destination'] == destination.ip_address)]['D flag'].all() == False:
+        relevant_row = sink_dataframe[(sink_dataframe['Source'] == next_router.ip_address) & (sink_dataframe['Destination'] == destination.ip_address)]
+        if (relevant_row['Max'].item() - relevant_row['Min'].item()) >= self.treshold:
             routers_id.append(source.id)
             return
         for i in indices:

@@ -1,0 +1,52 @@
+Router ID:          1
+IP Address:         1.1.1.1
+Hostname:           BRU1
+Metric: 1               IS-Extended LIE1.00
+    Link Average Delay: 10000 us     
+Metric: 3               IS-Extended LIE1.00
+    Link Average Delay: 10000 us     
+Metric: 1               IS-Extended NAM1.00
+    Link Average Delay: 10000 us
+Metric: 1               IS-Extended HUY1.00
+    Link Average Delay: 10000 us
+
+Router ID:          2
+IP Address:         1.1.1.2
+Hostname:           LIE1
+Metric: 1               IS-Extended BRU1.00
+    Link Average Delay: 10000 us     
+Metric: 3               IS-Extended BRU1.00
+    Link Average Delay: 10000 us     
+Metric: 1               IS-Extended WAR1.00
+    Link Average Delay: 10000 us
+
+
+Router ID:          3
+IP Address:         1.1.1.3
+Hostname:           NAM1
+Metric: 1               IS-Extended BRU1.00
+    Link Average Delay: 10000 us       
+Metric: 1               IS-Extended WAR1.00
+    Link Average Delay: 10000 us
+Metric: 200             IS-Extended HUY1.00
+    Link Average Delay: 100000 us
+
+Router ID:          4
+IP Address:         1.1.1.4
+Hostname:           HUY1
+Metric: 1               IS-Extended BRU1.00
+    Link Average Delay: 10000 us       
+Metric: 1               IS-Extended WAR1.00
+    Link Average Delay: 10000 us
+Metric: 200             IS-Extended NAM1.00
+    Link Average Delay: 0 us
+
+Router ID:          5
+IP Address:         1.1.1.5
+Hostname:           WAR1
+Metric: 1               IS-Extended LIE1.00
+    Link Average Delay: 10000 us      
+Metric: 1               IS-Extended NAM1.00
+    Link Average Delay: 10000 us
+Metric: 1               IS-Extended HUY1.00
+    Link Average Delay: 10000 us

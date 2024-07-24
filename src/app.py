@@ -14,6 +14,7 @@ import datetime
 import zipfile
 import pandas as pd
 import plotly.express as px
+import io
 
 
 cache = diskcache.Cache("./cache")
@@ -117,7 +118,7 @@ menu_layout = dbc.Container(
                 dbc.Col(
                     dbc.Button("Emulation", color="primary",
                                size="lg", id="start-simulation-btn", className="w-100"),
-                    
+
                     className="d-flex justify-content-center"  # Center the button within the column
                 ),
                 dbc.Col(
@@ -277,7 +278,7 @@ def start_simulation_layout() -> dbc.Container:
                             dbc.Label("End Probe",
                                       html_for="end-probe"),
                             dbc.Input(
-                                type="number", id="end-probe", value=0),
+                                type="number", id="end_probe", value=0),
                         ]
                     ),]),
             ],
@@ -369,64 +370,68 @@ def ecmp_analysis_layout(dropdown_options) -> dbc.Container:
         fluid=True
     )
 
-def measurements_analysis_layout() -> dbc.Container: 
+
+def measurements_analysis_layout() -> dbc.Container:
     return dbc.Container(
-    [
-        dbc.Row(
-            [
+        [
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dcc.Upload(
+                                id='upload-source',
+                                children=html.Div(
+                                    ['Drag and Drop or ', html.A('Select a Source CSV File')]),
+                                style={
+                                    'width': '100%',
+                                    'height': '60px',
+                                    'lineHeight': '60px',
+                                    'borderWidth': '1px',
+                                    'borderStyle': 'dashed',
+                                    'borderRadius': '5px',
+                                    'textAlign': 'center',
+                                    'margin': '10px'
+                                },
+                                multiple=False
+                            ),
+                            html.Div(id='source-upload-output')
+                        ],
+                        width=7
+                    ),
+                    dbc.Col(
+                        [
+                            dcc.Upload(
+                                id='upload-sink',
+                                children=html.Div(
+                                    ['Drag and Drop or ', html.A('Select a Sink CSV File')]),
+                                style={
+                                    'width': '100%',
+                                    'height': '60px',
+                                    'lineHeight': '60px',
+                                    'borderWidth': '1px',
+                                    'borderStyle': 'dashed',
+                                    'borderRadius': '5px',
+                                    'textAlign': 'center',
+                                    'margin': '10px'
+                                },
+                                multiple=False
+                            ),
+                            html.Div(id='sink-upload-output')
+                        ],
+                        width=7
+                    ),
+                ]
+            ),
+            dbc.Row(
                 dbc.Col(
-                    [
-                        dcc.Upload(
-                            id='upload-source',
-                            children=html.Div(['Drag and Drop or ', html.A('Select a Source CSV File')]),
-                            style={
-                                'width': '100%',
-                                'height': '60px',
-                                'lineHeight': '60px',
-                                'borderWidth': '1px',
-                                'borderStyle': 'dashed',
-                                'borderRadius': '5px',
-                                'textAlign': 'center',
-                                'margin': '10px'
-                            },
-                            multiple=False
-                        ),
-                        html.Div(id='source-upload-output')
-                    ],
-                    width=6
-                ),
-                dbc.Col(
-                    [
-                        dcc.Upload(
-                            id='upload-sink',
-                            children=html.Div(['Drag and Drop or ', html.A('Select a Sink CSV File')]),
-                            style={
-                                'width': '100%',
-                                'height': '60px',
-                                'lineHeight': '60px',
-                                'borderWidth': '1px',
-                                'borderStyle': 'dashed',
-                                'borderRadius': '5px',
-                                'textAlign': 'center',
-                                'margin': '10px'
-                            },
-                            multiple=False
-                        ),
-                        html.Div(id='sink-upload-output')
-                    ],
-                    width=6
-                ),
-            ]
-        ),
-        dbc.Row(
-            dbc.Col(
-                html.Div(id='combined-output', style={'marginTop': '20px'}),
-                width=12
+                    html.Div(id='combined-output',
+                             style={'marginTop': '20px'}),
+                    width=12
+                )
             )
-        )
-    ],
-    fluid=True
-)
+        ],
+        fluid=True
+    )
 
 
 @app.callback([Input('probe-rate', 'value'),
@@ -607,16 +612,17 @@ def redirect_to_final(_):
     ],
     [State('hw-failure-dropdown', 'value'),
      State('start_probe', 'value'),
-     State('end-probe', 'value')],
+     State('end_probe', 'value')],
     prevent_initial_call=True
 )
 def start_emulation(n_clicks, n_intervals, router_id, start, end):
+    
     if n_clicks is None or n_clicks == 0:
         return dash.no_update, False, True,
 
     if net_sim.working:
-        return dash.no_update, True, False, 
-    
+        return dash.no_update, True, False,
+
     if net_sim.current_step == 0 and router_id is not None:
         net_sim.add_hw_issue(start=start, end=end, source_id=router_id)
 
@@ -624,6 +630,7 @@ def start_emulation(n_clicks, n_intervals, router_id, start, end):
         net_sim.duration * net_sim.generation_rate
 
     net_sim.working = True
+    
 
     if net_sim.current_step <= total_steps:
         routers = net_sim.routers
@@ -675,7 +682,7 @@ def start_emulation(n_clicks, n_intervals, router_id, start, end):
             dbc.Row(dbc.Col(progress_bar), className="mt-4"),
         ], className="my-4")
 
-        return progress_display, True, False, 
+        return progress_display, True, False,
 
     net_sim.current_step = 0
     net_sim.working = False
@@ -691,7 +698,8 @@ def start_emulation(n_clicks, n_intervals, router_id, start, end):
         className="mb-4"
     )
 
-    return download_button, False, True, 
+    return download_button, False, True,
+
 
 @app.callback(
     Output('download-link', 'data'),
@@ -715,6 +723,7 @@ def download_output(n_click):
     print(f"Downloaded output files to {zip_file_path}")
     return dcc.send_file(zip_file_path, 'output_files.zip', type='zip')
 
+
 @app.callback(
     [Output('source-upload-output', 'children'),
      Output('sink-upload-output', 'children'),
@@ -732,58 +741,79 @@ def upload_measurement_files(source_filename, sink_filename, source_contents, si
     if source_filename is not None:
         if 'source' in source_filename.lower():
             source_message = f'File "{source_filename}" uploaded successfully.'
+            if source_contents:
+                content_type, content_string = source_contents.split(',')
+                decoded = base64.b64decode(content_string)
+                source_df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
         else:
             source_message = 'Please upload a CSV file containing "source" in its name.'
 
     if sink_filename is not None:
         if 'sink' in sink_filename.lower():
             sink_message = f'File "{sink_filename}" uploaded successfully.'
+            if sink_contents:
+                content_type, content_string = sink_contents.split(',')
+                decoded = base64.b64decode(content_string)
+                sink_df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
         else:
             sink_message = 'Please upload a CSV file containing "sink" in its name.'
 
     if source_message and sink_message and 'uploaded successfully' in source_message and 'uploaded successfully' in sink_message:
+
+        list_of_routers = net_sim.hw_issue_detection(
+            sink_dataframe=sink_df, source_dataframe=source_df, latency=True)
+        routers_display = html.Ul([html.Li(f"Router with id: {router} encountered hardware failure")
+                                  for router in list_of_routers])
         analysis_layout = dbc.Container(
             [
                 dbc.Row(
                     dbc.Col(
-                        html.H1("Measurements Analysis", className="text-center my-4")
+                        routers_display,
+                        className="my-4"
                     )
                 ),
-                            dbc.Row(
-                dbc.Col(
-                    dcc.Dropdown(
-                        id='source-id-dropdown',
-                        options=sample_ids,
-                        placeholder="Select the ID of source router"
-                    ),
-                    width=6,
-                    className="mx-auto"
-                )
-            ),
-            dbc.Row(
-                dbc.Col(
-                    dcc.Dropdown(
-                        id='sink-id-dropdown',
-                        options=sample_ids,
-                        placeholder="Select an ID of sink router"
-                    ),
-                    width=6,
-                    className="mx-auto mt-3"
-                )
-            ),
-            dbc.Row(
-                dbc.Col(
-                    dbc.Button("Submit", id='submit-measurement-analysis',
-                               color="primary", className="mt-3"),
-                    width=6,
-                    className="d-flex justify-content-center mx-auto"
-                )
-            ),
-            dbc.Row(
-                dbc.Col(
-                    html.Div(id='measurement-analysis-output', className="mt-4")
-                )
-            ),
+                dbc.Row(
+                    dbc.Col(
+                        html.H1("Measurements Analysis",
+                                className="text-center my-4")
+                    )
+                ),
+                dbc.Row(
+                    dbc.Col(
+                        dcc.Dropdown(
+                            id='source-id-dropdown',
+                            options=sample_ids,
+                            placeholder="Select the ID of source router"
+                        ),
+                        width=6,
+                        className="mx-auto"
+                    )
+                ),
+                dbc.Row(
+                    dbc.Col(
+                        dcc.Dropdown(
+                            id='sink-id-dropdown',
+                            options=sample_ids,
+                            placeholder="Select an ID of sink router"
+                        ),
+                        width=6,
+                        className="mx-auto mt-3"
+                    )
+                ),
+                dbc.Row(
+                    dbc.Col(
+                        dbc.Button("Submit", id='submit-measurement-analysis',
+                                   color="primary", className="mt-3"),
+                        width=6,
+                        className="d-flex justify-content-center mx-auto"
+                    )
+                ),
+                dbc.Row(
+                    dbc.Col(
+                        html.Div(id='measurement-analysis-output',
+                                 className="mt-4")
+                    )
+                ),
 
             ],
             fluid=True
@@ -791,11 +821,13 @@ def upload_measurement_files(source_filename, sink_filename, source_contents, si
 
     return html.Div(source_message), html.Div(sink_message), html.Div(analysis_layout)
 
+
 def save_base64_to_csv(base64_str, file_path):
     content_type, content_string = base64_str.split(',')
     decoded = base64.b64decode(content_string)
     with open(file_path, 'wb') as f:
         f.write(decoded)
+
 
 @app.callback(
     Output('measurement-analysis-output', 'children'),
@@ -812,35 +844,38 @@ def measurement_analysis(n_click, source_id, sink_id, source_file, sink_file):
     if source_file is None or sink_file is None:
         return html.Div("Please upload both source and sink files")
     if not os.path.exists('uploads'):
-            os.makedirs('uploads')
+        os.makedirs('uploads')
     source_file_path = os.path.join('uploads', 'source.csv')
     save_base64_to_csv(source_file, source_file_path)
-    
+
     # Save the uploaded sink file
     sink_file_path = os.path.join('uploads', 'sink.csv')
     save_base64_to_csv(sink_file, sink_file_path)
-    
+
     # Read the saved CSV files
     source_df = pd.read_csv(source_file_path)
     sink_df = pd.read_csv(sink_file_path)
-    
+
     # Find the last row with the given source and destination
     source_router = net_sim.get_router_from_id(source_id)
     sink_router = net_sim.get_router_from_id(sink_id)
-    filtered_df = sink_df[(sink_df['Source'] == source_router.ip_address) & (sink_df['Destination'] == sink_router.ip_address)]
+    filtered_df = sink_df[(sink_df['Source'] == source_router.ip_address) & (
+        sink_df['Destination'] == sink_router.ip_address)]
     last_entry = filtered_df.iloc[-1]
-    
     # Extract histogram template and values
     histogram_template = eval(last_entry['Histogram Template'])
     histogram_values = eval(last_entry['Histogram Value'])
-    
+
     # Create histogram plot
     fig = px.bar(x=histogram_template, y=histogram_values, labels={'x': 'Latency (ms)', 'y': 'Count'},
-                    title=f'Latency Histogram for Source {source_id} and Destination {sink_id}')
-    
+                 title=f'Latency Histogram for Source {source_id} and Destination {sink_id}')
+    fig.update_xaxes(type='category')
+
     return dcc.Graph(figure=fig)
 
 # Define the callback to update the layout based on the URL
+
+
 @app.callback(
     Output('page-content', 'children'),
     Input('url', 'pathname'),

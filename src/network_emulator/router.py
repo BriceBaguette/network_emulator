@@ -105,36 +105,44 @@ class Router:
         for key, bins in self.__bins.items():
             # Step 1: Mark the bins
             marks = self.mark_bins(bins)
-           
+        
             # Step 2: Merge empty bins
             merged_bins, freed_bins = self.merge_empty_bins(bins, marks)
             
             # Step 3: Subdivide used and neighbor bins
-            subdidvided_bins = self.subdivide_bins(bins, marks, freed_bins)
-           
-            # Step 4: subdivide empty bins with remaining bins
-            empty_bins = self.subdivide_empty_bins(merged_bins, len(subdidvided_bins) + len(merged_bins))
+            subdivided_bins, neighbors_bins = self.subdivide_bins(bins, marks, freed_bins)
+        
+            # Step 4: Subdivide empty bins with remaining bins
+            empty_bins = self.subdivide_empty_bins(merged_bins, len(subdivided_bins) + len(merged_bins) + len(neighbors_bins))
             
             new_bins: List[Bin] = []
             
             empty_bin_index = 0
-            subdidvided_bins_index = 0
-            
-            for i in range(MAX_BINS):
-                if subdidvided_bins_index == len(subdidvided_bins) and empty_bin_index == len(empty_bins):
-                    break
-                
-                elif subdidvided_bins_index == len(subdidvided_bins) or empty_bins[empty_bin_index].start < subdidvided_bins[subdidvided_bins_index].start and empty_bin_index < len(empty_bins):
+            subdivided_bins_index = 0
+            neighbors_bins_index = 0
+                            
+            while len(new_bins) < MAX_BINS:
+
+                if empty_bin_index < len(empty_bins) and (subdivided_bins_index >= len(subdivided_bins) or empty_bins[empty_bin_index].start <= subdivided_bins[subdivided_bins_index].start) and (neighbors_bins_index >= len(neighbors_bins) or empty_bins[empty_bin_index].start <= neighbors_bins[neighbors_bins_index].start):
                     new_bins.append(empty_bins[empty_bin_index])
                     empty_bin_index += 1
-                else:
-                    new_bins.append(subdidvided_bins[subdidvided_bins_index])
-                    subdidvided_bins_index += 1
+                
+                elif subdivided_bins_index < len(subdivided_bins) and (neighbors_bins_index >= len(neighbors_bins) or subdivided_bins[subdivided_bins_index].start <= neighbors_bins[neighbors_bins_index].start):
+                    new_bins.append(subdivided_bins[subdivided_bins_index])
+                    subdivided_bins_index += 1
+                
+                elif neighbors_bins_index < len(neighbors_bins):
+                    new_bins.append(neighbors_bins[neighbors_bins_index])
+                    neighbors_bins_index += 1
+                
+                if empty_bin_index == len(empty_bins) and subdivided_bins_index == len(subdivided_bins) and neighbors_bins_index == len(neighbors_bins):
+                    break
 
             for bin in new_bins:
                 bin.reset()
             # Update the bins
             self.__bins[key] = new_bins
+
 
     def mark_bins(self, bins: List[Bin]) -> List[int]:
         marks = []
@@ -165,15 +173,16 @@ class Router:
                 i += 1
         return merged_bins, freed_bins
 
-    def subdivide_bins(self, bins: List[Bin], marks: List[int], freed_bins: int) -> List[Bin]:
-        used_and_neighbor_bins = [bin for i, bin in enumerate(bins) if marks[i] in (ROUTER, NEIGHBOR)]
+    def subdivide_bins(self, bins: List[Bin], marks: List[int], freed_bins: int) -> Tuple[List[Bin], List[Bin]]:
+        used_bins = [bin for i, bin in enumerate(bins) if marks[i] == ROUTER]
+        neighbors_bins = [bin for i, bin in enumerate(bins) if marks[i] == NEIGHBOR]
         new_bins = []
 
         # Determine the total number of new bins to create
-        total_new_bins = len(used_and_neighbor_bins) + freed_bins
-        num_new_bins = max(1, total_new_bins // len(used_and_neighbor_bins))
-        for index, bin in enumerate(used_and_neighbor_bins):
-            num_new_bins = max(1, total_new_bins // (len(used_and_neighbor_bins)- index))
+        total_new_bins = len(used_bins) + freed_bins
+        num_new_bins = max(1, total_new_bins // len(used_bins))
+        for index, bin in enumerate(used_bins):
+            num_new_bins = max(1, total_new_bins // (len(used_bins)- index))
             bin_size = (bin.end - bin.start) // num_new_bins
             if bin_size < 1:
                 bin_size = 1
@@ -189,7 +198,7 @@ class Router:
             # Ensure the last bin ends exactly at bin.end
             new_bins.append(Bin(start, bin.end))
 
-        return new_bins
+        return new_bins, neighbors_bins
 
     
     def subdivide_empty_bins(self, empty_bins: List[Bin], occupied_bins: int) -> List[Bin]:
