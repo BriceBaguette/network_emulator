@@ -2,29 +2,21 @@
 This module defines the Network Emulator class, which can represent a network,
 test his resilience and generate data for the network.
 """
-import ast
 import json
-import os
 import random
 import re
-import sys
 import time
-import networkx as nx
-import numpy as np
-import pandas as pd
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
-from scipy.interpolate import interp1d
-from tqdm import tqdm
 from typing import List, Tuple
-import utils
+import networkx as nx
+import numpy as np
+import pandas as pd
+from tqdm import tqdm
+import matplotlib.pyplot as plt
 from network_emulator.link import Link
 from network_emulator.router import Router, ForwardTableElement
-
-# Import necessary modules
-import matplotlib.pyplot as plt
-import scipy.stats as stats
 
 
 class NetworkEmulator:
@@ -51,10 +43,12 @@ class NetworkEmulator:
         save_folder (None or str): Save folder.
     """
 
-    def __init__(self, node_file: str, link_file: str, single_file: str, generation_rate: int, num_generation: int,
-                 load_folder: str = None, save_folder: str = None, treshold: int = 5):
+    def __init__(self, node_file: str, link_file: str, single_file: str, generation_rate: int,
+                 num_generation: int, load_folder: str = None, save_folder: str = None,
+                 treshold: int = 5):
         """
-        Initialize the NetworkEmulator with node file, link file, generation rate, and number of generations.
+        Initialize the NetworkEmulator with node file, link file, generation rate, 
+        and number of generations.
 
         Args:
             node_file (str): Node file.
@@ -87,7 +81,8 @@ class NetworkEmulator:
         self.save_folder = save_folder
 
         self.hw_issue: pd.DataFrame = pd.DataFrame(
-            columns=['Router ID', 'Start', 'End', 'Previous Table Element', 'New Table Element', 'Entry Index'])
+            columns=['Router ID', 'Start', 'End', 'Previous Table Element',
+                    'New Table Element', 'Entry Index'])
 
     def is_running(self) -> bool:
         """
@@ -98,19 +93,40 @@ class NetworkEmulator:
         """
         return self.__is_running
 
-    def get_router_from_id(self, id) -> Router:
+    def get_router_from_id(self, router_id) -> Router:
+        """
+        Retrieve a router object based on its ID.
+
+        Args:
+            router_id (int): The ID of the router to retrieve.
+
+        Returns:
+            Router: The router object with the specified ID, or None if no such router exists.
+        """
         for router in self.routers:
-            if router.id == id:
+            if router.id == router_id:
                 return router
         return None
 
     def get_routers_ids(self) -> List[str]:
+        """
+        Retrieve a list of all router IDs in the network.
+
+        Returns:
+            List[str]: A list of IDs for all routers in the network.
+        """
         return [router.id for router in self.routers]
 
     def get_topology(self) -> nx.MultiDiGraph:
+        """
+        Retrieve the network topology as a directed multigraph.
+
+        Returns:
+            nx.MultiDiGraph: The network topology represented as a directed multigraph.
+        """
         return self.g
 
-    def build(self):
+    def build(self) -> None:
         """
         Build the network by building routers and links.
         """
@@ -129,7 +145,7 @@ class NetworkEmulator:
               " routers and " + str(len(self.links)) + " links")
 
     def __build_network_from_file(self):
-        with open(self.single_file, "r") as file:
+        with open(self.single_file, "r", encoding="utf-8") as file:
             topo = file.read()
 
         routers_info = topo.split("\n\n")
@@ -172,15 +188,17 @@ class NetworkEmulator:
                         neighbor = self.get_router_by_name(
                             neighbor_match.group(2))
                         if neighbor:
-                            link = Link(link_id=len(self.links), source=source.ip_address, destination=neighbor.ip_address, delay=int(
-                                delay_match.group(1)), cost=int(neighbor_match.group(1)))
+                            link = Link(link_id=len(self.links), source=source.ip_address,
+                                        destination=neighbor.ip_address,
+                                        delay=int(delay_match.group(1)),
+                                        cost=int(neighbor_match.group(1)))
                             self.links.append(link)
 
     def __load_network(self):
         """
         Load the network from saved files.
         """
-        with open(f"{self.load_folder}/routers.json", 'r') as file:
+        with open(f"{self.load_folder}/routers.json", 'r', encoding="utf-8") as file:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
@@ -193,8 +211,8 @@ class NetworkEmulator:
             node_name = obj.get('node_name', None)
             active = obj.get('active', 1)
             ip_address = obj.get('ip_address', None)
-            self.routers.append(
-                Router(node_name=node_name, router_id=node_id, active=active, ip_address=ip_address))
+            self.routers.append(Router(node_name=node_name,
+                                       router_id=node_id, active=active, ip_address=ip_address))
 
             for element in obj.get('forward_table', []):
                 dest = element.get('destination', None)
@@ -202,7 +220,7 @@ class NetworkEmulator:
                 self.routers[-1].update_forward_table(
                     ForwardTableElement(dest=dest, next_hop=next_hop))
 
-        with open(f"{self.load_folder}/links.json", 'r') as file:
+        with open(f"{self.load_folder}/links.json", 'r', encoding="utf-8") as file:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
@@ -218,13 +236,14 @@ class NetworkEmulator:
             cost = obj.get('cost', 0)
 
             self.links.append(
-                Link(link_id=link_id, source=source, destination=destination, delay=delay, cost=cost))
+                Link(link_id=link_id, source=source,
+                     destination=destination, delay=delay, cost=cost))
 
     def __build_routers(self):
         """
         Build routers from the node file.
         """
-        with open(self.node_file, 'r') as file:
+        with open(self.node_file, 'r', encoding="utf-8") as file:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
@@ -252,7 +271,7 @@ class NetworkEmulator:
         """
         Build links from the link file.
         """
-        with open(self.link_file, 'r') as file:
+        with open(self.link_file, 'r', encoding="utf-8") as file:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
@@ -291,14 +310,31 @@ class NetworkEmulator:
             # Create the directory
             dir_path.mkdir(parents=True, exist_ok=True)
 
-        with open(f"{self.save_folder}/routers.json", 'w') as file:
+        with open(f"{self.save_folder}/routers.json", 'w', encoding="utf-8") as file:
             json.dump([router.to_json()
                       for router in self.routers], file, indent=4)
 
-        with open(f"{self.save_folder}/links.json", 'w') as file:
+        with open(f"{self.save_folder}/links.json", 'w', encoding="utf-8") as file:
             json.dump([link.to_json() for link in self.links], file, indent=4)
 
     def start(self):
+        """
+        Initialize and start the network simulation.
+
+        This method performs the following steps:
+        1. Records the start time and gets the number of routers.
+        2. Constructs a network graph as a sparse matrix.
+        3. Fills the network graph with link costs.
+        4. Creates a NetworkX graph from the sparse matrix.
+        5. Prints the time taken to build the graph.
+        6. If no load folder is specified, updates the forward table
+           for each router pair asynchronously.
+        7. Saves the network state if a save folder is specified.
+        8. Prints the time taken to start the network and sets the network running state to True.
+
+        Returns:
+            None
+        """
         # Record the start time and get the number of routers
         start = time.time()
         number_of_routers = len(self.routers)
@@ -339,24 +375,24 @@ class NetworkEmulator:
                     net_graph[i, j] = [0]
 
         # create a networkx graph
-        G = nx.MultiDiGraph()
+        g = nx.MultiDiGraph()
 
         # Add nodes to the graph
-        G.add_nodes_from(range(len(net_graph)))
+        g.add_nodes_from(range(len(net_graph)))
 
         # Add edges to the graph with weights
-        for i in range(len(net_graph)):
-            for j in range(len(net_graph[i])):
-                for k in range(len(net_graph[i, j])):
-                    if net_graph[i, j][k] != 0:
-                        G.add_edge(i, j, weight=net_graph[i, j][k])
+        for i, row in enumerate(net_graph):
+            for j, col in enumerate(row):
+                for _, weight in enumerate(col):
+                    if weight != 0:
+                        g.add_edge(i, j, weight=weight)
         self.net_graph = net_graph
-        self.g = G
+        self.g = g
         # Print the time taken to build the graph
         end = time.time()
-        print("Build graph in: {}".format(end - start))
+        print(f"Build graph in: {str(end - start)}")
 
-        if (self.load_folder == None):
+        if self.load_folder is None:
             with ThreadPoolExecutor() as executor:
                 # Use submit to asynchronously submit tasks to the executor
                 futures = []
@@ -364,7 +400,7 @@ class NetworkEmulator:
                     for j in range(number_of_routers):
                         if i != j:
                             futures.append(executor.submit(
-                                self.update_forward_table, G, i, j))
+                                self.update_forward_table, g, i, j))
 
                 # Wait for all tasks to complete
                 progress_bar = tqdm(total=len(futures), desc="Processing")
@@ -375,19 +411,34 @@ class NetworkEmulator:
 
                 progress_bar.close()
 
-            if (self.save_folder != None):
+            if self.save_folder is not None:
                 self.__save_network()
 
             # Print the time taken to start the network
         end = time.time()
         self.__is_running = True
-        print("Network started in: {}".format(end - start))
+        print(f"Network started in: {str(end - start)}")
 
-    def update_forward_table(self, G, source: int, target: int):
+    def update_forward_table(self, g: nx.MultiDiGraph, source: int, target: int):
+        """
+        Update the forward table for the routers in the network.
+
+        This method finds the shortest paths from the source router to the target router
+        and updates the forward table entries for the source router and all intermediate routers
+        along the shortest paths.
+
+        Args:
+            g (nx.MultiDiGraph): The network graph.
+            source (int): The index of the source router.
+            target (int): The index of the target router.
+
+        Returns:
+            None
+        """
         # Find the shortest paths from the source to the destination
         if not self.routers[source].has_entry_for_destination(self.routers[target].ip_address):
-            shortest_paths = list(nx.all_shortest_paths(
-                G, source=source, target=target, weight='weight'))
+            shortest_paths: List[List[int]] = list(nx.all_shortest_paths(
+                g, source=source, target=target, weight='weight'))
             for path in shortest_paths:
                 # Update the forward table for the source router
                 self.routers[source].update_forward_table(ForwardTableElement(
@@ -400,18 +451,38 @@ class NetworkEmulator:
                         dest=self.routers[path[len(path) - 1]].ip_address
                     ))
 
-    def export_sink_data(self, sink_router: Router, fl, gen_number, timestamp, vrf="Measurement"):
+    def export_sink_data(self, sink_router: Router, fl, gen_number, timestamp,
+                         vrf="Measurement") -> None:
+        """
+        Export the sink router data to a CSV file.
+
+        This method collects histogram data from the sink router and exports it to a CSV file.
+        It updates the session ID if necessary and appends the new data to the existing CSV file.
+
+        Args:
+            sink_router (Router): The sink router from which to collect data.
+            fl (str): The flow label.
+            gen_number (int): The generation number.
+            timestamp (str): The timestamp of the data collection.
+            vrf (str, optional): The VRF (Virtual Routing and Forwarding) instance. 
+                                 Defaults to "Measurement".
+
+        Returns:
+            None
+        """
 
         # Export the data to a CSV file
         sink_csv_file = './src/results/sink.csv'
-        
+
         try:
             sink = pd.read_csv(sink_csv_file)
             if self.session_id is None:
                 self.session_id = sink.iloc[-1]['Session ID'] + 1
-        except:
-            sink = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'FL', 'VRF', 'TimeStamp', 'Histogram Template',
-                                'Histogram Value', 'Packet Counter', 'Histogram type', 'Min', 'Max', 'Liveness flag', 'Telemetry Period'])
+        except (FileNotFoundError, pd.errors.EmptyDataError):
+            sink = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'FL', 'VRF',
+                                         'TimeStamp', 'Histogram Template', 'Histogram Value',
+                                         'Packet Counter', 'Histogram type', 'Min', 'Max',
+                                         'Liveness flag', 'Telemetry Period'])
             self.session_id = 1
         histogram_type = None
         if gen_number % 2 == 0:
@@ -419,7 +490,7 @@ class NetworkEmulator:
         else:
             histogram_type = 'White'
 
-        if fl == None:
+        if fl is None:
             fl = "Spray"
         else:
             fl = str(fl)
@@ -450,23 +521,42 @@ class NetworkEmulator:
         # Append the new row to the DataFrame
         pd.DataFrame.to_csv(sink, sink_csv_file, index=False)
 
-    def export_source_data(self, source_router: Router, fl, gen_number, timestamp, vrf="Measurement"):
+    def export_source_data(self, source_router: Router, fl, gen_number, timestamp,
+                           vrf="Measurement") -> None:
+        """
+        Export the source router data to a CSV file.
+
+        This method collects data from the source router and exports it to a CSV file.
+        It updates the session ID if necessary and appends the new data to the existing CSV file.
+
+        Args:
+            source_router (Router): The source router from which to collect data.
+            fl (str): The flow label.
+            gen_number (int): The generation number.
+            timestamp (str): The timestamp of the data collection.
+            vrf (str, optional): The VRF (Virtual Routing and Forwarding) instance. 
+                                 Defaults to "Measurement".
+
+        Returns:
+            None
+        """
         # Export the data to a CSV file
         source_csv_file = './src/results/source.csv'
         try:
             source_df = pd.read_csv(source_csv_file)
-            if self.session_id == None:
+            if self.session_id is None:
                 self.session_id = source_df.iloc[-1]['Session ID'] + 1
-        except:
+        except(FileNotFoundError, pd.errors.EmptyDataError):
             source_df = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'FL', 'VRF',
-                                              'TimeStamp', 'Probe GenRate', 'Packet Counter', 'Packet Counter Type', 'Telemetry Period'])
+                                              'TimeStamp', 'Probe GenRate', 'Packet Counter',
+                                              'Packet Counter Type', 'Telemetry Period'])
             self.session_id = 1
         packet_type = None
         if gen_number % 2 == 0:
             packet_type = 'Black'
         else:
             packet_type = 'White'
-        if fl == None:
+        if fl is None:
             fl = "Spray"
         else:
             fl = str(fl)
@@ -491,11 +581,35 @@ class NetworkEmulator:
 
         pd.DataFrame.to_csv(source_df, source_csv_file, index=False)
 
-    def add_hw_issue(self, start: int, end: int, source_id: str = None, destination_id: str = None, next_hop_id: str = None, new_next_hop_id: str = None):
+    def add_hw_issue(self, start: int, end: int, source_id: str = None, destination_id: str = None,
+                     next_hop_id: str = None, new_next_hop_id: str = None) -> None:
+        """
+        Add a hardware issue to the network.
+
+        This method simulates a hardware issue by modifying the forwarding table of a router.
+        It updates the forwarding table entry for a specific destination and next hop, and 
+        logs the change.
+
+        Args:
+            start (int): The start time of the hardware issue.
+            end (int): The end time of the hardware issue.
+            source_id (str, optional): The ID of the source router. 
+                                       If None, a random router is chosen. Defaults to None.
+            destination_id (str, optional): The ID of the destination router. 
+                                            If None, a random router is chosen. Defaults to None.
+            next_hop_id (str, optional): The ID of the current next hop router. 
+                                         If None, a random next hop is chosen. Defaults to None.
+            new_next_hop_id (str, optional): The ID of the new next hop router. 
+                                             If None, a random next hop is chosen. Defaults to None.
+
+        Returns:
+            None
+        """
+
         if source_id is None:
             source_id = random.choice(self.routers).id
         if destination_id is None:
-            while destination_id == source_id or destination_id == None:
+            while destination_id == source_id or destination_id is None:
                 destination_id = random.choice(self.routers).id
         router = self.routers[self.get_router_index_from_id(source_id)]
 
@@ -504,7 +618,8 @@ class NetworkEmulator:
 
         if next_hop_id is None:
             next_hop_ips = [router.forward_table[index].next_hop for index in range(len(
-                router.forward_table)) if router.forward_table[index].destination == destination.ip_address]
+                router.forward_table)) if router.forward_table[index].destination ==
+                            destination.ip_address]
             next_hop_ip = random.choice(next_hop_ips)
             next_hop_id = self.routers[self.get_router_index_from_ip(
                 next_hop_ip)].id
@@ -512,7 +627,8 @@ class NetworkEmulator:
         next_hop = self.routers[self.get_router_index_from_id(next_hop_id)]
 
         entry_index = next(index for index, value in enumerate(router.forward_table)
-                           if value.destination == destination.ip_address and value.next_hop == next_hop.ip_address)
+                           if value.destination == destination.ip_address
+                           and value.next_hop == next_hop.ip_address)
 
         previous_element = router.forward_table[entry_index]
 
@@ -527,27 +643,86 @@ class NetworkEmulator:
             neighbor_links = [
                 link for link in self.links if link.source == router.ip_address]
             random_next_hop = random.choice([r.ip_address for r in self.routers if r.ip_address in [
-                                            link.destination for link in neighbor_links] and r.ip_address != previous_element.next_hop])
+                                            link.destination for link in neighbor_links]
+                                             and r.ip_address != previous_element.next_hop])
             new_element = ForwardTableElement(
                 dest=previous_element.destination, next_hop=random_next_hop)
 
-        self.hw_issue.loc[len(self.hw_issue)] = {'Router ID': source_id, 'Start': start, 'End': end, 'Previous Table Element': previous_element.to_json(
-        ), 'New Table Element': new_element.to_json(), 'Entry Index': entry_index}
-        
-        print(f"Hardware issue added to router {source_id} from {start} to {end} with destination {destination_id} and new next hop {new_element.next_hop} instead of {next_hop_id}")
+        self.hw_issue.loc[len(self.hw_issue)] = {'Router ID': source_id,
+                                                 'Start': start,
+                                                 'End': end,
+                                                 'Previous Table Element': previous_element.to_json(
+                                                     ),
+                                                 'New Table Element': new_element.to_json(),
+                                                 'Entry Index': entry_index}
 
-    def hw_update_interface(self, row: pd.Series):
+        print(f"Hardware issue added to router {source_id} from {start} to {end} with destination {
+              destination_id} and new next hop {new_element.next_hop} instead of {next_hop_id}")
+
+    def hw_update_interface(self, row: pd.Series) -> None:
+        """
+        Update the hardware interface of a router.
+
+        This method updates the forwarding table of a specified router based on the
+        provided row data.
+        It modifies the forwarding table entry at the specified index with the new
+        destination and next hop.
+
+        Args:
+            row (pd.Series): A pandas Series containing the following keys:
+                - 'Router ID': The ID of the router to update.
+                - 'Entry Index': The index of the forwarding table entry to update.
+                - 'New Table Element': A dictionary with keys 'destination' and
+                'next_hop' representing the new forwarding table entry.
+
+        Returns:
+            None
+        """
+
         router = self.routers[self.get_router_index_from_id(row['Router ID'])]
         router.forward_table[row['Entry Index']] = ForwardTableElement(
-            dest=row['New Table Element']["destination"], next_hop=row['New Table Element']["next_hop"])
+            dest=row['New Table Element']["destination"],
+            next_hop=row['New Table Element']["next_hop"])
 
-    def hw_revert_interface(self, row: pd.Series):
+    def hw_revert_interface(self, row: pd.Series) -> None:
+        """
+        Revert the hardware interface of a router.
+
+        This method reverts the forwarding table of a specified router to its previous
+        state based on the provided row data.
+        It modifies the forwarding table entry at the specified index with the previous
+        destination and next hop.
+
+        Args:
+            row (pd.Series): A pandas Series containing the following keys:
+                - 'Router ID': The ID of the router to update.
+                - 'Entry Index': The index of the forwarding table entry to revert.
+                - 'Previous Table Element': A dictionary with keys 'destination' and
+                'next_hop' representing the previous forwarding table entry.
+
+        Returns:
+            None
+        """
         router = self.routers[self.get_router_index_from_id(row['Router ID'])]
         router.forward_table[row['Entry Index']] = ForwardTableElement(
-            dest=row['Previous Table Element']["destination"], next_hop=row['Previous Table Element']["next_hop"])
+            dest=row['Previous Table Element']["destination"],
+            next_hop=row['Previous Table Element']["next_hop"])
 
     def all_ipm_session(self, flow_label: int = None):
+        """
+        Emulate all IPM (Inter-Process Messaging) sessions.
 
+        This method emulates IPM sessions for a specified number of generations. For each
+        generation, it sends probes between all pairs of routers (excluding self-loops),
+        exports sink and source data, and updates the bins for each router.
+
+        Args:
+            flow_label (int, optional): The flow label to be used for the probes. Defaults to None.
+
+        Returns:
+            str: A summary of the emulation process, including the number of generations,
+            the total number of probes, and the duration of the emulation.
+        """
         start = time.time()
 
         for gen_number in range(self.num_generation):
@@ -560,12 +735,32 @@ class NetworkEmulator:
                 self.export_sink_data(
                     sink_router=router, fl=flow_label, gen_number=gen_number, timestamp=timestamp)
                 self.export_source_data(
-                    source=router, fl=flow_label, gen_number=gen_number, timestamp=timestamp)
+                    source_router=router, fl=flow_label, gen_number=gen_number, timestamp=timestamp)
                 router.update_bins()
 
-        return "Emulated all ipm sessions for " + str(self.num_generation) + " generations with " + str(self.generation_rate*self.duration) + " probes in " + str(time.time() - start)
+        return (
+            f"Emulated all ipm sessions for {str(self.num_generation)} generations with "
+            f"{str(self.generation_rate * self.duration)} probes in {str(time.time() - start)}"
+        )
 
-    def send_prob(self, source: Router, destination: Router, flow_label: int):
+
+    def send_prob(self, source: Router, destination: Router, flow_label: int) -> int:
+        """
+        Send a probe from the source router to the destination router.
+
+        This method calculates the latency from the source router to the destination router
+        by traversing the network.
+        It uses a hash function to determine the route to take at each hop and accumulates
+        the delay for each link.
+
+        Args:
+            source (Router): The source router from which the probe is sent.
+            destination (Router): The destination router to which the probe is sent.
+            flow_label (int): The flow label used to determine the route.
+
+        Returns:
+            int: The total latency from the source to the destination in milliseconds.
+        """
         # Initialize a latency array
         latency = 0
         # For each generation, calculate the latency from source to destination
@@ -579,28 +774,49 @@ class NetworkEmulator:
 
         # Find the next router
         index = next(index for index, value in enumerate(
-            self.routers) if value.ip_address == source.forward_table[indices[chosen_route]].next_hop)
+            self.routers) if value.ip_address ==
+                     source.forward_table[indices[chosen_route]].next_hop)
         next_router = self.routers[index]
 
         # Continue finding the next hop and adding the delay until the destination is reached
-        while (next_router.ip_address != destination.ip_address):
+        while next_router.ip_address != destination.ip_address:
             indices = [index for index, value in enumerate(
                 next_router.forward_table) if value.destination == destination.ip_address]
             indices, link_indices = self.get_multi_links(next_router, indices)
 
             chosen_route = next_router.select_route(source.ip_address,
-                                                    destination.ip_address, len(indices), flow_label)
+                                                    destination.ip_address,
+                                                    len(indices), flow_label)
 
             latency += self.links[link_indices[chosen_route]].delay
 
             index = next(index for index, value in enumerate(
-                self.routers) if value.ip_address == next_router.forward_table[indices[chosen_route]].next_hop)
+                self.routers) if value.ip_address ==
+                         next_router.forward_table[indices[chosen_route]].next_hop)
             next_router = self.routers[index]
         # Return the latency array
         destination.add_latency_to_bin(source.ip_address, latency/1000)
         return latency
 
-    def send_probs(self, source: Router, destination: Router, flow_label: int):
+    def send_probs(self, source: Router, destination: Router, flow_label: int) -> None:
+        """
+        Send multiple probes from the source router to the destination router
+        over a specified duration.
+
+        This method sends probes between the source and destination routers for each
+        time step in the specified duration.
+        It updates and reverts the hardware interface based on the start and end
+        times of hardware issues.
+
+        Args:
+            source (Router): The source router from which the probes are sent.
+            destination (Router): The destination router to which the probes are sent.
+            flow_label (int): The flow label used to determine the route. If None, 
+                              a random flow label is generated for each probe.
+
+        Returns:
+            None
+        """
         fl = flow_label
 
         start_time = []
@@ -619,27 +835,90 @@ class NetworkEmulator:
                 self.hw_update_interface(self.hw_issue.iloc[s])
             for e in end_indices:
                 self.hw_revert_interface(self.hw_issue.iloc[e])
-            if flow_label == None:
+            if flow_label is None:
                 fl = random.randint(0, 32)
             self.send_prob(source, destination, fl)
 
     def get_router_index_from_ip(self, ip_address: str) -> int:
-        for i in range(len(self.routers)):
-            if (self.routers[i].ip_address == ip_address):
+        """
+        Get the index of a router based on its IP address.
+
+        This method iterates through the list of routers and returns
+        the index of the router
+        that matches the given IP address.
+
+        Args:
+            ip_address (str): The IP address of the router to find.
+
+        Returns:
+            int: The index of the router with the specified IP address.
+
+        Raises:
+            ValueError: If no router with the specified IP address is found.
+        """
+        for i, router in enumerate(self.routers):
+            if router.ip_address == ip_address:
                 return i
+        raise ValueError(f"No router found with IP address: {ip_address}")
 
     def get_router_index_from_id(self, router_id: str) -> int:
-        for i in range(len(self.routers)):
-            if (self.routers[i].id == router_id):
+        """
+        Get the index of a router based on its ID.
+
+        This method iterates through the list of routers and returns
+        the index of the router that matches the given router ID.
+
+        Args:
+            router_id (str): The ID of the router to find.
+
+        Returns:
+            int: The index of the router with the specified ID.
+
+        Raises:
+            ValueError: If no router with the specified ID is found.
+        """
+        for i, router in enumerate(self.routers):
+            if router.id == router_id:
                 return i
+        raise ValueError(f"No router found with ID: {router_id}")
 
     def get_router_by_name(self, name: str) -> Router:
+        """
+        Get a router based on its node name.
+
+        This method iterates through the list of routers and returns the router
+        that matches the given node name.
+
+        Args:
+            name (str): The node name of the router to find.
+
+        Returns:
+            Router: The router with the specified node name, or None if no such router is found.
+        """
         for router in self.routers:
             if router.node_name == name:
                 return router
         return None
 
-    def ipm_session(self, source_ip: str, destination_ip: str, fl: int = None, t: str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")):
+    def ipm_session(self, source_ip: str, destination_ip: str, fl: int = None,
+                    t: str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) -> None:
+        """
+        Emulate an IPM (Inter-Process Messaging) session between two routers.
+
+        This method emulates an IPM session by sending probes between the source and
+        destination routers for a specified number of generations.
+        It also exports sink and source data and updates the bins for the 
+        destination router.
+
+        Args:
+            source_ip (str): The IP address of the source router.
+            destination_ip (str): The IP address of the destination router.
+            fl (int, optional): The flow label to be used for the probes. Defaults to None.
+            t (str, optional): The timestamp for the session. Defaults to the current time.
+
+        Returns:
+            None
+        """
         source = self.routers[self.get_router_index_from_ip(source_ip)]
         destination = self.routers[self.get_router_index_from_ip(
             destination_ip)]
@@ -651,6 +930,21 @@ class NetworkEmulator:
             destination.update_bins()
 
     def get_multi_links(self, source: Router, indices: List[int]) -> Tuple[List[int], List[int]]:
+        """
+        Get multiple link indices for a given source router and a list of indices.
+
+        This method finds the link indices with the minimum cost for each index in the provided
+        list.
+        It also handles cases where there are multiple links with the same minimum cost.
+
+        Args:
+            source (Router): The source router.
+            indices (List[int]): A list of indices representing the forward table entries.
+
+        Returns:
+            Tuple[List[int], List[int]]: A tuple containing the updated list of indices
+            and the corresponding multi-link indices.
+        """
         new_indices = []
         multi_link_indices = [0 for _ in range(len(indices))]
         for i in indices:
@@ -668,6 +962,25 @@ class NetworkEmulator:
         return indices, multi_link_indices
 
     def ecmp_analysis(self, source_id: str, show: bool = False) -> Tuple[dict, dict]:
+        """
+        Perform ECMP (Equal-Cost Multi-Path) analysis for a given source router.
+
+        This method analyzes the number of equal-cost paths from the source router to all 
+        other routers in the network. It also computes and optionally displays the distribution
+        and CDF (Cumulative Distribution Function) of the number of paths. Additionally, 
+        it performs latency tests and calculates the average latency per hop count.
+
+        Args:
+            source_id (str): The ID of the source router.
+            show (bool, optional): Whether to display the analysis plots. Defaults to False.
+
+        Returns:
+            Tuple[dict, dict]: A tuple containing:
+                - ecmp_dict: A dictionary where keys are the number of paths and values are
+                the number of destinations with that many paths.
+                - hop_latency: A dictionary where keys are the number of hops and values are
+                the average latency for that hop count.
+        """
         source = self.routers[self.get_router_index_from_id(source_id)]
         ecmp_dict = {}
         for destination in self.routers:
@@ -742,7 +1055,22 @@ class NetworkEmulator:
 
         return ecmp_dict, dict(sorted(hop_latency.items()))
 
-    def get_number_of_paths(self, source: Router, destination: Router, index: int):
+    def get_number_of_paths(self, source: Router, destination: Router, index: int) -> int:
+        """
+        Get the number of paths from the source router to the destination router.
+
+        This method recursively calculates the number of paths from the source router to the 
+        destination router by traversing the forward tables and considering multiple links with
+        the same minimum cost.
+
+        Args:
+            source (Router): The source router.
+            destination (Router): The destination router.
+            index (int): The index in the source router's forward table.
+
+        Returns:
+            int: The number of paths from the source to the destination router.
+        """
         next_hop = source.forward_table[index].next_hop
         next_router = self.routers[self.get_router_index_from_ip(next_hop)]
         indices = [index for index, value in enumerate(
@@ -757,6 +1085,16 @@ class NetworkEmulator:
         return counter
 
     def all_latency_test(self) -> List[Tuple[list, int]]:
+        """
+        Perform latency tests between all pairs of routers and collect wrong paths.
+
+        This method iterates over all pairs of routers in the network and performs a latency test
+        between each pair. It collects and returns all the wrong paths identified during the tests.
+
+        Returns:
+            List[Tuple[List, int]]: A list of tuples where each tuple contains a wrong path
+            (as a list of routers) and the corresponding latency (as an integer).
+        """
         wrong_paths = []
         for source in self.routers:
             for destination in self.routers:
@@ -766,35 +1104,78 @@ class NetworkEmulator:
                     wrong_paths.extend(wrong_path)
         return wrong_paths
 
-    def latency_test(self, source_id: str, destination_id: str):
+    def latency_test(
+            self,
+            source_id: str,
+            destination_id: str
+        ) -> Tuple[zip, List[Tuple[List, int]]]:
+        """
+        Perform a latency test between a source router and a destination router.
+
+        This method calculates the latency for all possible paths between the source and destination
+        routers.
+        It identifies and returns the paths with their latencies and collects paths that exceed a
+        certain latency threshold.
+
+        Args:
+            source_id (str): The ID of the source router.
+            destination_id (str): The ID of the destination router.
+
+        Returns:
+            Tuple[zip, List[Tuple[List, int]]]: A tuple containing:
+                - A zip object of paths and their corresponding latencies.
+                - A list of tuples where each tuple contains a wrong path (as a list of routers)
+                and the corresponding latency (as an integer).
+        """
         latencies = []
         paths = []
         wrong_paths = []
 
         source: Router = self.routers[self.get_router_index_from_id(source_id)]
-        destination: Router = self.routers[self.get_router_index_from_id(
-            destination_id)]
+        destination: Router = self.routers[self.get_router_index_from_id(destination_id)]
 
         indices = [index for index, value in enumerate(
             source.forward_table) if value.destination == destination.ip_address]
         indices, link_indices = self.get_multi_links(source, indices)
 
-        for i in range(len(indices)):
-            path_groups, _ = self.get_latency_and_path(source, destination, indices[i], [
-                                                       source.ip_address], link_indices[i], 0)
+        for i, index in enumerate(indices):
+            path_groups, _ = self.get_latency_and_path(source, destination, index, [
+                                                    source.ip_address], link_indices[i], 0)
             for path, latency in path_groups:
                 paths.append(path)
                 latencies.append(latency)
 
         min_latency = min(latencies)
 
-        for i in range(len(latencies)):
-            if latencies[i] >= min_latency + self.treshold * 1000:
-                wrong_paths.append((paths[i], latencies[i] - min_latency))
+        for i, latency in enumerate(latencies):
+            if latency >= min_latency + self.treshold * 1000:
+                wrong_paths.append((paths[i], latency - min_latency))
 
         return zip(paths, latencies), wrong_paths
 
-    def get_latency_and_path(self, current: Router, destination: Router, index: int, path: list, link_index: int, latency: int):
+    def get_latency_and_path(self, current: Router, destination: Router, index: int, path: list,
+                             link_index: int, latency: int) -> Tuple[List[Tuple[list, int]], int]:
+        """
+        Calculate the latency and path from the current router to the destination router.
+
+        This method recursively calculates the latency and path from the current router to the
+        destination router by traversing the forward tables and considering multiple links with
+        the same destination.
+
+        Args:
+            current (Router): The current router.
+            destination (Router): The destination router.
+            index (int): The index in the current router's forward table.
+            path (list): The current path taken.
+            link_index (int): The index of the link being used.
+            latency (int): The current accumulated latency.
+
+        Returns:
+            Tuple[List[Tuple[list, int]], int]: A tuple containing:
+                - A list of tuples where each tuple contains a path (as a list of routers) and the
+                corresponding latency (as an integer).
+                - An integer (always 0 in this implementation).
+        """
         next_hop = current.forward_table[index].next_hop
         next_router: Router = self.routers[self.get_router_index_from_ip(
             next_hop)]
@@ -809,42 +1190,63 @@ class NetworkEmulator:
             next_router.forward_table) if value.destination == destination.ip_address]
         indices, next_multi_links = self.get_multi_links(next_router, indices)
 
-        for i in range(len(indices)):
+        for i, idx in enumerate(indices):
             new_path_groups, _ = self.get_latency_and_path(
-                next_router, destination, indices[i], path[:], next_multi_links[i], latency)
+                next_router, destination, idx, path[:], next_multi_links[i], latency)
             all_paths.extend(new_path_groups)
 
         return all_paths, 0
 
-    def hw_issue_detection(self, source_dataframe: pd.DataFrame, sink_dataframe: pd.DataFrame, latency: bool = False, loss: bool = False) -> List[str]:
+    def hw_issue_detection(self, source_dataframe: pd.DataFrame, sink_dataframe: pd.DataFrame,
+                           latency: bool = False, loss: bool = False) -> List[str]:
+        """
+        Detect hardware issues based on latency or loss in the network.
+
+        This method analyzes the provided dataframes to detect hardware issues by checking for
+        latency or loss.
+        It filters the sink dataframe based on session ID and histogram type, and then checks for
+        latency issues by comparing the 'Max' and 'Min' values. If a latency issue is detected,
+        it identifies the source and destination routers and performs hardware detection on the
+        path between them.
+
+        Args:
+            source_dataframe (pd.DataFrame): The dataframe containing source data.
+            sink_dataframe (pd.DataFrame): The dataframe containing sink data.
+            latency (bool): Flag to indicate if latency issues should be checked.
+            loss (bool): Flag to indicate if loss issues should be checked.
+
+        Returns:
+            List[str]: A list of router IDs where hardware issues were detected.
+        """
 
         gen_mark = sink_dataframe.iloc[-1]['Histogram type']
         mark = 'Black' if gen_mark == 'White' else 'White'
         session_id = sink_dataframe.iloc[-1]['Session ID']
+
         # Use boolean indexing to filter rows
-        filtered_sink: pd.DataFrame = sink_dataframe[(sink_dataframe['Session ID'] == session_id) & 
-                                    (sink_dataframe['Histogram type'] == mark)]
-        
+        filtered_sink: pd.DataFrame = sink_dataframe[(sink_dataframe['Session ID'] == session_id) &
+                                                    (sink_dataframe['Histogram type'] == mark)]
+
         if filtered_sink.empty:
             filtered_sink = sink_dataframe[sink_dataframe['Session ID'] == session_id]
         else:
             # Use the last index from the filtered data
             last_index = filtered_sink.index[-1]
             filtered_sink = sink_dataframe.loc[last_index:]
-        
+
         routers_id: List[str] = []
-        
+
         if latency:
             for _, row in filtered_sink.iterrows():
                 if (row['Max'] - row['Min']) >= self.treshold:
-                    source_router = self.routers[self.get_router_index_from_ip(
-                        row['Source'])]
-                    destination_router = self.routers[self.get_router_index_from_ip(
-                        row['Destination'])]
-                    indices = [index for index, value in enumerate(
-                        source_router.forward_table) if value.destination == destination_router.ip_address]
+                    source_router = self.routers[self.get_router_index_from_ip(row['Source'])]
+                    destination_router = self.routers[
+                        self.get_router_index_from_ip(row['Destination'])]
+                    indices = [index for index, value in enumerate(source_router.forward_table)
+                               if value.destination == destination_router.ip_address]
                     self.path_hw_detection(source=source_router, destination=destination_router,
-                                           index=indices[0], routers_id=routers_id, sink_dataframe=filtered_sink)
+                                        index=indices[0], routers_id=routers_id,
+                                        sink_dataframe=filtered_sink)
                     if len(routers_id) == 0:
                         routers_id.append(source_router.id)
         elif loss:
@@ -852,14 +1254,31 @@ class NetworkEmulator:
 
         return routers_id
 
-    def path_hw_detection(self, source: Router, destination: Router, index: int, routers_id: List[str], sink_dataframe: pd.DataFrame):
+    def path_hw_detection(self, source: Router, destination: Router, index: int,
+                          routers_id: List[str], sink_dataframe: pd.DataFrame) -> None:
+        """
+        Detect hardware issues along the path from the source router to the destination router.
+
+        This method recursively traverses the path from the source router to the destination
+        router, checking for hardware issues based on the latency threshold. If an issue is
+        detected, the source router's ID is added to the list of routers with detected issues.
+
+        Args:
+            source (Router): The source router.
+            destination (Router): The destination router.
+            index (int): The index in the source router's forward table.
+            routers_id (List[str]): A list to store the IDs of routers with detected hardware
+            issues.
+            sink_dataframe (pd.DataFrame): The dataframe containing sink data.
+        """
         next_hop = source.forward_table[index].next_hop
         next_router = self.routers[self.get_router_index_from_ip(next_hop)]
         indices = [index for index, value in enumerate(
             next_router.forward_table) if value.destination == destination.ip_address]
         if next_router.ip_address == destination.ip_address:
             return
-        relevant_row = sink_dataframe[(sink_dataframe['Source'] == next_router.ip_address) & (sink_dataframe['Destination'] == destination.ip_address)]
+        relevant_row = sink_dataframe[(sink_dataframe['Source'] == next_router.ip_address) & (
+            sink_dataframe['Destination'] == destination.ip_address)]
         if (relevant_row['Max'].item() - relevant_row['Min'].item()) >= self.treshold:
             routers_id.append(source.id)
             return

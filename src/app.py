@@ -1,21 +1,27 @@
-import dash
-from dash import dcc, html, Input, Output, State
-import dash_bootstrap_components as dbc
+"""
+This script defines a Dash application for network simulation and analysis.
+It includes functions for creating network graphs, defining layout for different pages,
+and handling user inputs for simulation parameters.
+"""
+import ast
 import base64
 import tempfile
 import os
-from network_emulator.network_emulator import NetworkEmulator
-import networkx as nx
-import plotly.graph_objs as go
 import random
-from dash.long_callback import DiskcacheLongCallbackManager
-import diskcache
 import datetime
 import zipfile
-import pandas as pd
-import plotly.express as px
 import io
-
+import numpy as np
+import dash
+from dash import dcc, html, Input, Output, State
+from dash.long_callback import DiskcacheLongCallbackManager
+import dash_bootstrap_components as dbc
+import networkx as nx
+import plotly.graph_objs as go
+import plotly.express as px
+import diskcache
+import pandas as pd
+from network_emulator.network_emulator import NetworkEmulator
 
 cache = diskcache.Cache("./cache")
 long_callback_manager = DiskcacheLongCallbackManager(cache)
@@ -26,7 +32,7 @@ app.config['suppress_callback_exceptions'] = True
 net_sim: NetworkEmulator = None
 
 # Sample list of IDs for dropdowns
-sample_ids = []
+sample_ids: list[str] = []
 
 # Define the initial layout of the app
 app.layout = dbc.Container(
@@ -148,16 +154,26 @@ menu_layout = dbc.Container(
 
 
 def create_network_graph():
+    """
+    Creates a network graph using NetworkX and Plotly.
+
+    This function generates a network graph from a topology obtained via `net_sim.get_topology()`.
+    It uses a spring layout algorithm to position the nodes with increased spacing.
+    The graph is visualized using Plotly with nodes colored by their degree.
+
+    Returns:
+        plotly.graph_objs._figure.Figure: A Plotly figure object representing the network graph.
+    """
     # Create a simple networkx graph
-    G = net_sim.get_topology()
+    g = net_sim.get_topology()
 
     # Get the positions of the nodes using a layout algorithm with increased spacing
     # Adjust the value of k to control node spacing
-    pos = nx.spring_layout(G, k=1, dim=2)
+    pos = nx.spring_layout(g, k=1, dim=2)
 
     # Create the edge traces
     edge_trace = []
-    for edge in G.edges():
+    for edge in g.edges():
         x0, y0 = pos[edge[0]]
         x1, y1 = pos[edge[1]]
         edge_trace.append(
@@ -172,9 +188,9 @@ def create_network_graph():
 
     # Create the node trace
     node_trace = go.Scatter(
-        x=[pos[node][0] for node in G.nodes()],
-        y=[pos[node][1] for node in G.nodes()],
-        text=[str(node) for node in G.nodes()],
+        x=[pos[node][0] for node in g.nodes()],
+        y=[pos[node][1] for node in g.nodes()],
+        text=[str(node) for node in g.nodes()],
         mode='markers+text',
         hoverinfo='text',
         marker=dict(
@@ -193,7 +209,7 @@ def create_network_graph():
 
     # Color nodes by their degree
     node_adjacencies = []
-    for node, adjacencies in enumerate(G.adjacency()):
+    for node, adjacencies in enumerate(g.adjacency()):
         node_adjacencies.append(len(adjacencies[1]))
     node_trace.marker.color = node_adjacencies
 
@@ -213,6 +229,16 @@ def create_network_graph():
 
 # Define the content layouts for each button
 def start_simulation_layout() -> dbc.Container:
+    """
+    Creates the layout for the simulation start page using Dash Bootstrap Components.
+
+    This function sets up the layout for the simulation start page, including input fields for 
+    probe rate, number of generations, telemetry period, and hardware failure selection. 
+    It also includes a button to start the emulation and displays progress and download links.
+
+    Returns:
+        dbc.Container: A Dash Bootstrap Container with the layout for the simulation start page.
+    """
     return dbc.Container(
         [
             dcc.Store(id='working-state', data={'working': False}),
@@ -240,7 +266,9 @@ def start_simulation_layout() -> dbc.Container:
                                     dbc.Label("Number of generation",
                                               html_for="number-of-generation"),
                                     dbc.Input(
-                                        type="number", id="number-of-generation", value=net_sim.num_generation),
+                                        type="number",
+                                        id="number-of-generation",
+                                        value=net_sim.num_generation),
                                 ]
                             ),
                             dbc.CardGroup(
@@ -248,7 +276,9 @@ def start_simulation_layout() -> dbc.Container:
                                     dbc.Label("Telemtry Period in minute",
                                               html_for="telemetry-period"),
                                     dbc.Input(
-                                        type='number', id="telemetry-period", value=net_sim.duration/60),
+                                        type='number',
+                                        id="telemetry-period",
+                                        value=net_sim.duration/60),
                                 ]
                             ),
                         ],
@@ -296,6 +326,19 @@ def start_simulation_layout() -> dbc.Container:
 
 
 def ecmp_analysis_layout(dropdown_options) -> dbc.Container:
+    """
+    Creates the layout for the ECMP analysis page using Dash Bootstrap Components.
+
+    This function sets up the layout for the ECMP analysis page, including dropdowns for 
+    selecting IDs, sections for ECMP and latency imbalance analysis, and a submit button 
+    for additional analysis. The layout is designed to be fluid and responsive.
+
+    Args:
+        dropdown_options (list): A list of options for the dropdown menus.
+
+    Returns:
+        dbc.Container: A Dash Bootstrap Container with the layout for the ECMP analysis page.
+    """
     return dbc.Container(
         [
             dbc.Row(
@@ -372,6 +415,17 @@ def ecmp_analysis_layout(dropdown_options) -> dbc.Container:
 
 
 def measurements_analysis_layout() -> dbc.Container:
+    """
+    Creates the layout for the measurements analysis page using Dash Bootstrap Components.
+
+    This function sets up the layout for the measurements analysis page, including upload 
+    components for source and sink CSV files, and a combined output section. The layout 
+    is designed to be fluid and responsive.
+
+    Returns:
+        dbc.Container: A Dash Bootstrap Container with the layout for the measurements
+        analysis page.
+    """
     return dbc.Container(
         [
             dbc.Row(
@@ -438,6 +492,21 @@ def measurements_analysis_layout() -> dbc.Container:
                Input('number-of-generation', 'value'),
                Input('telemetry-period', 'value')])
 def update_emulation_parameters(probe_rate, num_gen, tel_period):
+    """
+    Updates the emulation parameters based on the input values from the UI.
+
+    This callback function updates the global `net_sim` object with the new values for 
+    probe rate, number of generations, and telemetry period. The telemetry period is 
+    converted from minutes to seconds before updating.
+
+    Args:
+        probe_rate (int): The new probe rate value.
+        num_gen (int): The new number of generations value.
+        tel_period (int): The new telemetry period value in minutes.
+
+    Returns:
+        dash.no_update: Indicates that no component updates are needed.
+    """
     if probe_rate is not None:
         net_sim.generation_rate = probe_rate
     if num_gen is not None:
@@ -455,6 +524,19 @@ def update_emulation_parameters(probe_rate, num_gen, tel_period):
     prevent_initial_call=True
 )
 def store_file_and_redirect(contents):
+    """
+    Stores the uploaded file contents and redirects to a loading page.
+
+    This callback function takes the contents of an uploaded file and stores it in a 
+    Dash `dcc.Store` component. It then redirects the user to a loading page. If no 
+    contents are provided, it redirects to the home page.
+
+    Args:
+        contents (str): The contents of the uploaded file.
+
+    Returns:
+        tuple: A tuple containing the file contents and the new URL pathname.
+    """
     if contents is not None:
         return contents, '/loading'
     return None, '/'
@@ -470,6 +552,23 @@ def store_file_and_redirect(contents):
     prevent_initial_call=True
 )
 def update_output(_, __, ___):
+    """
+    Updates the output based on which button was clicked.
+
+    This callback function determines which button was clicked and updates the 
+    'button-output' component accordingly. It handles three buttons: start simulation, 
+    ECMP analysis, and general analysis. Depending on the button clicked, it returns 
+    the corresponding layout. If no button is clicked or if the net_sim object is None, 
+    it returns no update or redirects to the home page.
+
+    Args:
+        _ (int): Number of clicks for the start simulation button.
+        __ (int): Number of clicks for the ECMP analysis button.
+        ___ (int): Number of clicks for the analysis button.
+
+    Returns:
+        dash.development.base_component.Component: The updated layout or no update.
+    """
     ctx = dash.callback_context
     if not ctx.triggered:
         return dash.no_update
@@ -490,30 +589,83 @@ def update_output(_, __, ___):
     return dash.no_update
 
 # Define the callback to update the ECMP Analysis content based on dropdown selection
-
-
 @app.callback(
     Output('ecmp-graphs', 'children'),
     Input('ecmp-id-dropdown', 'value'),
     prevent_initial_call=True
 )
 def update_ecmp_graphs(selected_id):
+    """
+    Updates the ECMP graphs based on the selected router ID.
+
+    This function generates two graphs: one showing the number of destinations by 
+    the number of paths for the selected router ID, and another showing the latency 
+    with the number of hops with the selected router ID as the source.
+
+    Args:
+        selected_id (str): The selected router ID.
+
+    Returns:
+        html.Div: A Div containing the two generated graphs, or no update if no ID is selected.
+    """
     if selected_id:
         ecmp_values, path = net_sim.ecmp_analysis(selected_id)
-        # Replace with actual graph generation based on the selected ID
-        return html.Div([
-            dcc.Graph(figure={'data': [{'x': list(ecmp_values.keys()), 'y': list(ecmp_values.values()), 'type': 'bar', 'name': selected_id}],
-                              'layout': {'title': f'Number of destinations by number of paths for {selected_id}',
-                                         'xaxis': {'title': 'Number of paths'},
-                                         'yaxis': {'title': 'Number of destinations'}}}),
-            dcc.Graph(figure={'data': [{'x': list(path.keys()), 'y': list(path.values()), 'type': 'linear', 'name': selected_id}],
-                              'layout': {'title': f'Latency with number of hops with {selected_id} as source',
-                                         'xaxis': {'title': 'Number of hops'},
-                                         'yaxis': {'title': 'Latency in ms'}}}),
-        ])
+        
+        # Prepare data for the linear regression
+        x = np.array(list(path.keys()))
+        y = np.array(list(path.values()))
+        
+        # Calculate linear regression
+        slope, intercept = np.polyfit(x, y, 1)
+        regression_line = slope * x + intercept
+        
+        # Create the graphs
+        graph1 = dcc.Graph(
+            figure={
+                'data': [{
+                    'x': list(ecmp_values.keys()),
+                    'y': list(ecmp_values.values()),
+                    'type': 'bar',
+                    'name': selected_id
+                }],
+                'layout': {
+                    'title': f'Number of destinations by number of paths for {selected_id}',
+                    'xaxis': {'title': 'Number of paths'},
+                    'yaxis': {'title': 'Number of destinations'}
+                }
+            }
+        )
+        
+        graph2 = dcc.Graph(
+            figure={
+                'data': [
+                    {
+                        'x': list(path.keys()),
+                        'y': list(path.values()),
+                        'type': 'scatter',
+                        'mode': 'lines+markers',
+                        'name': selected_id
+                    },
+                    {
+                        'x': list(path.keys()),
+                        'y': regression_line,
+                        'type': 'scatter',
+                        'mode': 'lines',
+                        'name': 'Linear Regression',
+                        'line': {'color': 'red'}
+                    }
+                ],
+                'layout': {
+                    'title': f'Latency with number of hops with {selected_id} as source',
+                    'xaxis': {'title': 'Number of hops'},
+                    'yaxis': {'title': 'Latency in ms'}
+                }
+            }
+        )
+        
+        return html.Div([graph1, graph2])
+    
     return dash.no_update
-
-# Define the callback to update the Additional Analysis content based on dropdowns and button click
 
 
 @app.callback(
@@ -524,6 +676,21 @@ def update_ecmp_graphs(selected_id):
     prevent_initial_call=True
 )
 def update_additional_analysis(n_clicks, id1, id2):
+    """
+    Updates the additional analysis output based on the selected IDs and button click.
+
+    This function performs a latency test between the selected IDs and generates a graph
+    and a list of paths with latency imbalances. If only one ID is selected, it tests
+    against all other IDs. If no IDs are selected, it performs a test on all paths.
+
+    Args:
+        n_clicks (int): Number of clicks on the submit button.
+        id1 (str): The first selected ID.
+        id2 (str): The second selected ID.
+
+    Returns:
+        html.Div: A Div containing the generated graph and list of paths with latency imbalances.
+    """
     wrong_paths = []
     graph_value = {}
     if n_clicks and id1 and id2:
@@ -535,23 +702,30 @@ def update_additional_analysis(n_clicks, id1, id2):
             else:
                 graph_value[key] += 1
     elif n_clicks and id1 and not id2:
-        for id in sample_ids:
-            if id != id1:
-                _, wrong_path = net_sim.latency_test(id1, id)
+        for s_id in sample_ids:
+            if s_id != id1:
+                _, wrong_path = net_sim.latency_test(id1, s_id)
                 wrong_paths.extend(wrong_path)
     else:
         wrong_paths = net_sim.all_latency_test()
     if len(wrong_paths) > 0:
-        text_items = [html.Li(f"Path from {wrong_paths[0][0]} to {path[0][-1]} going through {
-                              path[0][1:-1]} has a latency imbalance of {path[1]/1000} ms") for path in wrong_paths]
+        text_items = [html.Li(f"Path from {wrong_paths[0][0]} to {path[0][-1]} going through "
+                              f"{path[0][1:-1]} has a latency imbalance of {path[1]/1000} ms")
+                                for path in wrong_paths]
     else:
         text_items = html.Li("No wrong paths found")
 
     return html.Div([
-        dcc.Graph(figure={'data': [{'x': list(graph_value.keys()), 'y': list(graph_value.values()), 'type': 'bar', 'name': f"Latency for number of paths between {id1} and {id2}"}],
-                          'layout': {'title': f"Latency for number of paths between {id1} and {id2}",
+        dcc.Graph(figure={'data': [{'x': list(graph_value.keys()), 'y': list(graph_value.values()),
+                                    'type': 'bar',
+                                    'name': f"Latency for number of paths between {id1} and {id2}"}
+                                   ],
+                          'layout': {
+                              'title': f"Latency for number of paths between {id1} and {id2}",
                                      'xaxis': {'title': 'Latency in ms'},
-                                     'yaxis': {'title': 'Number of paths'}}}) if len(graph_value.items()) > 0 else html.Div(),
+                                     'yaxis': {'title': 'Number of paths'}}})  
+        if len(graph_value.items()) > 0
+        else html.Div(),
         html.Ul(text_items)])
 
 # Define the callback to build the network
@@ -564,10 +738,24 @@ def update_additional_analysis(n_clicks, id1, id2):
     prevent_initial_call=True
 )
 def build_network(pathname, stored_file):
+    """
+    Builds the network when the pathname is '/loading' and a stored file is provided.
+
+    This function decodes the base64 encoded stored file, writes it to a temporary file,
+    and initializes the NetworkEmulator with the temporary file. It then builds and starts
+    the network simulation, retrieves the router IDs, and enables the interval component.
+
+    Args:
+        pathname (str): The current pathname.
+        stored_file (str): The base64 encoded stored file data.
+
+    Returns:
+        bool: False to enable the interval component, True otherwise.
+    """
     if pathname == '/loading' and stored_file is not None:
         global net_sim
         # Decode the base64 string
-        content_type, content_string = stored_file.split(',')
+        _, content_string = stored_file.split(',')
         decoded = base64.b64decode(content_string)
         # Create a temporary file to save the uploaded content
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
@@ -575,7 +763,8 @@ def build_network(pathname, stored_file):
             temp_file_path = temp_file.name
 
         net_sim = NetworkEmulator(node_file=None, link_file=None, single_file=temp_file_path,
-                                  generation_rate=20, num_generation=1, load_folder=None, save_folder=None)
+                                  generation_rate=20, num_generation=1,
+                                  load_folder=None, save_folder=None)
         net_sim.build()
         net_sim.start()
         global sample_ids
@@ -595,6 +784,18 @@ def build_network(pathname, stored_file):
     prevent_initial_call=True
 )
 def redirect_to_final(_):
+    """
+    Redirects to the final URL based on the network simulation status.
+
+    This function checks if the network simulation is running and redirects to the
+    '/menu' page if it is. Otherwise, it redirects to the '/loading' page.
+
+    Args:
+        _ (int): The number of intervals passed (not used).
+
+    Returns:
+        str: The pathname to redirect to.
+    """
     if net_sim and net_sim.is_running():
         return '/menu'
     return '/loading'
@@ -615,8 +816,25 @@ def redirect_to_final(_):
      State('end_probe', 'value')],
     prevent_initial_call=True
 )
-def start_emulation(n_clicks, n_intervals, router_id, start, end):
-    
+def start_emulation(n_clicks, _, router_id, start, end):
+    """
+    Starts the network emulation process.
+
+    This function handles the emulation process, including adding hardware issues,
+    sending probabilities, exporting data, and updating the progress bar.
+
+    Args:
+        n_clicks (int): Number of clicks on the start button.
+        _ (any): Placeholder for unused input.
+        router_id (str): The ID of the router to add a hardware issue to.
+        start (int): The start time of the hardware issue.
+        end (int): The end time of the hardware issue.
+
+    Returns:
+        tuple: A tuple containing the progress display, a boolean to disable the button, and a
+        boolean to show the download button.
+    """
+
     if n_clicks is None or n_clicks == 0:
         return dash.no_update, False, True,
 
@@ -630,7 +848,7 @@ def start_emulation(n_clicks, n_intervals, router_id, start, end):
         net_sim.duration * net_sim.generation_rate
 
     net_sim.working = True
-    
+
 
     if net_sim.current_step <= total_steps:
         routers = net_sim.routers
@@ -655,14 +873,19 @@ def start_emulation(n_clicks, n_intervals, router_id, start, end):
                     net_sim.send_prob(
                         source=source, destination=destination, flow_label=fl)
 
-        if net_sim.current_step % (net_sim.generation_rate*net_sim.duration) == 0 and net_sim.current_step != 0:
+        if (net_sim.current_step % (net_sim.generation_rate*net_sim.duration) == 0
+            and net_sim.current_step != 0):
             timestamp = datetime.datetime.now()
             print(f"Exporting data at {timestamp}")
             for router in routers:
-                net_sim.export_source_data(source_router=router, fl=None, gen_number=net_sim.current_step //
-                                           (net_sim.generation_rate*net_sim.duration), timestamp=timestamp)
-                net_sim.export_sink_data(sink_router=router, fl=None, gen_number=net_sim.current_step //
-                                         (net_sim.generation_rate*net_sim.duration), timestamp=timestamp)
+                net_sim.export_source_data(source_router=router, fl=None,
+                                           gen_number=net_sim.current_step //
+                                           (net_sim.generation_rate*net_sim.duration),
+                                           timestamp=timestamp)
+                net_sim.export_sink_data(sink_router=router, fl=None,
+                                         gen_number=net_sim.current_step //
+                                         (net_sim.generation_rate*net_sim.duration),
+                                         timestamp=timestamp)
                 router.update_bins()
 
         net_sim.current_step += 1
@@ -707,6 +930,19 @@ def start_emulation(n_clicks, n_intervals, router_id, start, end):
     prevent_initial_call=True
 )
 def download_output(n_click):
+    """
+    Handles the download of output files when the download button is clicked.
+
+    This function creates a ZIP file containing the sink and source CSV files and
+    returns it for download.
+
+    Args:
+        n_click (int): Number of clicks on the download button.
+
+    Returns:
+        dcc.send_file: A Dash component to send the ZIP file for download.
+    """
+
     if n_click is None or n_click == 0:
         return dash.no_update
         # Example data extraction and function call (replace with actual logic)
@@ -734,6 +970,25 @@ def download_output(n_click):
      State('upload-sink', 'contents')]
 )
 def upload_measurement_files(source_filename, sink_filename, source_contents, sink_contents):
+    """
+    Handles the upload of measurement files and performs analysis.
+
+    This function processes the uploaded source and sink CSV files, decodes their contents,
+    and performs hardware issue detection analysis. It updates the UI with the
+    results of the analysis.
+
+    Args:
+        source_filename (str): The filename of the uploaded source file.
+        sink_filename (str): The filename of the uploaded sink file.
+        source_contents (str): The contents of the uploaded source file in base64 format.
+        sink_contents (str): The contents of the uploaded sink file in base64 format.
+
+    Returns:
+        tuple: A tuple containing:
+            - A Div element with the source file upload message.
+            - A Div element with the sink file upload message.
+            - A Div element with the analysis layout.
+    """
     source_message = ''
     sink_message = ''
     analysis_layout = dbc.Container()
@@ -742,7 +997,7 @@ def upload_measurement_files(source_filename, sink_filename, source_contents, si
         if 'source' in source_filename.lower():
             source_message = f'File "{source_filename}" uploaded successfully.'
             if source_contents:
-                content_type, content_string = source_contents.split(',')
+                _, content_string = source_contents.split(',')
                 decoded = base64.b64decode(content_string)
                 source_df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
         else:
@@ -752,13 +1007,14 @@ def upload_measurement_files(source_filename, sink_filename, source_contents, si
         if 'sink' in sink_filename.lower():
             sink_message = f'File "{sink_filename}" uploaded successfully.'
             if sink_contents:
-                content_type, content_string = sink_contents.split(',')
+                _, content_string = sink_contents.split(',')
                 decoded = base64.b64decode(content_string)
                 sink_df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
         else:
             sink_message = 'Please upload a CSV file containing "sink" in its name.'
 
-    if source_message and sink_message and 'uploaded successfully' in source_message and 'uploaded successfully' in sink_message:
+    if (source_message and sink_message and 'uploaded successfully' in source_message
+        and 'uploaded successfully' in sink_message):
 
         list_of_routers = net_sim.hw_issue_detection(
             sink_dataframe=sink_df, source_dataframe=source_df, latency=True)
@@ -823,7 +1079,17 @@ def upload_measurement_files(source_filename, sink_filename, source_contents, si
 
 
 def save_base64_to_csv(base64_str, file_path):
-    content_type, content_string = base64_str.split(',')
+    """
+    Decodes a base64-encoded string and saves it as a CSV file.
+
+    Args:
+        base64_str (str): The base64-encoded string representing the contents of the CSV file.
+        file_path (str): The path where the decoded CSV file will be saved.
+
+    Returns:
+        None
+    """
+    _, content_string = base64_str.split(',')
     decoded = base64.b64decode(content_string)
     with open(file_path, 'wb') as f:
         f.write(decoded)
@@ -839,6 +1105,29 @@ def save_base64_to_csv(base64_str, file_path):
     prevent_initial_call=True
 )
 def measurement_analysis(n_click, source_id, sink_id, source_file, sink_file):
+    """
+    Analyzes measurement data and generates a latency histogram.
+
+    This function is triggered by a button click and performs the following steps:
+    1. Checks if the button has been clicked and if both source and sink files are uploaded.
+    2. Saves the uploaded source and sink files to the 'uploads' directory.
+    3. Reads the saved CSV files.
+    4. Filters the sink data to find the last entry for the given source and destination.
+    5. Extracts histogram template and values from the last entry.
+    6. Creates a histogram plot of latency values.
+
+    Args:
+        n_click (int): The number of times the button has been clicked.
+        source_id (str): The ID of the source router.
+        sink_id (str): The ID of the sink router.
+        source_file (str): The base64-encoded contents of the uploaded source file.
+        sink_file (str): The base64-encoded contents of the uploaded sink file.
+
+    Returns:
+        dcc.Graph: A Dash Graph component containing the latency histogram plot.
+        or
+        html.Div: A Dash Div component with an error message if files are not uploaded.
+    """
     if n_click is None or n_click == 0:
         return dash.no_update
     if source_file is None or sink_file is None:
@@ -853,7 +1142,7 @@ def measurement_analysis(n_click, source_id, sink_id, source_file, sink_file):
     save_base64_to_csv(sink_file, sink_file_path)
 
     # Read the saved CSV files
-    source_df = pd.read_csv(source_file_path)
+    _ = pd.read_csv(source_file_path)
     sink_df = pd.read_csv(sink_file_path)
 
     # Find the last row with the given source and destination
@@ -863,11 +1152,12 @@ def measurement_analysis(n_click, source_id, sink_id, source_file, sink_file):
         sink_df['Destination'] == sink_router.ip_address)]
     last_entry = filtered_df.iloc[-1]
     # Extract histogram template and values
-    histogram_template = eval(last_entry['Histogram Template'])
-    histogram_values = eval(last_entry['Histogram Value'])
+    histogram_template = ast.literal_eval(last_entry['Histogram Template'])
+    histogram_values = ast.literal_eval(last_entry['Histogram Value'])
 
     # Create histogram plot
-    fig = px.bar(x=histogram_template, y=histogram_values, labels={'x': 'Latency (ms)', 'y': 'Count'},
+    fig = px.bar(x=histogram_template, y=histogram_values, labels={'x': 'Latency (ms)',
+                                                                   'y': 'Count'},
                  title=f'Latency Histogram for Source {source_id} and Destination {sink_id}')
     fig.update_xaxes(type='category')
 
@@ -882,6 +1172,22 @@ def measurement_analysis(n_click, source_id, sink_id, source_file, sink_file):
     prevent_initial_call=True
 )
 def display_page(pathname):
+    """
+    Updates the page content based on the URL pathname.
+
+    This function is a callback that updates the content of the 'page-content' div
+    based on the current URL pathname. It returns different layouts depending on
+    the pathname.
+
+    Args:
+        pathname (str): The current URL pathname.
+
+    Returns:
+        layout (dash.development.base_component.Component): The layout to be displayed.
+            - If pathname is '/loading', returns the loading layout.
+            - If pathname is '/menu', returns the menu layout.
+            - Otherwise, returns the upload layout.
+    """
     if pathname == '/loading':
         return loading_layout
     elif pathname == '/menu':
