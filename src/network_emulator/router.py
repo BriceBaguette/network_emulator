@@ -166,7 +166,7 @@ class Router:
         """
         return self.__bins, self.__min_max_bins
 
-    def update_bins(self):
+    def update_bins(self, treshold:int = 5):
         """
         Update the bins for each source.
 
@@ -182,6 +182,19 @@ class Router:
         for key, bins in self.__bins.items():
             # Step 1: Mark the bins
             marks = self.mark_bins(bins)
+
+            no_update = True
+
+            for index, old_bin in enumerate(bins):
+                if marks[index] == ROUTER:
+                    if old_bin.end - old_bin.start >= treshold:
+                        no_update = False
+                        break
+
+            if no_update:
+                for _, old_bin in enumerate(bins):
+                    old_bin.reset()
+                return
 
             # Step 2: Merge empty bins
             merged_bins, freed_bins = self.merge_empty_bins(bins, marks)
