@@ -148,7 +148,14 @@ class NetworkEmulator:
         with open(self.single_file, "r", encoding="utf-8") as file:
             topo = file.read()
 
-        routers_info = topo.split("\n\n")
+        # Find all positions of router sections
+        router_start_positions = [match.start() 
+                                  for match in re.finditer(r'^\S', topo, re.MULTILINE)]
+
+        # Split content into router sections
+        routers_info = [topo[start:router_start_positions[i + 1]] 
+                        if i + 1 < len(router_start_positions) 
+                        else topo[start:] for i, start in enumerate(router_start_positions)]
 
         router_id_pattern = r"Router ID:\s*(\S+)"
 
@@ -899,6 +906,46 @@ class NetworkEmulator:
             if router.node_name == name:
                 return router
         return None
+
+    def get_next_hops(self, source: Router, destination: Router) -> List[str]:
+        """
+        Retrieves the next hop IP addresses from the source router to the destination router.
+
+        This method iterates through the source router's forwarding table to find entries that
+        match the destination router's IP address and collects the corresponding next hop
+        IP addresses.
+
+        Args:
+            source (Router): The source router.
+            destination (Router): The destination router.
+
+        Returns:
+            List[str]: A list of next hop IP addresses.
+        """
+        next_hops: List[str] = []
+        for _, value in enumerate(source.forward_table):
+            if value.destination == destination.ip_address:
+                next_hops.append(value.next_hop)
+        return next_hops
+
+    def get_all_neighbors(self, source: Router) -> List[str]:
+        """
+        Retrieves all neighboring routers' IP addresses for the given source router.
+
+        This method iterates through the network links to find links originating from the source
+        router and collects the destination IP addresses of those links.
+
+        Args:
+            source (Router): The source router.
+
+        Returns:
+            List[str]: A list of neighboring routers' IP addresses.
+        """
+        neighbors: List[str] = []
+        for link in self.links:
+            if link.source == source.ip_address:
+                neighbors.append(link.destination)
+        return neighbors
 
     def ipm_session(self, source_ip: str, destination_ip: str, fl: int = None,
                     t: str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) -> None:

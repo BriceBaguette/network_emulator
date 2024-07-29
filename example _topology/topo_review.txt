@@ -1,0 +1,3365 @@
+RP/0/RP0/CPU0:R11#sh isis database verbose
+Thu Jun  6 14:53:12.536 UTC
+
+IS-IS 1 (Level-2) Link State Database
+LSPID                 LSP Seq Num  LSP Checksum  LSP Holdtime/Rcvd  ATT/P/OL
+SFO1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.1
+  IP Address:     1.1.1.1
+  Hostname:       SFO1
+  Metric: 0          IP-Extended 1.1.1.1/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.1
+  Metric: 1000         IS-Extended SFO2.00
+    Local Interface ID: 1, Remote Interface ID: 1
+    Interface IP Address: 99.1.2.1
+    Neighbor IP Address: 99.1.2.2
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 64 us
+    Link Min/Max Delay: 64/64 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.1.2.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended SFO2.00
+    Local Interface ID: 2, Remote Interface ID: 2
+    Interface IP Address: 100.1.2.1
+    Neighbor IP Address: 100.1.2.2
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 290 us
+    Link Min/Max Delay: 290/290 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.1.2.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-SFO.00
+    Local Interface ID: 3, Remote Interface ID: 1
+    Interface IP Address: 99.1.3.1
+    Neighbor IP Address: 99.1.3.3
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 118 us
+    Link Min/Max Delay: 118/118 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.1.3.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA1.00
+    Local Interface ID: 4, Remote Interface ID: 1
+    Interface IP Address: 99.1.4.1
+    Neighbor IP Address: 99.1.4.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5391 us
+    Link Min/Max Delay: 5391/5391 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.1.4.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA1.00
+    Local Interface ID: 5, Remote Interface ID: 2
+    Interface IP Address: 100.1.4.1
+    Neighbor IP Address: 100.1.4.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5660 us
+    Link Min/Max Delay: 5660/5660 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.1.4.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX1.00
+    Local Interface ID: 6, Remote Interface ID: 1
+    Interface IP Address: 99.1.7.1
+    Neighbor IP Address: 99.1.7.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2765 us
+    Link Min/Max Delay: 2765/2765 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.1.7.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX1.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 100.1.7.1
+    Neighbor IP Address: 100.1.7.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2903 us
+    Link Min/Max Delay: 2903/2903 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.1.7.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+SFO2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.2
+  IP Address:     1.1.1.2
+  Hostname:       SFO2
+  Metric: 0          IP-Extended 1.1.1.2/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.2
+  Metric: 1000         IS-Extended SFO1.00
+    Local Interface ID: 1, Remote Interface ID: 1
+    Interface IP Address: 99.1.2.2
+    Neighbor IP Address: 99.1.2.1
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 64 us
+    Link Min/Max Delay: 64/64 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.1.2.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended SFO1.00
+    Local Interface ID: 2, Remote Interface ID: 2
+    Interface IP Address: 100.1.2.2
+    Neighbor IP Address: 100.1.2.1
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 290 us
+    Link Min/Max Delay: 290/290 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.1.2.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-SFO.00
+    Local Interface ID: 3, Remote Interface ID: 2
+    Interface IP Address: 99.2.3.2
+    Neighbor IP Address: 99.2.3.3
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 375 us
+    Link Min/Max Delay: 375/375 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.2.3.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA2.00
+    Local Interface ID: 4, Remote Interface ID: 1
+    Interface IP Address: 99.2.5.2
+    Neighbor IP Address: 99.2.5.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5924 us
+    Link Min/Max Delay: 5924/5924 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.2.5.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA2.00
+    Local Interface ID: 5, Remote Interface ID: 2
+    Interface IP Address: 100.2.5.2
+    Neighbor IP Address: 100.2.5.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6220 us
+    Link Min/Max Delay: 6220/6220 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.2.5.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX2.00
+    Local Interface ID: 6, Remote Interface ID: 1
+    Interface IP Address: 99.2.8.2
+    Neighbor IP Address: 99.2.8.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3041 us
+    Link Min/Max Delay: 3041/3041 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.2.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX2.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 100.2.8.2
+    Neighbor IP Address: 100.2.8.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3193 us
+    Link Min/Max Delay: 3193/3193 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.2.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-PTX.00
+    Local Interface ID: 8, Remote Interface ID: 1
+    Interface IP Address: 99.2.41.2
+    Neighbor IP Address: 99.2.41.41
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4246 us
+    Link Min/Max Delay: 4246/4246 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.2.41.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-SFO.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.3
+  IP Address:     1.1.1.3
+  Hostname:       PE-SFO
+  Metric: 0          IP-Extended 1.1.1.3/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.3
+  Metric: 10000         IS-Extended SFO1.00
+    Local Interface ID: 1, Remote Interface ID: 3
+    Interface IP Address: 99.1.3.3
+    Neighbor IP Address: 99.1.3.1
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 118 us
+    Link Min/Max Delay: 118/118 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.1.3.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended SFO2.00
+    Local Interface ID: 2, Remote Interface ID: 3
+    Interface IP Address: 99.2.3.3
+    Neighbor IP Address: 99.2.3.2
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 375 us
+    Link Min/Max Delay: 375/375 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.2.3.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+SEA1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.4
+  IP Address:     1.1.1.4
+  Hostname:       SEA1
+  Metric: 0          IP-Extended 1.1.1.4/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.4
+  Metric: 100         IS-Extended SFO1.00
+    Local Interface ID: 1, Remote Interface ID: 4
+    Interface IP Address: 99.1.4.4
+    Neighbor IP Address: 99.1.4.1
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5391 us
+    Link Min/Max Delay: 5391/5391 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.1.4.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SFO1.00
+    Local Interface ID: 2, Remote Interface ID: 5
+    Interface IP Address: 100.1.4.4
+    Neighbor IP Address: 100.1.4.1
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5660 us
+    Link Min/Max Delay: 5660/5660 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.1.4.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended SEA2.00
+    Local Interface ID: 3, Remote Interface ID: 3
+    Interface IP Address: 99.4.5.4
+    Neighbor IP Address: 99.4.5.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 49 us
+    Link Min/Max Delay: 49/49 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.4.5.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended SEA2.00
+    Local Interface ID: 4, Remote Interface ID: 4
+    Interface IP Address: 100.4.5.4
+    Neighbor IP Address: 100.4.5.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 70 us
+    Link Min/Max Delay: 70/70 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.4.5.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-SEA.00
+    Local Interface ID: 5, Remote Interface ID: 1
+    Interface IP Address: 99.4.6.4
+    Neighbor IP Address: 99.4.6.6
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 252 us
+    Link Min/Max Delay: 252/252 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.4.6.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX1.00
+    Local Interface ID: 6, Remote Interface ID: 3
+    Interface IP Address: 99.4.7.4
+    Neighbor IP Address: 99.4.7.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 7622 us
+    Link Min/Max Delay: 7622/7622 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.4.7.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX1.00
+    Local Interface ID: 7, Remote Interface ID: 4
+    Interface IP Address: 100.4.7.4
+    Neighbor IP Address: 100.4.7.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8003 us
+    Link Min/Max Delay: 8003/8003 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.4.7.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN1.00
+    Local Interface ID: 8, Remote Interface ID: 1
+    Interface IP Address: 99.4.10.4
+    Neighbor IP Address: 99.4.10.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8096 us
+    Link Min/Max Delay: 8096/8096 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.4.10.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN1.00
+    Local Interface ID: 9, Remote Interface ID: 2
+    Interface IP Address: 100.4.10.4
+    Neighbor IP Address: 100.4.10.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8501 us
+    Link Min/Max Delay: 8501/8501 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.4.10.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN1.00
+    Local Interface ID: 10, Remote Interface ID: 1
+    Interface IP Address: 99.4.19.4
+    Neighbor IP Address: 99.4.19.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 11048 us
+    Link Min/Max Delay: 11048/11048 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.4.19.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN1.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 100.4.19.4
+    Neighbor IP Address: 100.4.19.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 11601 us
+    Link Min/Max Delay: 11601/11601 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.4.19.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-PTX.00
+    Local Interface ID: 12, Remote Interface ID: 2
+    Interface IP Address: 99.4.41.4
+    Neighbor IP Address: 99.4.41.41
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1150 us
+    Link Min/Max Delay: 1150/1150 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.4.41.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-GFK.00
+    Local Interface ID: 13, Remote Interface ID: 1
+    Interface IP Address: 99.4.44.4
+    Neighbor IP Address: 99.4.44.44
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9291 us
+    Link Min/Max Delay: 9291/9291 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.4.44.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+SEA2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.5
+  IP Address:     1.1.1.5
+  Hostname:       SEA2
+  Metric: 0          IP-Extended 1.1.1.5/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.5
+  Metric: 100         IS-Extended SFO2.00
+    Local Interface ID: 1, Remote Interface ID: 4
+    Interface IP Address: 99.2.5.5
+    Neighbor IP Address: 99.2.5.2
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5924 us
+    Link Min/Max Delay: 5924/5924 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.2.5.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SFO2.00
+    Local Interface ID: 2, Remote Interface ID: 5
+    Interface IP Address: 100.2.5.5
+    Neighbor IP Address: 100.2.5.2
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6220 us
+    Link Min/Max Delay: 6220/6220 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.2.5.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended SEA1.00
+    Local Interface ID: 3, Remote Interface ID: 3
+    Interface IP Address: 99.4.5.5
+    Neighbor IP Address: 99.4.5.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 49 us
+    Link Min/Max Delay: 49/49 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.4.5.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended SEA1.00
+    Local Interface ID: 4, Remote Interface ID: 4
+    Interface IP Address: 100.4.5.5
+    Neighbor IP Address: 100.4.5.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 70 us
+    Link Min/Max Delay: 70/70 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.4.5.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-SEA.00
+    Local Interface ID: 5, Remote Interface ID: 2
+    Interface IP Address: 99.5.6.5
+    Neighbor IP Address: 99.5.6.6
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 242 us
+    Link Min/Max Delay: 242/242 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.5.6.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX2.00
+    Local Interface ID: 6, Remote Interface ID: 3
+    Interface IP Address: 99.5.8.5
+    Neighbor IP Address: 99.5.8.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 7742 us
+    Link Min/Max Delay: 7742/7742 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.5.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX2.00
+    Local Interface ID: 7, Remote Interface ID: 4
+    Interface IP Address: 100.5.8.5
+    Neighbor IP Address: 100.5.8.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8129 us
+    Link Min/Max Delay: 8129/8129 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.5.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN2.00
+    Local Interface ID: 8, Remote Interface ID: 1
+    Interface IP Address: 99.5.11.5
+    Neighbor IP Address: 99.5.11.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8392 us
+    Link Min/Max Delay: 8392/8392 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.5.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN2.00
+    Local Interface ID: 9, Remote Interface ID: 2
+    Interface IP Address: 100.5.11.5
+    Neighbor IP Address: 100.5.11.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8812 us
+    Link Min/Max Delay: 8812/8812 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.5.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN2.00
+    Local Interface ID: 10, Remote Interface ID: 1
+    Interface IP Address: 99.5.20.5
+    Neighbor IP Address: 99.5.20.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 17244 us
+    Link Min/Max Delay: 17244/17244 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.5.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN2.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 100.5.20.5
+    Neighbor IP Address: 100.5.20.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 18106 us
+    Link Min/Max Delay: 18106/18106 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.5.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-SEA.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.6
+  IP Address:     1.1.1.6
+  Hostname:       PE-SEA
+  Metric: 0          IP-Extended 1.1.1.6/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.6
+  Metric: 10000         IS-Extended SEA1.00
+    Local Interface ID: 1, Remote Interface ID: 5
+    Interface IP Address: 99.4.6.6
+    Neighbor IP Address: 99.4.6.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 252 us
+    Link Min/Max Delay: 252/252 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.4.6.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended SEA2.00
+    Local Interface ID: 2, Remote Interface ID: 5
+    Interface IP Address: 99.5.6.6
+    Neighbor IP Address: 99.5.6.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 242 us
+    Link Min/Max Delay: 242/242 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.5.6.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+LAX1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.7
+  IP Address:     1.1.1.7
+  Hostname:       LAX1
+  Metric: 0          IP-Extended 1.1.1.7/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.7
+  Metric: 100         IS-Extended SFO1.00
+    Local Interface ID: 1, Remote Interface ID: 6
+    Interface IP Address: 99.1.7.7
+    Neighbor IP Address: 99.1.7.1
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2765 us
+    Link Min/Max Delay: 2765/2765 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.1.7.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SFO1.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 100.1.7.7
+    Neighbor IP Address: 100.1.7.1
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2903 us
+    Link Min/Max Delay: 2903/2903 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.1.7.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA1.00
+    Local Interface ID: 3, Remote Interface ID: 6
+    Interface IP Address: 99.4.7.7
+    Neighbor IP Address: 99.4.7.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 7622 us
+    Link Min/Max Delay: 7622/7622 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.4.7.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA1.00
+    Local Interface ID: 4, Remote Interface ID: 7
+    Interface IP Address: 100.4.7.7
+    Neighbor IP Address: 100.4.7.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8003 us
+    Link Min/Max Delay: 8003/8003 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.4.7.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended LAX2.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.7.8.7
+    Neighbor IP Address: 99.7.8.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 15 us
+    Link Min/Max Delay: 15/15 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.7.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended LAX2.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.7.8.7
+    Neighbor IP Address: 100.7.8.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 49 us
+    Link Min/Max Delay: 49/49 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.7.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-LAX.00
+    Local Interface ID: 7, Remote Interface ID: 1
+    Interface IP Address: 99.7.9.7
+    Neighbor IP Address: 99.7.9.9
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5 us
+    Link Min/Max Delay: 5/5 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.7.9.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN1.00
+    Local Interface ID: 8, Remote Interface ID: 3
+    Interface IP Address: 99.7.10.7
+    Neighbor IP Address: 99.7.10.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6590 us
+    Link Min/Max Delay: 6590/6590 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.7.10.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN1.00
+    Local Interface ID: 9, Remote Interface ID: 4
+    Interface IP Address: 100.7.10.7
+    Neighbor IP Address: 100.7.10.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6920 us
+    Link Min/Max Delay: 6920/6920 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.7.10.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 10, Remote Interface ID: 1
+    Interface IP Address: 99.7.16.7
+    Neighbor IP Address: 99.7.16.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9789 us
+    Link Min/Max Delay: 9789/9789 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.7.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 100.7.16.7
+    Neighbor IP Address: 100.7.16.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 10279 us
+    Link Min/Max Delay: 10279/10279 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.7.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-PHX.00
+    Local Interface ID: 12, Remote Interface ID: 1
+    Interface IP Address: 99.7.43.7
+    Neighbor IP Address: 99.7.43.43
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2834 us
+    Link Min/Max Delay: 2834/2834 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.7.43.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+LAX2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.8
+  IP Address:     1.1.1.8
+  Hostname:       LAX2
+  Metric: 0          IP-Extended 1.1.1.8/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.8
+  Metric: 100         IS-Extended SFO2.00
+    Local Interface ID: 1, Remote Interface ID: 6
+    Interface IP Address: 99.2.8.8
+    Neighbor IP Address: 99.2.8.2
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3041 us
+    Link Min/Max Delay: 3041/3041 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.2.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SFO2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 100.2.8.8
+    Neighbor IP Address: 100.2.8.2
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3193 us
+    Link Min/Max Delay: 3193/3193 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.2.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA2.00
+    Local Interface ID: 3, Remote Interface ID: 6
+    Interface IP Address: 99.5.8.8
+    Neighbor IP Address: 99.5.8.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 7742 us
+    Link Min/Max Delay: 7742/7742 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.5.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA2.00
+    Local Interface ID: 4, Remote Interface ID: 7
+    Interface IP Address: 100.5.8.8
+    Neighbor IP Address: 100.5.8.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8129 us
+    Link Min/Max Delay: 8129/8129 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.5.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended LAX1.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.7.8.8
+    Neighbor IP Address: 99.7.8.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 15 us
+    Link Min/Max Delay: 15/15 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.7.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended LAX1.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.7.8.8
+    Neighbor IP Address: 100.7.8.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 49 us
+    Link Min/Max Delay: 49/49 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.7.8.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-LAX.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 99.8.9.8
+    Neighbor IP Address: 99.8.9.9
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 489 us
+    Link Min/Max Delay: 489/489 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.8.9.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN2.00
+    Local Interface ID: 8, Remote Interface ID: 3
+    Interface IP Address: 99.8.11.8
+    Neighbor IP Address: 99.8.11.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 15264 us
+    Link Min/Max Delay: 15264/15264 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.8.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN2.00
+    Local Interface ID: 9, Remote Interface ID: 4
+    Interface IP Address: 100.8.11.8
+    Neighbor IP Address: 100.8.11.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 16027 us
+    Link Min/Max Delay: 16027/16027 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.8.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 10, Remote Interface ID: 1
+    Interface IP Address: 99.8.17.8
+    Neighbor IP Address: 99.8.17.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8807 us
+    Link Min/Max Delay: 8807/8807 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.8.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 100.8.17.8
+    Neighbor IP Address: 100.8.17.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9247 us
+    Link Min/Max Delay: 9247/9247 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.8.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-LAX.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.9
+  IP Address:     1.1.1.9
+  Hostname:       PE-LAX
+  Metric: 0          IP-Extended 1.1.1.9/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.9
+  Metric: 10000         IS-Extended LAX1.00
+    Local Interface ID: 1, Remote Interface ID: 7
+    Interface IP Address: 99.7.9.9
+    Neighbor IP Address: 99.7.9.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5 us
+    Link Min/Max Delay: 5/5 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.7.9.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended LAX2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 99.8.9.9
+    Neighbor IP Address: 99.8.9.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 489 us
+    Link Min/Max Delay: 489/489 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.8.9.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+DEN1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.10
+  IP Address:     1.1.1.10
+  Hostname:       DEN1
+  Metric: 0          IP-Extended 1.1.1.10/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.10
+  Metric: 100         IS-Extended SEA1.00
+    Local Interface ID: 1, Remote Interface ID: 8
+    Interface IP Address: 99.4.10.10
+    Neighbor IP Address: 99.4.10.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8096 us
+    Link Min/Max Delay: 8096/8096 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.4.10.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA1.00
+    Local Interface ID: 2, Remote Interface ID: 9
+    Interface IP Address: 100.4.10.10
+    Neighbor IP Address: 100.4.10.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8501 us
+    Link Min/Max Delay: 8501/8501 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.4.10.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX1.00
+    Local Interface ID: 3, Remote Interface ID: 8
+    Interface IP Address: 99.7.10.10
+    Neighbor IP Address: 99.7.10.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6590 us
+    Link Min/Max Delay: 6590/6590 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.7.10.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX1.00
+    Local Interface ID: 4, Remote Interface ID: 9
+    Interface IP Address: 100.7.10.10
+    Neighbor IP Address: 100.7.10.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6920 us
+    Link Min/Max Delay: 6920/6920 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.7.10.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DEN2.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.10.11.10
+    Neighbor IP Address: 99.10.11.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 64 us
+    Link Min/Max Delay: 64/64 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.10.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DEN2.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.10.11.10
+    Neighbor IP Address: 100.10.11.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 186 us
+    Link Min/Max Delay: 186/186 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.10.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-DEN.00
+    Local Interface ID: 7, Remote Interface ID: 1
+    Interface IP Address: 99.10.12.10
+    Neighbor IP Address: 99.10.12.12
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 173 us
+    Link Min/Max Delay: 173/173 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.10.12.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY1.00
+    Local Interface ID: 8, Remote Interface ID: 1
+    Interface IP Address: 99.10.13.10
+    Neighbor IP Address: 99.10.13.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4473 us
+    Link Min/Max Delay: 4473/4473 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.10.13.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY1.00
+    Local Interface ID: 9, Remote Interface ID: 2
+    Interface IP Address: 100.10.13.10
+    Neighbor IP Address: 100.10.13.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4696 us
+    Link Min/Max Delay: 4696/4696 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.10.13.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 10, Remote Interface ID: 3
+    Interface IP Address: 99.10.16.10
+    Neighbor IP Address: 99.10.16.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5307 us
+    Link Min/Max Delay: 5307/5307 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.10.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 11, Remote Interface ID: 4
+    Interface IP Address: 100.10.16.10
+    Neighbor IP Address: 100.10.16.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5572 us
+    Link Min/Max Delay: 5572/5572 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.10.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+DEN2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.11
+  IP Address:     1.1.1.11
+  Hostname:       DEN2
+  Metric: 0          IP-Extended 1.1.1.11/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.11
+  Metric: 100         IS-Extended SEA2.00
+    Local Interface ID: 1, Remote Interface ID: 8
+    Interface IP Address: 99.5.11.11
+    Neighbor IP Address: 99.5.11.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8392 us
+    Link Min/Max Delay: 8392/8392 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.5.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA2.00
+    Local Interface ID: 2, Remote Interface ID: 9
+    Interface IP Address: 100.5.11.11
+    Neighbor IP Address: 100.5.11.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8812 us
+    Link Min/Max Delay: 8812/8812 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.5.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX2.00
+    Local Interface ID: 3, Remote Interface ID: 8
+    Interface IP Address: 99.8.11.11
+    Neighbor IP Address: 99.8.11.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 15264 us
+    Link Min/Max Delay: 15264/15264 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.8.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX2.00
+    Local Interface ID: 4, Remote Interface ID: 9
+    Interface IP Address: 100.8.11.11
+    Neighbor IP Address: 100.8.11.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 16027 us
+    Link Min/Max Delay: 16027/16027 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.8.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DEN1.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.10.11.11
+    Neighbor IP Address: 99.10.11.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 64 us
+    Link Min/Max Delay: 64/64 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.10.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DEN1.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.10.11.11
+    Neighbor IP Address: 100.10.11.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 186 us
+    Link Min/Max Delay: 186/186 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.10.11.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-DEN.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 99.11.12.11
+    Neighbor IP Address: 99.11.12.12
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 321 us
+    Link Min/Max Delay: 321/321 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.11.12.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY2.00
+    Local Interface ID: 8, Remote Interface ID: 1
+    Interface IP Address: 99.11.14.11
+    Neighbor IP Address: 99.11.14.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4715 us
+    Link Min/Max Delay: 4715/4715 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.11.14.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY2.00
+    Local Interface ID: 9, Remote Interface ID: 2
+    Interface IP Address: 100.11.14.11
+    Neighbor IP Address: 100.11.14.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4950 us
+    Link Min/Max Delay: 4950/4950 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.11.14.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 10, Remote Interface ID: 3
+    Interface IP Address: 99.11.17.11
+    Neighbor IP Address: 99.11.17.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5781 us
+    Link Min/Max Delay: 5781/5781 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.11.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 11, Remote Interface ID: 4
+    Interface IP Address: 100.11.17.11
+    Neighbor IP Address: 100.11.17.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6070 us
+    Link Min/Max Delay: 6070/6070 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.11.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-DEN.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.12
+  IP Address:     1.1.1.12
+  Hostname:       PE-DEN
+  Metric: 0          IP-Extended 1.1.1.12/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.12
+  Metric: 10000         IS-Extended DEN1.00
+    Local Interface ID: 1, Remote Interface ID: 7
+    Interface IP Address: 99.10.12.12
+    Neighbor IP Address: 99.10.12.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 173 us
+    Link Min/Max Delay: 173/173 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.10.12.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended DEN2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 99.11.12.12
+    Neighbor IP Address: 99.11.12.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 321 us
+    Link Min/Max Delay: 321/321 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.11.12.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+KCY1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.13
+  IP Address:     1.1.1.13
+  Hostname:       KCY1
+  Metric: 0          IP-Extended 1.1.1.13/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.13
+  Metric: 100         IS-Extended DEN1.00
+    Local Interface ID: 1, Remote Interface ID: 8
+    Interface IP Address: 99.10.13.13
+    Neighbor IP Address: 99.10.13.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4473 us
+    Link Min/Max Delay: 4473/4473 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.10.13.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN1.00
+    Local Interface ID: 2, Remote Interface ID: 9
+    Interface IP Address: 100.10.13.13
+    Neighbor IP Address: 100.10.13.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4696 us
+    Link Min/Max Delay: 4696/4696 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.10.13.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended KCY2.00
+    Local Interface ID: 3, Remote Interface ID: 3
+    Interface IP Address: 99.13.14.13
+    Neighbor IP Address: 99.13.14.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 20 us
+    Link Min/Max Delay: 20/20 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.13.14.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended KCY2.00
+    Local Interface ID: 4, Remote Interface ID: 4
+    Interface IP Address: 100.13.14.13
+    Neighbor IP Address: 100.13.14.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 56 us
+    Link Min/Max Delay: 56/56 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.13.14.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-KCY.00
+    Local Interface ID: 5, Remote Interface ID: 1
+    Interface IP Address: 99.13.15.13
+    Neighbor IP Address: 99.13.15.15
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 168 us
+    Link Min/Max Delay: 168/168 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.13.15.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 6, Remote Interface ID: 5
+    Interface IP Address: 99.13.16.13
+    Neighbor IP Address: 99.13.16.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3604 us
+    Link Min/Max Delay: 3604/3604 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.13.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 7, Remote Interface ID: 6
+    Interface IP Address: 100.13.16.13
+    Neighbor IP Address: 100.13.16.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3784 us
+    Link Min/Max Delay: 3784/3784 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.13.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN1.00
+    Local Interface ID: 8, Remote Interface ID: 3
+    Interface IP Address: 99.13.19.13
+    Neighbor IP Address: 99.13.19.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3268 us
+    Link Min/Max Delay: 3268/3268 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.13.19.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN1.00
+    Local Interface ID: 9, Remote Interface ID: 4
+    Interface IP Address: 100.13.19.13
+    Neighbor IP Address: 100.13.19.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3431 us
+    Link Min/Max Delay: 3431/3431 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.13.19.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI1.00
+    Local Interface ID: 10, Remote Interface ID: 1
+    Interface IP Address: 99.13.22.13
+    Neighbor IP Address: 99.13.22.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3273 us
+    Link Min/Max Delay: 3273/3273 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.13.22.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI1.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 100.13.22.13
+    Neighbor IP Address: 100.13.22.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3437 us
+    Link Min/Max Delay: 3437/3437 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.13.22.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-OMA.00
+    Local Interface ID: 12, Remote Interface ID: 1
+    Interface IP Address: 99.13.42.13
+    Neighbor IP Address: 99.13.42.42
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1313 us
+    Link Min/Max Delay: 1313/1313 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.13.42.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+KCY2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.14
+  IP Address:     1.1.1.14
+  Hostname:       KCY2
+  Metric: 0          IP-Extended 1.1.1.14/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.14
+  Metric: 100         IS-Extended DEN2.00
+    Local Interface ID: 1, Remote Interface ID: 8
+    Interface IP Address: 99.11.14.14
+    Neighbor IP Address: 99.11.14.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4715 us
+    Link Min/Max Delay: 4715/4715 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.11.14.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN2.00
+    Local Interface ID: 2, Remote Interface ID: 9
+    Interface IP Address: 100.11.14.14
+    Neighbor IP Address: 100.11.14.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4950 us
+    Link Min/Max Delay: 4950/4950 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.11.14.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended KCY1.00
+    Local Interface ID: 3, Remote Interface ID: 3
+    Interface IP Address: 99.13.14.14
+    Neighbor IP Address: 99.13.14.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 20 us
+    Link Min/Max Delay: 20/20 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.13.14.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended KCY1.00
+    Local Interface ID: 4, Remote Interface ID: 4
+    Interface IP Address: 100.13.14.14
+    Neighbor IP Address: 100.13.14.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 56 us
+    Link Min/Max Delay: 56/56 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.13.14.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-KCY.00
+    Local Interface ID: 5, Remote Interface ID: 2
+    Interface IP Address: 99.14.15.14
+    Neighbor IP Address: 99.14.15.15
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 326 us
+    Link Min/Max Delay: 326/326 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.14.15.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 6, Remote Interface ID: 5
+    Interface IP Address: 99.14.17.14
+    Neighbor IP Address: 99.14.17.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3964 us
+    Link Min/Max Delay: 3964/3964 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.14.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 7, Remote Interface ID: 6
+    Interface IP Address: 100.14.17.14
+    Neighbor IP Address: 100.14.17.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4162 us
+    Link Min/Max Delay: 4162/4162 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.14.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN2.00
+    Local Interface ID: 8, Remote Interface ID: 3
+    Interface IP Address: 99.14.20.14
+    Neighbor IP Address: 99.14.20.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2972 us
+    Link Min/Max Delay: 2972/2972 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.14.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN2.00
+    Local Interface ID: 9, Remote Interface ID: 4
+    Interface IP Address: 100.14.20.14
+    Neighbor IP Address: 100.14.20.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3120 us
+    Link Min/Max Delay: 3120/3120 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.14.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI2.00
+    Local Interface ID: 10, Remote Interface ID: 1
+    Interface IP Address: 99.14.23.14
+    Neighbor IP Address: 99.14.23.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3628 us
+    Link Min/Max Delay: 3628/3628 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.14.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI2.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 100.14.23.14
+    Neighbor IP Address: 100.14.23.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3810 us
+    Link Min/Max Delay: 3810/3810 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.14.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-KCY.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.15
+  IP Address:     1.1.1.15
+  Hostname:       PE-KCY
+  Metric: 0          IP-Extended 1.1.1.15/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.15
+  Metric: 10000         IS-Extended KCY1.00
+    Local Interface ID: 1, Remote Interface ID: 5
+    Interface IP Address: 99.13.15.15
+    Neighbor IP Address: 99.13.15.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 168 us
+    Link Min/Max Delay: 168/168 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.13.15.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended KCY2.00
+    Local Interface ID: 2, Remote Interface ID: 5
+    Interface IP Address: 99.14.15.15
+    Neighbor IP Address: 99.14.15.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 326 us
+    Link Min/Max Delay: 326/326 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.14.15.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+DAL1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.16
+  IP Address:     1.1.1.16
+  Hostname:       DAL1
+  Metric: 0          IP-Extended 1.1.1.16/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.16
+  Metric: 100         IS-Extended LAX1.00
+    Local Interface ID: 1, Remote Interface ID: 10
+    Interface IP Address: 99.7.16.16
+    Neighbor IP Address: 99.7.16.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9789 us
+    Link Min/Max Delay: 9789/9789 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.7.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX1.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 100.7.16.16
+    Neighbor IP Address: 100.7.16.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 10279 us
+    Link Min/Max Delay: 10279/10279 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.7.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN1.00
+    Local Interface ID: 3, Remote Interface ID: 10
+    Interface IP Address: 99.10.16.16
+    Neighbor IP Address: 99.10.16.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5307 us
+    Link Min/Max Delay: 5307/5307 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.10.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN1.00
+    Local Interface ID: 4, Remote Interface ID: 11
+    Interface IP Address: 100.10.16.16
+    Neighbor IP Address: 100.10.16.10
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5572 us
+    Link Min/Max Delay: 5572/5572 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.10.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY1.00
+    Local Interface ID: 5, Remote Interface ID: 6
+    Interface IP Address: 99.13.16.16
+    Neighbor IP Address: 99.13.16.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3604 us
+    Link Min/Max Delay: 3604/3604 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.13.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY1.00
+    Local Interface ID: 6, Remote Interface ID: 7
+    Interface IP Address: 100.13.16.16
+    Neighbor IP Address: 100.13.16.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3784 us
+    Link Min/Max Delay: 3784/3784 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.13.16.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DAL2.00
+    Local Interface ID: 7, Remote Interface ID: 7
+    Interface IP Address: 99.16.17.16
+    Neighbor IP Address: 99.16.17.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 49 us
+    Link Min/Max Delay: 49/49 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.16.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DAL2.00
+    Local Interface ID: 8, Remote Interface ID: 8
+    Interface IP Address: 100.16.17.16
+    Neighbor IP Address: 100.16.17.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 65 us
+    Link Min/Max Delay: 65/65 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.16.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-DAL.00
+    Local Interface ID: 9, Remote Interface ID: 1
+    Interface IP Address: 99.16.18.16
+    Neighbor IP Address: 99.16.18.18
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5 us
+    Link Min/Max Delay: 5/5 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.16.18.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL1.00
+    Local Interface ID: 10, Remote Interface ID: 1
+    Interface IP Address: 99.16.31.16
+    Neighbor IP Address: 99.16.31.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5677 us
+    Link Min/Max Delay: 5677/5677 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.16.31.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL1.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 100.16.31.16
+    Neighbor IP Address: 100.16.31.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5961 us
+    Link Min/Max Delay: 5961/5961 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.16.31.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIA1.00
+    Local Interface ID: 12, Remote Interface ID: 1
+    Interface IP Address: 99.16.34.16
+    Neighbor IP Address: 99.16.34.34
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8812 us
+    Link Min/Max Delay: 8812/8812 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.16.34.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIA1.00
+    Local Interface ID: 13, Remote Interface ID: 2
+    Interface IP Address: 100.16.34.16
+    Neighbor IP Address: 100.16.34.34
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9253 us
+    Link Min/Max Delay: 9253/9253 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.16.34.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+DAL2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.17
+  IP Address:     1.1.1.17
+  Hostname:       DAL2
+  Metric: 0          IP-Extended 1.1.1.17/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.17
+  Metric: 100         IS-Extended LAX2.00
+    Local Interface ID: 1, Remote Interface ID: 10
+    Interface IP Address: 99.8.17.17
+    Neighbor IP Address: 99.8.17.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8807 us
+    Link Min/Max Delay: 8807/8807 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.8.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended LAX2.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 100.8.17.17
+    Neighbor IP Address: 100.8.17.8
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9247 us
+    Link Min/Max Delay: 9247/9247 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.8.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN2.00
+    Local Interface ID: 3, Remote Interface ID: 10
+    Interface IP Address: 99.11.17.17
+    Neighbor IP Address: 99.11.17.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5781 us
+    Link Min/Max Delay: 5781/5781 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.11.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DEN2.00
+    Local Interface ID: 4, Remote Interface ID: 11
+    Interface IP Address: 100.11.17.17
+    Neighbor IP Address: 100.11.17.11
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6070 us
+    Link Min/Max Delay: 6070/6070 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.11.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY2.00
+    Local Interface ID: 5, Remote Interface ID: 6
+    Interface IP Address: 99.14.17.17
+    Neighbor IP Address: 99.14.17.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3964 us
+    Link Min/Max Delay: 3964/3964 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.14.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY2.00
+    Local Interface ID: 6, Remote Interface ID: 7
+    Interface IP Address: 100.14.17.17
+    Neighbor IP Address: 100.14.17.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4162 us
+    Link Min/Max Delay: 4162/4162 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.14.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DAL1.00
+    Local Interface ID: 7, Remote Interface ID: 7
+    Interface IP Address: 99.16.17.17
+    Neighbor IP Address: 99.16.17.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 49 us
+    Link Min/Max Delay: 49/49 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.16.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DAL1.00
+    Local Interface ID: 8, Remote Interface ID: 8
+    Interface IP Address: 100.16.17.17
+    Neighbor IP Address: 100.16.17.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 65 us
+    Link Min/Max Delay: 65/65 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.16.17.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-DAL.00
+    Local Interface ID: 9, Remote Interface ID: 2
+    Interface IP Address: 99.17.18.17
+    Neighbor IP Address: 99.17.18.18
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 484 us
+    Link Min/Max Delay: 484/484 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.17.18.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL2.00
+    Local Interface ID: 10, Remote Interface ID: 1
+    Interface IP Address: 99.17.32.17
+    Neighbor IP Address: 99.17.32.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6186 us
+    Link Min/Max Delay: 6186/6186 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.17.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL2.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 100.17.32.17
+    Neighbor IP Address: 100.17.32.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6495 us
+    Link Min/Max Delay: 6495/6495 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.17.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIA2.00
+    Local Interface ID: 12, Remote Interface ID: 1
+    Interface IP Address: 99.17.35.17
+    Neighbor IP Address: 99.17.35.35
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8985 us
+    Link Min/Max Delay: 8985/8985 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.17.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIA2.00
+    Local Interface ID: 13, Remote Interface ID: 2
+    Interface IP Address: 100.17.35.17
+    Neighbor IP Address: 100.17.35.35
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9434 us
+    Link Min/Max Delay: 9434/9434 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.17.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-TPA.00
+    Local Interface ID: 14, Remote Interface ID: 1
+    Interface IP Address: 99.17.40.17
+    Neighbor IP Address: 99.17.40.40
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 7696 us
+    Link Min/Max Delay: 7696/7696 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.17.40.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-PHX.00
+    Local Interface ID: 15, Remote Interface ID: 2
+    Interface IP Address: 99.17.43.17
+    Neighbor IP Address: 99.17.43.43
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 7025 us
+    Link Min/Max Delay: 7025/7025 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.17.43.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-DAL.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.18
+  IP Address:     1.1.1.18
+  Hostname:       PE-DAL
+  Metric: 0          IP-Extended 1.1.1.18/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.18
+  Metric: 10000         IS-Extended DAL1.00
+    Local Interface ID: 1, Remote Interface ID: 9
+    Interface IP Address: 99.16.18.18
+    Neighbor IP Address: 99.16.18.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5 us
+    Link Min/Max Delay: 5/5 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.16.18.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended DAL2.00
+    Local Interface ID: 2, Remote Interface ID: 9
+    Interface IP Address: 99.17.18.18
+    Neighbor IP Address: 99.17.18.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 484 us
+    Link Min/Max Delay: 484/484 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.17.18.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+MIN1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.19
+  IP Address:     1.1.1.19
+  Hostname:       MIN1
+  Metric: 0          IP-Extended 1.1.1.19/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.19
+  Metric: 100         IS-Extended SEA1.00
+    Local Interface ID: 1, Remote Interface ID: 10
+    Interface IP Address: 99.4.19.19
+    Neighbor IP Address: 99.4.19.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 11048 us
+    Link Min/Max Delay: 11048/11048 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.4.19.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA1.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 100.4.19.19
+    Neighbor IP Address: 100.4.19.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 11601 us
+    Link Min/Max Delay: 11601/11601 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.4.19.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY1.00
+    Local Interface ID: 3, Remote Interface ID: 8
+    Interface IP Address: 99.13.19.19
+    Neighbor IP Address: 99.13.19.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3268 us
+    Link Min/Max Delay: 3268/3268 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.13.19.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY1.00
+    Local Interface ID: 4, Remote Interface ID: 9
+    Interface IP Address: 100.13.19.19
+    Neighbor IP Address: 100.13.19.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3431 us
+    Link Min/Max Delay: 3431/3431 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.13.19.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended MIN2.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.19.20.19
+    Neighbor IP Address: 99.19.20.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 10 us
+    Link Min/Max Delay: 10/10 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.19.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended MIN2.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.19.20.19
+    Neighbor IP Address: 100.19.20.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 111 us
+    Link Min/Max Delay: 111/111 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.19.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-MIN.00
+    Local Interface ID: 7, Remote Interface ID: 1
+    Interface IP Address: 99.19.21.19
+    Neighbor IP Address: 99.19.21.21
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 449 us
+    Link Min/Max Delay: 449/449 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.19.21.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI1.00
+    Local Interface ID: 8, Remote Interface ID: 3
+    Interface IP Address: 99.19.22.19
+    Neighbor IP Address: 99.19.22.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2814 us
+    Link Min/Max Delay: 2814/2814 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.19.22.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI1.00
+    Local Interface ID: 9, Remote Interface ID: 4
+    Interface IP Address: 100.19.22.19
+    Neighbor IP Address: 100.19.22.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2955 us
+    Link Min/Max Delay: 2955/2955 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.19.22.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+MIN2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.20
+  IP Address:     1.1.1.20
+  Hostname:       MIN2
+  Metric: 0          IP-Extended 1.1.1.20/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.20
+  Metric: 100         IS-Extended SEA2.00
+    Local Interface ID: 1, Remote Interface ID: 10
+    Interface IP Address: 99.5.20.20
+    Neighbor IP Address: 99.5.20.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 17244 us
+    Link Min/Max Delay: 17244/17244 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.5.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended SEA2.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 100.5.20.20
+    Neighbor IP Address: 100.5.20.5
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 18106 us
+    Link Min/Max Delay: 18106/18106 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.5.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY2.00
+    Local Interface ID: 3, Remote Interface ID: 8
+    Interface IP Address: 99.14.20.20
+    Neighbor IP Address: 99.14.20.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2972 us
+    Link Min/Max Delay: 2972/2972 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.14.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY2.00
+    Local Interface ID: 4, Remote Interface ID: 9
+    Interface IP Address: 100.14.20.20
+    Neighbor IP Address: 100.14.20.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3120 us
+    Link Min/Max Delay: 3120/3120 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.14.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended MIN1.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.19.20.20
+    Neighbor IP Address: 99.19.20.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 10 us
+    Link Min/Max Delay: 10/10 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.19.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended MIN1.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.19.20.20
+    Neighbor IP Address: 100.19.20.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 111 us
+    Link Min/Max Delay: 111/111 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.19.20.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-MIN.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 99.20.21.20
+    Neighbor IP Address: 99.20.21.21
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 44 us
+    Link Min/Max Delay: 44/44 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.20.21.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI2.00
+    Local Interface ID: 8, Remote Interface ID: 3
+    Interface IP Address: 99.20.23.20
+    Neighbor IP Address: 99.20.23.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3036 us
+    Link Min/Max Delay: 3036/3036 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.20.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI2.00
+    Local Interface ID: 9, Remote Interface ID: 4
+    Interface IP Address: 100.20.23.20
+    Neighbor IP Address: 100.20.23.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3188 us
+    Link Min/Max Delay: 3188/3188 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.20.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-OMA.00
+    Local Interface ID: 10, Remote Interface ID: 2
+    Interface IP Address: 99.20.42.20
+    Neighbor IP Address: 99.20.42.42
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2340 us
+    Link Min/Max Delay: 2340/2340 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.20.42.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-GFK.00
+    Local Interface ID: 11, Remote Interface ID: 2
+    Interface IP Address: 99.20.44.20
+    Neighbor IP Address: 99.20.44.44
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2221 us
+    Link Min/Max Delay: 2221/2221 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.20.44.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-MIN.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.21
+  IP Address:     1.1.1.21
+  Hostname:       PE-MIN
+  Metric: 0          IP-Extended 1.1.1.21/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.21
+  Metric: 10000         IS-Extended MIN1.00
+    Local Interface ID: 1, Remote Interface ID: 7
+    Interface IP Address: 99.19.21.21
+    Neighbor IP Address: 99.19.21.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 449 us
+    Link Min/Max Delay: 449/449 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.19.21.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended MIN2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 99.20.21.21
+    Neighbor IP Address: 99.20.21.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 44 us
+    Link Min/Max Delay: 44/44 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.20.21.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+CHI1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.22
+  IP Address:     1.1.1.22
+  Hostname:       CHI1
+  Metric: 0          IP-Extended 1.1.1.22/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.22
+  Metric: 100         IS-Extended KCY1.00
+    Local Interface ID: 1, Remote Interface ID: 10
+    Interface IP Address: 99.13.22.22
+    Neighbor IP Address: 99.13.22.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3273 us
+    Link Min/Max Delay: 3273/3273 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.13.22.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY1.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 100.13.22.22
+    Neighbor IP Address: 100.13.22.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3437 us
+    Link Min/Max Delay: 3437/3437 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.13.22.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN1.00
+    Local Interface ID: 3, Remote Interface ID: 8
+    Interface IP Address: 99.19.22.22
+    Neighbor IP Address: 99.19.22.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2814 us
+    Link Min/Max Delay: 2814/2814 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.19.22.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN1.00
+    Local Interface ID: 4, Remote Interface ID: 9
+    Interface IP Address: 100.19.22.22
+    Neighbor IP Address: 100.19.22.19
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2955 us
+    Link Min/Max Delay: 2955/2955 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.19.22.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended CHI2.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.22.23.22
+    Neighbor IP Address: 99.22.23.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 20 us
+    Link Min/Max Delay: 20/20 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.22.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended CHI2.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.22.23.22
+    Neighbor IP Address: 100.22.23.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 210 us
+    Link Min/Max Delay: 210/210 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.22.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-CHI.00
+    Local Interface ID: 7, Remote Interface ID: 1
+    Interface IP Address: 99.22.24.22
+    Neighbor IP Address: 99.22.24.24
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 296 us
+    Link Min/Max Delay: 296/296 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.22.24.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DET1.00
+    Local Interface ID: 8, Remote Interface ID: 1
+    Interface IP Address: 99.22.25.22
+    Neighbor IP Address: 99.22.25.25
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1876 us
+    Link Min/Max Delay: 1876/1876 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.22.25.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DET1.00
+    Local Interface ID: 9, Remote Interface ID: 2
+    Interface IP Address: 100.22.25.22
+    Neighbor IP Address: 100.22.25.25
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1970 us
+    Link Min/Max Delay: 1970/1970 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.22.25.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL1.00
+    Local Interface ID: 10, Remote Interface ID: 3
+    Interface IP Address: 99.22.31.22
+    Neighbor IP Address: 99.22.31.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4453 us
+    Link Min/Max Delay: 4453/4453 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.22.31.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL1.00
+    Local Interface ID: 11, Remote Interface ID: 4
+    Interface IP Address: 100.22.31.22
+    Neighbor IP Address: 100.22.31.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4676 us
+    Link Min/Max Delay: 4676/4676 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.22.31.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+CHI2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.23
+  IP Address:     1.1.1.23
+  Hostname:       CHI2
+  Metric: 0          IP-Extended 1.1.1.23/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.23
+  Metric: 100         IS-Extended KCY2.00
+    Local Interface ID: 1, Remote Interface ID: 10
+    Interface IP Address: 99.14.23.23
+    Neighbor IP Address: 99.14.23.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3628 us
+    Link Min/Max Delay: 3628/3628 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.14.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended KCY2.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 100.14.23.23
+    Neighbor IP Address: 100.14.23.14
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3810 us
+    Link Min/Max Delay: 3810/3810 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.14.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN2.00
+    Local Interface ID: 3, Remote Interface ID: 8
+    Interface IP Address: 99.20.23.23
+    Neighbor IP Address: 99.20.23.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3036 us
+    Link Min/Max Delay: 3036/3036 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.20.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIN2.00
+    Local Interface ID: 4, Remote Interface ID: 9
+    Interface IP Address: 100.20.23.23
+    Neighbor IP Address: 100.20.23.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3188 us
+    Link Min/Max Delay: 3188/3188 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.20.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended CHI1.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.22.23.23
+    Neighbor IP Address: 99.22.23.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 20 us
+    Link Min/Max Delay: 20/20 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.22.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended CHI1.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.22.23.23
+    Neighbor IP Address: 100.22.23.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 210 us
+    Link Min/Max Delay: 210/210 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.22.23.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-CHI.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 99.23.24.23
+    Neighbor IP Address: 99.23.24.24
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 197 us
+    Link Min/Max Delay: 197/197 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.23.24.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DET2.00
+    Local Interface ID: 8, Remote Interface ID: 1
+    Interface IP Address: 99.23.26.23
+    Neighbor IP Address: 99.23.26.26
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2024 us
+    Link Min/Max Delay: 2024/2024 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.23.26.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DET2.00
+    Local Interface ID: 9, Remote Interface ID: 2
+    Interface IP Address: 100.23.26.23
+    Neighbor IP Address: 100.23.26.26
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2125 us
+    Link Min/Max Delay: 2125/2125 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.23.26.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL2.00
+    Local Interface ID: 10, Remote Interface ID: 3
+    Interface IP Address: 99.23.32.23
+    Neighbor IP Address: 99.23.32.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 11937 us
+    Link Min/Max Delay: 11937/11937 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.23.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL2.00
+    Local Interface ID: 11, Remote Interface ID: 4
+    Interface IP Address: 100.23.32.23
+    Neighbor IP Address: 100.23.32.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 12534 us
+    Link Min/Max Delay: 12534/12534 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.23.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-CHI.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.24
+  IP Address:     1.1.1.24
+  Hostname:       PE-CHI
+  Metric: 0          IP-Extended 1.1.1.24/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.24
+  Metric: 10000         IS-Extended CHI1.00
+    Local Interface ID: 1, Remote Interface ID: 7
+    Interface IP Address: 99.22.24.24
+    Neighbor IP Address: 99.22.24.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 296 us
+    Link Min/Max Delay: 296/296 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.22.24.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended CHI2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 99.23.24.24
+    Neighbor IP Address: 99.23.24.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 197 us
+    Link Min/Max Delay: 197/197 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.23.24.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+DET1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.25
+  IP Address:     1.1.1.25
+  Hostname:       DET1
+  Metric: 0          IP-Extended 1.1.1.25/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.25
+  Metric: 100         IS-Extended CHI1.00
+    Local Interface ID: 1, Remote Interface ID: 8
+    Interface IP Address: 99.22.25.25
+    Neighbor IP Address: 99.22.25.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1876 us
+    Link Min/Max Delay: 1876/1876 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.22.25.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI1.00
+    Local Interface ID: 2, Remote Interface ID: 9
+    Interface IP Address: 100.22.25.25
+    Neighbor IP Address: 100.22.25.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1970 us
+    Link Min/Max Delay: 1970/1970 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.22.25.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DET2.00
+    Local Interface ID: 3, Remote Interface ID: 3
+    Interface IP Address: 99.25.26.25
+    Neighbor IP Address: 99.25.26.26
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 15 us
+    Link Min/Max Delay: 15/15 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.25.26.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DET2.00
+    Local Interface ID: 4, Remote Interface ID: 4
+    Interface IP Address: 100.25.26.25
+    Neighbor IP Address: 100.25.26.26
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 204 us
+    Link Min/Max Delay: 204/204 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.25.26.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-DET.00
+    Local Interface ID: 5, Remote Interface ID: 1
+    Interface IP Address: 99.25.27.25
+    Neighbor IP Address: 99.25.27.27
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 257 us
+    Link Min/Max Delay: 257/257 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.25.27.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended NYC1.00
+    Local Interface ID: 6, Remote Interface ID: 1
+    Interface IP Address: 99.25.28.25
+    Neighbor IP Address: 99.25.28.28
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3727 us
+    Link Min/Max Delay: 3727/3727 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.25.28.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended NYC1.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 100.25.28.25
+    Neighbor IP Address: 100.25.28.28
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3914 us
+    Link Min/Max Delay: 3914/3914 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.25.28.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+DET2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.26
+  IP Address:     1.1.1.26
+  Hostname:       DET2
+  Metric: 0          IP-Extended 1.1.1.26/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.26
+  Metric: 100         IS-Extended CHI2.00
+    Local Interface ID: 1, Remote Interface ID: 8
+    Interface IP Address: 99.23.26.26
+    Neighbor IP Address: 99.23.26.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2024 us
+    Link Min/Max Delay: 2024/2024 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.23.26.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI2.00
+    Local Interface ID: 2, Remote Interface ID: 9
+    Interface IP Address: 100.23.26.26
+    Neighbor IP Address: 100.23.26.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2125 us
+    Link Min/Max Delay: 2125/2125 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.23.26.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DET1.00
+    Local Interface ID: 3, Remote Interface ID: 3
+    Interface IP Address: 99.25.26.26
+    Neighbor IP Address: 99.25.26.25
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 15 us
+    Link Min/Max Delay: 15/15 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.25.26.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended DET1.00
+    Local Interface ID: 4, Remote Interface ID: 4
+    Interface IP Address: 100.25.26.26
+    Neighbor IP Address: 100.25.26.25
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 204 us
+    Link Min/Max Delay: 204/204 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.25.26.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-DET.00
+    Local Interface ID: 5, Remote Interface ID: 2
+    Interface IP Address: 99.26.27.26
+    Neighbor IP Address: 99.26.27.27
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 237 us
+    Link Min/Max Delay: 237/237 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.26.27.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended NYC2.00
+    Local Interface ID: 6, Remote Interface ID: 1
+    Interface IP Address: 99.26.29.26
+    Neighbor IP Address: 99.26.29.29
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4097 us
+    Link Min/Max Delay: 4097/4097 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.26.29.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended NYC2.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 100.26.29.26
+    Neighbor IP Address: 100.26.29.29
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4302 us
+    Link Min/Max Delay: 4302/4302 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.26.29.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-DET.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.27
+  IP Address:     1.1.1.27
+  Hostname:       PE-DET
+  Metric: 0          IP-Extended 1.1.1.27/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.27
+  Metric: 10000         IS-Extended DET1.00
+    Local Interface ID: 1, Remote Interface ID: 5
+    Interface IP Address: 99.25.27.27
+    Neighbor IP Address: 99.25.27.25
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 257 us
+    Link Min/Max Delay: 257/257 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.25.27.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended DET2.00
+    Local Interface ID: 2, Remote Interface ID: 5
+    Interface IP Address: 99.26.27.27
+    Neighbor IP Address: 99.26.27.26
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 237 us
+    Link Min/Max Delay: 237/237 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.26.27.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+NYC1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.28
+  IP Address:     1.1.1.28
+  Hostname:       NYC1
+  Metric: 0          IP-Extended 1.1.1.28/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.28
+  Metric: 100         IS-Extended DET1.00
+    Local Interface ID: 1, Remote Interface ID: 6
+    Interface IP Address: 99.25.28.28
+    Neighbor IP Address: 99.25.28.25
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3727 us
+    Link Min/Max Delay: 3727/3727 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.25.28.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DET1.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 100.25.28.28
+    Neighbor IP Address: 100.25.28.25
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 3914 us
+    Link Min/Max Delay: 3914/3914 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.25.28.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended NYC2.00
+    Local Interface ID: 3, Remote Interface ID: 3
+    Interface IP Address: 99.28.29.28
+    Neighbor IP Address: 99.28.29.29
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 74 us
+    Link Min/Max Delay: 74/74 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.28.29.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended NYC2.00
+    Local Interface ID: 4, Remote Interface ID: 4
+    Interface IP Address: 100.28.29.28
+    Neighbor IP Address: 100.28.29.29
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 141 us
+    Link Min/Max Delay: 141/141 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.28.29.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-NYC.00
+    Local Interface ID: 5, Remote Interface ID: 1
+    Interface IP Address: 99.28.30.28
+    Neighbor IP Address: 99.28.30.30
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 429 us
+    Link Min/Max Delay: 429/429 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.28.30.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended WAS1.00
+    Local Interface ID: 6, Remote Interface ID: 1
+    Interface IP Address: 99.28.37.28
+    Neighbor IP Address: 99.28.37.37
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1580 us
+    Link Min/Max Delay: 1580/1580 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.28.37.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended WAS1.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 100.28.37.28
+    Neighbor IP Address: 100.28.37.37
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1659 us
+    Link Min/Max Delay: 1659/1659 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.28.37.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+NYC2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.29
+  IP Address:     1.1.1.29
+  Hostname:       NYC2
+  Metric: 0          IP-Extended 1.1.1.29/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.29
+  Metric: 100         IS-Extended DET2.00
+    Local Interface ID: 1, Remote Interface ID: 6
+    Interface IP Address: 99.26.29.29
+    Neighbor IP Address: 99.26.29.26
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4097 us
+    Link Min/Max Delay: 4097/4097 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.26.29.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DET2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 100.26.29.29
+    Neighbor IP Address: 100.26.29.26
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4302 us
+    Link Min/Max Delay: 4302/4302 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.26.29.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended NYC1.00
+    Local Interface ID: 3, Remote Interface ID: 3
+    Interface IP Address: 99.28.29.29
+    Neighbor IP Address: 99.28.29.28
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 74 us
+    Link Min/Max Delay: 74/74 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.28.29.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended NYC1.00
+    Local Interface ID: 4, Remote Interface ID: 4
+    Interface IP Address: 100.28.29.29
+    Neighbor IP Address: 100.28.29.28
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 141 us
+    Link Min/Max Delay: 141/141 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.28.29.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-NYC.00
+    Local Interface ID: 5, Remote Interface ID: 2
+    Interface IP Address: 99.29.30.29
+    Neighbor IP Address: 99.29.30.30
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 64 us
+    Link Min/Max Delay: 64/64 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.29.30.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended WAS2.00
+    Local Interface ID: 6, Remote Interface ID: 1
+    Interface IP Address: 99.29.38.29
+    Neighbor IP Address: 99.29.38.38
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1738 us
+    Link Min/Max Delay: 1738/1738 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.29.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended WAS2.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 100.29.38.29
+    Neighbor IP Address: 100.29.38.38
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1825 us
+    Link Min/Max Delay: 1825/1825 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.29.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-NYC.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.30
+  IP Address:     1.1.1.30
+  Hostname:       PE-NYC
+  Metric: 0          IP-Extended 1.1.1.30/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.30
+  Metric: 10000         IS-Extended NYC1.00
+    Local Interface ID: 1, Remote Interface ID: 5
+    Interface IP Address: 99.28.30.30
+    Neighbor IP Address: 99.28.30.28
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 429 us
+    Link Min/Max Delay: 429/429 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.28.30.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended NYC2.00
+    Local Interface ID: 2, Remote Interface ID: 5
+    Interface IP Address: 99.29.30.30
+    Neighbor IP Address: 99.29.30.29
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 64 us
+    Link Min/Max Delay: 64/64 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.29.30.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+ATL1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.31
+  IP Address:     1.1.1.31
+  Hostname:       ATL1
+  Metric: 0          IP-Extended 1.1.1.31/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.31
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 1, Remote Interface ID: 10
+    Interface IP Address: 99.16.31.31
+    Neighbor IP Address: 99.16.31.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5677 us
+    Link Min/Max Delay: 5677/5677 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.16.31.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 100.16.31.31
+    Neighbor IP Address: 100.16.31.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5961 us
+    Link Min/Max Delay: 5961/5961 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.16.31.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI1.00
+    Local Interface ID: 3, Remote Interface ID: 10
+    Interface IP Address: 99.22.31.31
+    Neighbor IP Address: 99.22.31.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4453 us
+    Link Min/Max Delay: 4453/4453 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.22.31.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI1.00
+    Local Interface ID: 4, Remote Interface ID: 11
+    Interface IP Address: 100.22.31.31
+    Neighbor IP Address: 100.22.31.22
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4676 us
+    Link Min/Max Delay: 4676/4676 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.22.31.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended ATL2.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.31.32.31
+    Neighbor IP Address: 99.31.32.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 123 us
+    Link Min/Max Delay: 123/123 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.31.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended ATL2.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.31.32.31
+    Neighbor IP Address: 100.31.32.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 223 us
+    Link Min/Max Delay: 223/223 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.31.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-ATL.00
+    Local Interface ID: 7, Remote Interface ID: 1
+    Interface IP Address: 99.31.33.31
+    Neighbor IP Address: 99.31.33.33
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 35 us
+    Link Min/Max Delay: 35/35 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.31.33.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIA1.00
+    Local Interface ID: 8, Remote Interface ID: 3
+    Interface IP Address: 99.31.34.31
+    Neighbor IP Address: 99.31.34.34
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4808 us
+    Link Min/Max Delay: 4808/4808 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.31.34.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIA1.00
+    Local Interface ID: 9, Remote Interface ID: 4
+    Interface IP Address: 100.31.34.31
+    Neighbor IP Address: 100.31.34.34
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5049 us
+    Link Min/Max Delay: 5049/5049 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.31.34.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended WAS1.00
+    Local Interface ID: 10, Remote Interface ID: 3
+    Interface IP Address: 99.31.37.31
+    Neighbor IP Address: 99.31.37.37
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4310 us
+    Link Min/Max Delay: 4310/4310 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.31.37.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended WAS1.00
+    Local Interface ID: 11, Remote Interface ID: 4
+    Interface IP Address: 100.31.37.31
+    Neighbor IP Address: 100.31.37.37
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4525 us
+    Link Min/Max Delay: 4525/4525 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.31.37.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+ATL2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.32
+  IP Address:     1.1.1.32
+  Hostname:       ATL2
+  Metric: 0          IP-Extended 1.1.1.32/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.32
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 1, Remote Interface ID: 10
+    Interface IP Address: 99.17.32.32
+    Neighbor IP Address: 99.17.32.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6186 us
+    Link Min/Max Delay: 6186/6186 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.17.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 100.17.32.32
+    Neighbor IP Address: 100.17.32.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 6495 us
+    Link Min/Max Delay: 6495/6495 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.17.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI2.00
+    Local Interface ID: 3, Remote Interface ID: 10
+    Interface IP Address: 99.23.32.32
+    Neighbor IP Address: 99.23.32.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 11937 us
+    Link Min/Max Delay: 11937/11937 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.23.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended CHI2.00
+    Local Interface ID: 4, Remote Interface ID: 11
+    Interface IP Address: 100.23.32.32
+    Neighbor IP Address: 100.23.32.23
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 12534 us
+    Link Min/Max Delay: 12534/12534 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.23.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended ATL1.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.31.32.32
+    Neighbor IP Address: 99.31.32.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 123 us
+    Link Min/Max Delay: 123/123 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.31.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended ATL1.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.31.32.32
+    Neighbor IP Address: 100.31.32.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 223 us
+    Link Min/Max Delay: 223/223 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.31.32.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-ATL.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 99.32.33.32
+    Neighbor IP Address: 99.32.33.33
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 459 us
+    Link Min/Max Delay: 459/459 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.32.33.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIA2.00
+    Local Interface ID: 8, Remote Interface ID: 3
+    Interface IP Address: 99.32.35.32
+    Neighbor IP Address: 99.32.35.35
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5238 us
+    Link Min/Max Delay: 5238/5238 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.32.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended MIA2.00
+    Local Interface ID: 9, Remote Interface ID: 4
+    Interface IP Address: 100.32.35.32
+    Neighbor IP Address: 100.32.35.35
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5500 us
+    Link Min/Max Delay: 5500/5500 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.32.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended WAS2.00
+    Local Interface ID: 10, Remote Interface ID: 3
+    Interface IP Address: 99.32.38.32
+    Neighbor IP Address: 99.32.38.38
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4823 us
+    Link Min/Max Delay: 4823/4823 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.32.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended WAS2.00
+    Local Interface ID: 11, Remote Interface ID: 4
+    Interface IP Address: 100.32.38.32
+    Neighbor IP Address: 100.32.38.38
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5064 us
+    Link Min/Max Delay: 5064/5064 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.32.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-ATL.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.33
+  IP Address:     1.1.1.33
+  Hostname:       PE-ATL
+  Metric: 0          IP-Extended 1.1.1.33/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.33
+  Metric: 10000         IS-Extended ATL1.00
+    Local Interface ID: 1, Remote Interface ID: 7
+    Interface IP Address: 99.31.33.33
+    Neighbor IP Address: 99.31.33.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 35 us
+    Link Min/Max Delay: 35/35 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.31.33.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended ATL2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 99.32.33.33
+    Neighbor IP Address: 99.32.33.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 459 us
+    Link Min/Max Delay: 459/459 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.32.33.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+MIA1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.34
+  IP Address:     1.1.1.34
+  Hostname:       MIA1
+  Metric: 0          IP-Extended 1.1.1.34/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.34
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 1, Remote Interface ID: 12
+    Interface IP Address: 99.16.34.34
+    Neighbor IP Address: 99.16.34.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8812 us
+    Link Min/Max Delay: 8812/8812 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.16.34.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL1.00
+    Local Interface ID: 2, Remote Interface ID: 13
+    Interface IP Address: 100.16.34.34
+    Neighbor IP Address: 100.16.34.16
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9253 us
+    Link Min/Max Delay: 9253/9253 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.16.34.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL1.00
+    Local Interface ID: 3, Remote Interface ID: 8
+    Interface IP Address: 99.31.34.34
+    Neighbor IP Address: 99.31.34.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4808 us
+    Link Min/Max Delay: 4808/4808 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.31.34.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL1.00
+    Local Interface ID: 4, Remote Interface ID: 9
+    Interface IP Address: 100.31.34.34
+    Neighbor IP Address: 100.31.34.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5049 us
+    Link Min/Max Delay: 5049/5049 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.31.34.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended MIA2.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.34.35.34
+    Neighbor IP Address: 99.34.35.35
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 148 us
+    Link Min/Max Delay: 148/148 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.34.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended MIA2.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.34.35.34
+    Neighbor IP Address: 100.34.35.35
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 349 us
+    Link Min/Max Delay: 349/349 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.34.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-MIA.00
+    Local Interface ID: 7, Remote Interface ID: 1
+    Interface IP Address: 99.34.36.34
+    Neighbor IP Address: 99.34.36.36
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 380 us
+    Link Min/Max Delay: 380/380 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.34.36.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended REM-TPA.00
+    Local Interface ID: 8, Remote Interface ID: 2
+    Interface IP Address: 99.34.40.34
+    Neighbor IP Address: 99.34.40.40
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1629 us
+    Link Min/Max Delay: 1629/1629 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.34.40.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+MIA2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.35
+  IP Address:     1.1.1.35
+  Hostname:       MIA2
+  Metric: 0          IP-Extended 1.1.1.35/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.35
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 1, Remote Interface ID: 12
+    Interface IP Address: 99.17.35.35
+    Neighbor IP Address: 99.17.35.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 8985 us
+    Link Min/Max Delay: 8985/8985 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.17.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended DAL2.00
+    Local Interface ID: 2, Remote Interface ID: 13
+    Interface IP Address: 100.17.35.35
+    Neighbor IP Address: 100.17.35.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9434 us
+    Link Min/Max Delay: 9434/9434 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.17.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL2.00
+    Local Interface ID: 3, Remote Interface ID: 8
+    Interface IP Address: 99.32.35.35
+    Neighbor IP Address: 99.32.35.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5238 us
+    Link Min/Max Delay: 5238/5238 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.32.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL2.00
+    Local Interface ID: 4, Remote Interface ID: 9
+    Interface IP Address: 100.32.35.35
+    Neighbor IP Address: 100.32.35.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5500 us
+    Link Min/Max Delay: 5500/5500 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.32.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended MIA1.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.34.35.35
+    Neighbor IP Address: 99.34.35.34
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 148 us
+    Link Min/Max Delay: 148/148 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.34.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended MIA1.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.34.35.35
+    Neighbor IP Address: 100.34.35.34
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 349 us
+    Link Min/Max Delay: 349/349 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.34.35.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-MIA.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 99.35.36.35
+    Neighbor IP Address: 99.35.36.36
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 114 us
+    Link Min/Max Delay: 114/114 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.35.36.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-MIA.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.36
+  IP Address:     1.1.1.36
+  Hostname:       PE-MIA
+  Metric: 0          IP-Extended 1.1.1.36/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.36
+  Metric: 10000         IS-Extended MIA1.00
+    Local Interface ID: 1, Remote Interface ID: 7
+    Interface IP Address: 99.34.36.36
+    Neighbor IP Address: 99.34.36.34
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 380 us
+    Link Min/Max Delay: 380/380 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.34.36.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended MIA2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 99.35.36.36
+    Neighbor IP Address: 99.35.36.35
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 114 us
+    Link Min/Max Delay: 114/114 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.35.36.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+WAS1.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.37
+  IP Address:     1.1.1.37
+  Hostname:       WAS1
+  Metric: 0          IP-Extended 1.1.1.37/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.37
+  Metric: 100         IS-Extended NYC1.00
+    Local Interface ID: 1, Remote Interface ID: 6
+    Interface IP Address: 99.28.37.37
+    Neighbor IP Address: 99.28.37.28
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1580 us
+    Link Min/Max Delay: 1580/1580 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.28.37.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended NYC1.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 100.28.37.37
+    Neighbor IP Address: 100.28.37.28
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1659 us
+    Link Min/Max Delay: 1659/1659 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.28.37.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL1.00
+    Local Interface ID: 3, Remote Interface ID: 10
+    Interface IP Address: 99.31.37.37
+    Neighbor IP Address: 99.31.37.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4310 us
+    Link Min/Max Delay: 4310/4310 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.31.37.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL1.00
+    Local Interface ID: 4, Remote Interface ID: 11
+    Interface IP Address: 100.31.37.37
+    Neighbor IP Address: 100.31.37.31
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4525 us
+    Link Min/Max Delay: 4525/4525 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.31.37.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended WAS2.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.37.38.37
+    Neighbor IP Address: 99.37.38.38
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 84 us
+    Link Min/Max Delay: 84/84 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.37.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended WAS2.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.37.38.37
+    Neighbor IP Address: 100.37.38.38
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 311 us
+    Link Min/Max Delay: 311/311 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.37.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-WAS.00
+    Local Interface ID: 7, Remote Interface ID: 1
+    Interface IP Address: 99.37.39.37
+    Neighbor IP Address: 99.37.39.39
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 484 us
+    Link Min/Max Delay: 484/484 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.37.39.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+WAS2.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.38
+  IP Address:     1.1.1.38
+  Hostname:       WAS2
+  Metric: 0          IP-Extended 1.1.1.38/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.38
+  Metric: 100         IS-Extended NYC2.00
+    Local Interface ID: 1, Remote Interface ID: 6
+    Interface IP Address: 99.29.38.38
+    Neighbor IP Address: 99.29.38.29
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1738 us
+    Link Min/Max Delay: 1738/1738 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.29.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended NYC2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 100.29.38.38
+    Neighbor IP Address: 100.29.38.29
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1825 us
+    Link Min/Max Delay: 1825/1825 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.29.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL2.00
+    Local Interface ID: 3, Remote Interface ID: 10
+    Interface IP Address: 99.32.38.38
+    Neighbor IP Address: 99.32.38.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4823 us
+    Link Min/Max Delay: 4823/4823 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 99.32.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 100         IS-Extended ATL2.00
+    Local Interface ID: 4, Remote Interface ID: 11
+    Interface IP Address: 100.32.38.38
+    Neighbor IP Address: 100.32.38.32
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 5064 us
+    Link Min/Max Delay: 5064/5064 us
+    Link Delay Variation: 0 us
+  Metric: 100         IP-Extended 100.32.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended WAS1.00
+    Local Interface ID: 5, Remote Interface ID: 5
+    Interface IP Address: 99.37.38.38
+    Neighbor IP Address: 99.37.38.37
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 84 us
+    Link Min/Max Delay: 84/84 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 99.37.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 1000         IS-Extended WAS1.00
+    Local Interface ID: 6, Remote Interface ID: 6
+    Interface IP Address: 100.37.38.38
+    Neighbor IP Address: 100.37.38.37
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 311 us
+    Link Min/Max Delay: 311/311 us
+    Link Delay Variation: 0 us
+  Metric: 1000         IP-Extended 100.37.38.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended PE-WAS.00
+    Local Interface ID: 7, Remote Interface ID: 2
+    Interface IP Address: 99.38.39.38
+    Neighbor IP Address: 99.38.39.39
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 10 us
+    Link Min/Max Delay: 10/10 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.38.39.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+PE-WAS.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.39
+  IP Address:     1.1.1.39
+  Hostname:       PE-WAS
+  Metric: 0          IP-Extended 1.1.1.39/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.39
+  Metric: 10000         IS-Extended WAS1.00
+    Local Interface ID: 1, Remote Interface ID: 7
+    Interface IP Address: 99.37.39.39
+    Neighbor IP Address: 99.37.39.37
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 484 us
+    Link Min/Max Delay: 484/484 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.37.39.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended WAS2.00
+    Local Interface ID: 2, Remote Interface ID: 7
+    Interface IP Address: 99.38.39.39
+    Neighbor IP Address: 99.38.39.38
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 10 us
+    Link Min/Max Delay: 10/10 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.38.39.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+REM-TPA.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.40
+  IP Address:     1.1.1.40
+  Hostname:       REM-TPA
+  Metric: 0          IP-Extended 1.1.1.40/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.40
+  Metric: 10000         IS-Extended DAL2.00
+    Local Interface ID: 1, Remote Interface ID: 14
+    Interface IP Address: 99.17.40.40
+    Neighbor IP Address: 99.17.40.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 7696 us
+    Link Min/Max Delay: 7696/7696 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.17.40.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended MIA1.00
+    Local Interface ID: 2, Remote Interface ID: 8
+    Interface IP Address: 99.34.40.40
+    Neighbor IP Address: 99.34.40.34
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1629 us
+    Link Min/Max Delay: 1629/1629 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.34.40.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+REM-PTX.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.41
+  IP Address:     1.1.1.41
+  Hostname:       REM-PTX
+  Metric: 0          IP-Extended 1.1.1.41/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.41
+  Metric: 10000         IS-Extended SFO2.00
+    Local Interface ID: 1, Remote Interface ID: 8
+    Interface IP Address: 99.2.41.41
+    Neighbor IP Address: 99.2.41.2
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 4246 us
+    Link Min/Max Delay: 4246/4246 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.2.41.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended SEA1.00
+    Local Interface ID: 2, Remote Interface ID: 12
+    Interface IP Address: 99.4.41.41
+    Neighbor IP Address: 99.4.41.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1150 us
+    Link Min/Max Delay: 1150/1150 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.4.41.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+REM-OMA.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.42
+  IP Address:     1.1.1.42
+  Hostname:       REM-OMA
+  Metric: 0          IP-Extended 1.1.1.42/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.42
+  Metric: 10000         IS-Extended KCY1.00
+    Local Interface ID: 1, Remote Interface ID: 12
+    Interface IP Address: 99.13.42.42
+    Neighbor IP Address: 99.13.42.13
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 1313 us
+    Link Min/Max Delay: 1313/1313 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.13.42.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended MIN2.00
+    Local Interface ID: 2, Remote Interface ID: 10
+    Interface IP Address: 99.20.42.42
+    Neighbor IP Address: 99.20.42.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2340 us
+    Link Min/Max Delay: 2340/2340 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.20.42.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+REM-PHX.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.43
+  IP Address:     1.1.1.43
+  Hostname:       REM-PHX
+  Metric: 0          IP-Extended 1.1.1.43/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.43
+  Metric: 10000         IS-Extended LAX1.00
+    Local Interface ID: 1, Remote Interface ID: 12
+    Interface IP Address: 99.7.43.43
+    Neighbor IP Address: 99.7.43.7
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2834 us
+    Link Min/Max Delay: 2834/2834 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.7.43.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended DAL2.00
+    Local Interface ID: 2, Remote Interface ID: 15
+    Interface IP Address: 99.17.43.43
+    Neighbor IP Address: 99.17.43.17
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 7025 us
+    Link Min/Max Delay: 7025/7025 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.17.43.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+REM-GFK.00-00         0x0000014d   0x594b        59597/65535        0/0/0
+  Area Address:   49.0000
+  LSP MTU:        1492
+  NLPID:          0xcc
+  Router ID:      1.1.1.44
+  IP Address:     1.1.1.44
+  Hostname:       REM-GFK
+  Metric: 0          IP-Extended 1.1.1.44/32
+    Prefix Attribute Flags: X:0 R:0 N:1 E:0 A:0
+    Source Router ID: 1.1.1.44
+  Metric: 10000         IS-Extended SEA1.00
+    Local Interface ID: 1, Remote Interface ID: 13
+    Interface IP Address: 99.4.44.44
+    Neighbor IP Address: 99.4.44.4
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 9291 us
+    Link Min/Max Delay: 9291/9291 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.4.44.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0
+  Metric: 10000         IS-Extended MIN2.00
+    Local Interface ID: 2, Remote Interface ID: 11
+    Interface IP Address: 99.20.44.44
+    Neighbor IP Address: 99.20.44.20
+    Physical BW: 1000000 kbits/sec
+    Link Average Delay: 2221 us
+    Link Min/Max Delay: 2221/2221 us
+    Link Delay Variation: 0 us
+  Metric: 10000         IP-Extended 99.20.44.0/24
+    Prefix Attribute Flags: X:0 R:0 N:0 E:0 A:0

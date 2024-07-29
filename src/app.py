@@ -228,7 +228,7 @@ def create_network_graph():
 
 
 # Define the content layouts for each button
-def start_simulation_layout() -> dbc.Container:
+def start_simulation_layout(dropdown_options) -> dbc.Container:
     """
     Creates the layout for the simulation start page using Dash Bootstrap Components.
 
@@ -289,11 +289,34 @@ def start_simulation_layout() -> dbc.Container:
             dbc.Row([
                 dbc.Col(
                     dcc.Dropdown(
-                        id='hw-failure-dropdown',
-                        options=sample_ids,
+                        id='hw-failure-dropdown-source',
+                        options=dropdown_options,
                         placeholder="Select a router that encounters hardware failure"
                     ),
                 ),
+                dbc.Col(
+                    dcc.Dropdown(
+                        id='hw-failure-dropdown-destination',
+                        options=dropdown_options,
+                        placeholder="Select the destination that will be impacted by the failure"
+                    ),
+                ),]),
+            dbc.Row([
+                dbc.Col(
+                    dcc.Dropdown(
+                        id='hw-failure-previous-next-hop',
+                        placeholder="Select the initial good hop for the path",
+                        disabled=True
+                    ),
+                ),
+                dbc.Col(
+                    dcc.Dropdown(
+                        id='hw-failure-new-next-hop',
+                        placeholder="Select the hop where the path will be rerouted",
+                        disabled=True
+                    ),
+                ),]),
+            dbc.Row([
                 dbc.Form([
                     dbc.CardGroup(
                         [
@@ -487,6 +510,40 @@ def measurements_analysis_layout() -> dbc.Container:
         fluid=True
     )
 
+@app.callback([Output('hw-failure-previous-next-hop', 'options'),
+               Output('hw-failure-previous-next-hop', 'disabled'),
+               Output('hw-failure-new-next-hop', 'options'),
+               Output('hw-failure-new-next-hop', 'disabled')],
+              [Input('hw-failure-dropdown-source', 'value'),
+               Input('hw-failure-dropdown-destination', 'value')],
+              prevent_initial_call=True)
+def set_failure_options(source_id: str, destination_id: str):
+    """
+    Sets the options and disabled status for the previous and new next hop dropdowns based on the
+    selected IDs.
+
+    Args:
+        source_id (str): The selected source ID.
+        destination_id (str): The selected destination ID.
+
+    Returns:
+        tuple: A tuple containing the options and disabled status for the previous
+        and new next hop dropdowns.
+    """
+    if source_id is None or destination_id is None:
+        return [], True, [], True
+    source_router = net_sim.get_router_from_id(source_id)
+    destination_router = net_sim.get_router_from_id(destination_id)
+    all_source_neighbors = net_sim.get_all_neighbors(source_router)
+    next_hops = net_sim.get_next_hops(source_router, destination_router)
+    previous_next_hop = [{'label': f"{net_sim.get_router_from_id(id).node_name} - {id}",
+                          'value': id}
+                         for id in next_hops]
+    possible_next_hop = [{'label': f"{net_sim.get_router_from_id(id).node_name} - {id}",
+                          'value': id}
+                         for id in all_source_neighbors]
+
+    return previous_next_hop, False, possible_next_hop, False
 
 @app.callback([Input('probe-rate', 'value'),
                Input('number-of-generation', 'value'),
@@ -573,17 +630,17 @@ def update_output(_, __, ___):
     if not ctx.triggered:
         return dash.no_update
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    if net_sim is None:
+    if net_sim is None or not net_sim.is_running():
         return dcc.Location(id='url', refresh=True, pathname='/')
+
+    dropdown_options = []
+    router_ids = net_sim.get_routers_ids()  # Assuming this retrieves router IDs
+    dropdown_options = [{'label': f"{net_sim.get_router_from_id(id).node_name} - {id}", 'value': id}
+                            for id in router_ids]
     if button_id == 'ecmp-analysis-btn':
-        dropdown_options = []
-        if net_sim.is_running():
-            sample_ids = net_sim.get_routers_ids()  # Assuming this retrieves router IDs
-            dropdown_options = [{'label': id, 'value': id}
-                                for id in sample_ids]
         return ecmp_analysis_layout(dropdown_options)
     elif button_id == 'start-simulation-btn':
-        return start_simulation_layout()
+        return start_simulation_layout(dropdown_options)
     elif button_id == 'analysis-btn':
         return measurements_analysis_layout()
     return dash.no_update
@@ -702,7 +759,8 @@ def update_additional_analysis(n_clicks, id1, id2):
             else:
                 graph_value[key] += 1
     elif n_clicks and id1 and not id2:
-        for s_id in sample_ids:
+        router_ids = net_sim.get_routers_ids()
+        for s_id in router_ids:
             if s_id != id1:
                 _, wrong_path = net_sim.latency_test(id1, s_id)
                 wrong_paths.extend(wrong_path)
@@ -811,12 +869,15 @@ def redirect_to_final(_):
         Input('emulate-btn', 'n_clicks'),
         Input('emulate-interval', 'n_intervals')
     ],
-    [State('hw-failure-dropdown', 'value'),
+    [State('hw-failure-dropdown-source', 'value'),
+     State('hw-failure-dropdown-destination', 'value'),
+     State('hw-failure-previous-next-hop', 'value'),
+     State('hw-failure-new-next-hop', 'value'),
      State('start_probe', 'value'),
      State('end_probe', 'value')],
     prevent_initial_call=True
 )
-def start_emulation(n_clicks, _, router_id, start, end):
+def start_emulation(n_clicks, _, source_id, destination_id, prev_next_id, new_next_id, start, end):
     """
     Starts the network emulation process.
 
@@ -826,7 +887,10 @@ def start_emulation(n_clicks, _, router_id, start, end):
     Args:
         n_clicks (int): Number of clicks on the start button.
         _ (any): Placeholder for unused input.
-        router_id (str): The ID of the router to add a hardware issue to.
+        source_id (str): The ID of the router to add a hardware issue to.
+        destination_id (str): The ID of the destination router.
+        prev_next_id (str): The ID of the previous next hop.
+        new_next_id (str): The ID of the new next hop.
         start (int): The start time of the hardware issue.
         end (int): The end time of the hardware issue.
 
@@ -841,8 +905,12 @@ def start_emulation(n_clicks, _, router_id, start, end):
     if net_sim.working:
         return dash.no_update, True, False,
 
-    if net_sim.current_step == 0 and router_id is not None:
-        net_sim.add_hw_issue(start=start, end=end, source_id=router_id)
+    if net_sim.current_step == 0 and source_id is not None:
+        net_sim.add_hw_issue(start=start, end=end,
+                             source_id=source_id,
+                             destination_id=destination_id,
+                             new_next_hop_id=new_next_id,
+                             next_hop_id=prev_next_id)
 
     total_steps = net_sim.num_generation * \
         net_sim.duration * net_sim.generation_rate
