@@ -144,6 +144,9 @@ class Router:
                 source_bin.increment()
                 break
 
+        if latency < 0:
+            return
+
         if latency < self.__min_max_bins[source][0]:
             self.__min_max_bins[source] = (latency, self.__min_max_bins[source][1])
 
@@ -194,7 +197,8 @@ class Router:
             if no_update:
                 for _, old_bin in enumerate(bins):
                     old_bin.reset()
-                return
+                self.__bins[key] = bins
+                continue
 
             # Step 2: Merge empty bins
             merged_bins, freed_bins = self.merge_empty_bins(bins, marks)

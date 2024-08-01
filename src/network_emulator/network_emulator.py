@@ -2,6 +2,7 @@
 This module defines the Network Emulator class, which can represent a network,
 test his resilience and generate data for the network.
 """
+import ast
 import json
 import random
 import re
@@ -45,7 +46,7 @@ class NetworkEmulator:
 
     def __init__(self, node_file: str, link_file: str, single_file: str, generation_rate: int,
                  num_generation: int, load_folder: str = None, save_folder: str = None,
-                 treshold: int = 5):
+                 threshold: int = 5):
         """
         Initialize the NetworkEmulator with node file, link file, generation rate, 
         and number of generations.
@@ -66,7 +67,7 @@ class NetworkEmulator:
         self.link_file = link_file
         self.generation_rate = generation_rate
         self.num_generation = num_generation
-        self.treshold = treshold
+        self.threshold = threshold
         self.duration = 300
         self.current_step = 0
 
@@ -82,7 +83,7 @@ class NetworkEmulator:
 
         self.hw_issue: pd.DataFrame = pd.DataFrame(
             columns=['Router ID', 'Start', 'End', 'Previous Table Element',
-                    'New Table Element', 'Entry Index'])
+                     'New Table Element', 'Entry Index'])
 
     def is_running(self) -> bool:
         """
@@ -149,12 +150,12 @@ class NetworkEmulator:
             topo = file.read()
 
         # Find all positions of router sections
-        router_start_positions = [match.start() 
+        router_start_positions = [match.start()
                                   for match in re.finditer(r'^\S', topo, re.MULTILINE)]
 
         # Split content into router sections
-        routers_info = [topo[start:router_start_positions[i + 1]] 
-                        if i + 1 < len(router_start_positions) 
+        routers_info = [topo[start:router_start_positions[i + 1]]
+                        if i + 1 < len(router_start_positions)
                         else topo[start:] for i, start in enumerate(router_start_positions)]
 
         router_id_pattern = r"Router ID:\s*(\S+)"
@@ -488,7 +489,7 @@ class NetworkEmulator:
         except (FileNotFoundError, pd.errors.EmptyDataError):
             sink = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'FL', 'VRF',
                                          'TimeStamp', 'Histogram Template', 'Histogram Value',
-                                         'Packet Counter', 'Histogram type', 'Min', 'Max',
+                                         'Histogram type', 'Min', 'Max',
                                          'Liveness flag', 'Telemetry Period'])
             self.session_id = 1
         histogram_type = None
@@ -508,7 +509,6 @@ class NetworkEmulator:
             histogram_template = [str(bin.start) + '-' + str(bin.end)
                                   for bin in bins[source]]
             histogram_value = [bin.value for bin in bins[source]]
-            packet_counter = sum(histogram_value)
             new_row = {'Session ID': self.session_id,
                        'Source': source,
                        'Destination': sink_router.ip_address,
@@ -517,7 +517,6 @@ class NetworkEmulator:
                        'TimeStamp': timestamp,
                        'Histogram Template': histogram_template,
                        'Histogram Value': histogram_value,
-                       'Packet Counter': packet_counter,
                        'Histogram type': histogram_type,
                        'Min': min_max[source][0],
                        'Max': min_max[source][1],
@@ -553,7 +552,7 @@ class NetworkEmulator:
             source_df = pd.read_csv(source_csv_file)
             if self.session_id is None:
                 self.session_id = source_df.iloc[-1]['Session ID'] + 1
-        except(FileNotFoundError, pd.errors.EmptyDataError):
+        except (FileNotFoundError, pd.errors.EmptyDataError):
             source_df = pd.DataFrame(columns=['Session ID', 'Source', 'Destination', 'FL', 'VRF',
                                               'TimeStamp', 'Probe GenRate', 'Packet Counter',
                                               'Packet Counter Type', 'Telemetry Period'])
@@ -570,19 +569,18 @@ class NetworkEmulator:
 
         for destination in self.routers:
             bins, _ = destination.get_bins()
-            for source in bins.keys():
-                if source == source_router.ip_address:
-                    new_row = {'Session ID': self.session_id,
-                               'Source': source,
-                               'Destination': destination.ip_address,
-                               'FL': fl,
-                               'VRF': vrf,
-                               'TimeStamp': timestamp,
-                               'Probe GenRate': self.generation_rate,
-                               'Packet Counter': self.generation_rate * self.duration,
-                               'Packet Counter Type': packet_type,
-                               'Telemetry Period': self.duration/60}
-                    source_df.loc[len(source)] = new_row
+            if source_router.ip_address in bins.keys():
+                new_row = {'Session ID': self.session_id,
+                           'Source': source_router.ip_address,
+                           'Destination': destination.ip_address,
+                           'FL': fl,
+                           'VRF': vrf,
+                           'TimeStamp': timestamp,
+                           'Probe GenRate': self.generation_rate,
+                           'Packet Counter': self.generation_rate * self.duration,
+                           'Packet Counter Type': packet_type,
+                           'Telemetry Period': self.duration/60}
+                source_df.loc[len(source_df)] = new_row
 
         # Append the new row to the DataFrame
 
@@ -626,7 +624,7 @@ class NetworkEmulator:
         if next_hop_id is None:
             next_hop_ips = [router.forward_table[index].next_hop for index in range(len(
                 router.forward_table)) if router.forward_table[index].destination ==
-                            destination.ip_address]
+                destination.ip_address]
             next_hop_ip = random.choice(next_hop_ips)
             next_hop_id = self.routers[self.get_router_index_from_ip(
                 next_hop_ip)].id
@@ -651,7 +649,7 @@ class NetworkEmulator:
                 link for link in self.links if link.source == router.ip_address]
             random_next_hop = random.choice([r.ip_address for r in self.routers if r.ip_address in [
                                             link.destination for link in neighbor_links]
-                                             and r.ip_address != previous_element.next_hop])
+                and r.ip_address != previous_element.next_hop])
             new_element = ForwardTableElement(
                 dest=previous_element.destination, next_hop=random_next_hop)
 
@@ -659,7 +657,7 @@ class NetworkEmulator:
                                                  'Start': start,
                                                  'End': end,
                                                  'Previous Table Element': previous_element.to_json(
-                                                     ),
+                                                 ),
                                                  'New Table Element': new_element.to_json(),
                                                  'Entry Index': entry_index}
 
@@ -746,10 +744,11 @@ class NetworkEmulator:
                 router.update_bins()
 
         return (
-            f"Emulated all ipm sessions for {str(self.num_generation)} generations with "
-            f"{str(self.generation_rate * self.duration)} probes in {str(time.time() - start)}"
+            f"Emulated all ipm sessions for {
+                str(self.num_generation)} generations with "
+            f"{str(self.generation_rate * self.duration)
+               } probes in {str(time.time() - start)}"
         )
-
 
     def send_prob(self, source: Router, destination: Router, flow_label: int) -> int:
         """
@@ -782,11 +781,13 @@ class NetworkEmulator:
         # Find the next router
         index = next(index for index, value in enumerate(
             self.routers) if value.ip_address ==
-                     source.forward_table[indices[chosen_route]].next_hop)
+            source.forward_table[indices[chosen_route]].next_hop)
         next_router = self.routers[index]
 
         # Continue finding the next hop and adding the delay until the destination is reached
         while next_router.ip_address != destination.ip_address:
+            if latency/10**3 > 301:
+                return latency
             indices = [index for index, value in enumerate(
                 next_router.forward_table) if value.destination == destination.ip_address]
             indices, link_indices = self.get_multi_links(next_router, indices)
@@ -799,9 +800,9 @@ class NetworkEmulator:
 
             index = next(index for index, value in enumerate(
                 self.routers) if value.ip_address ==
-                         next_router.forward_table[indices[chosen_route]].next_hop)
+                next_router.forward_table[indices[chosen_route]].next_hop)
             next_router = self.routers[index]
-        # Return the latency array
+
         destination.add_latency_to_bin(source.ip_address, latency/1000)
         return latency
 
@@ -1152,10 +1153,10 @@ class NetworkEmulator:
         return wrong_paths
 
     def latency_test(
-            self,
-            source_id: str,
-            destination_id: str
-        ) -> Tuple[zip, List[Tuple[List, int]]]:
+        self,
+        source_id: str,
+        destination_id: str
+    ) -> Tuple[zip, List[Tuple[List, int]]]:
         """
         Perform a latency test between a source router and a destination router.
 
@@ -1179,7 +1180,8 @@ class NetworkEmulator:
         wrong_paths = []
 
         source: Router = self.routers[self.get_router_index_from_id(source_id)]
-        destination: Router = self.routers[self.get_router_index_from_id(destination_id)]
+        destination: Router = self.routers[self.get_router_index_from_id(
+            destination_id)]
 
         indices = [index for index, value in enumerate(
             source.forward_table) if value.destination == destination.ip_address]
@@ -1187,7 +1189,7 @@ class NetworkEmulator:
 
         for i, index in enumerate(indices):
             path_groups, _ = self.get_latency_and_path(source, destination, index, [
-                                                    source.ip_address], link_indices[i], 0)
+                source.ip_address], link_indices[i], 0)
             for path, latency in path_groups:
                 paths.append(path)
                 latencies.append(latency)
@@ -1195,7 +1197,7 @@ class NetworkEmulator:
         min_latency = min(latencies)
 
         for i, latency in enumerate(latencies):
-            if latency >= min_latency + self.treshold * 1000:
+            if latency >= min_latency + self.threshold * 1000:
                 wrong_paths.append((paths[i], latency - min_latency))
 
         return zip(paths, latencies), wrong_paths
@@ -1245,7 +1247,8 @@ class NetworkEmulator:
         return all_paths, 0
 
     def hw_issue_detection(self, source_dataframe: pd.DataFrame, sink_dataframe: pd.DataFrame,
-                           latency: bool = False, loss: bool = False) -> List[str]:
+                           latency: bool = False, loss: bool = False,
+                           bin_detection: bool = False) -> List[str]:
         """
         Detect hardware issues based on latency or loss in the network.
 
@@ -1272,37 +1275,134 @@ class NetworkEmulator:
 
         # Use boolean indexing to filter rows
         filtered_sink: pd.DataFrame = sink_dataframe[(sink_dataframe['Session ID'] == session_id) &
-                                                    (sink_dataframe['Histogram type'] == mark)]
+                                                     (sink_dataframe['Histogram type'] == mark)]
+        last_index = filtered_sink.index[-1]
 
         if filtered_sink.empty:
             filtered_sink = sink_dataframe[sink_dataframe['Session ID'] == session_id]
         else:
+            filtered_sink = sink_dataframe.loc[last_index+1:]
+
+        rest_of_sink: pd.DataFrame = sink_dataframe[:last_index]
+        opposite_mark = 'Black' if mark == 'White' else 'White'
+        rest_of_sink = rest_of_sink[(rest_of_sink['Session ID'] == session_id) &
+                                             (rest_of_sink['Histogram type'] == opposite_mark)]
+        previous_index = rest_of_sink.index[-1]
+        rest_of_sink = sink_dataframe.loc[previous_index+1:last_index]
+        filtered_source: pd.DataFrame = source_dataframe[(source_dataframe['Session ID']
+                                                          == session_id) &
+                                                         (source_dataframe['Packet Counter Type']
+                                                          == mark)]
+
+        if filtered_source.empty:
+            filtered_source = source_dataframe[source_dataframe['Session ID'] == session_id]
+        else:
             # Use the last index from the filtered data
-            last_index = filtered_sink.index[-1]
-            filtered_sink = sink_dataframe.loc[last_index:]
+            last_index = filtered_source.index[-1]
+            filtered_source = source_dataframe.loc[last_index:]
 
         routers_id: List[str] = []
 
         if latency:
             for _, row in filtered_sink.iterrows():
-                if (row['Max'] - row['Min']) >= self.treshold:
-                    source_router = self.routers[self.get_router_index_from_ip(row['Source'])]
+                if (row['Max'] - row['Min']) >= self.threshold:
+                    zipped_list, _ = self.latency_test(
+                        source_id=row['Source'], destination_id=row['Destination'])
+                    default_latency = [x/10**3 for _, x in zipped_list]
+                    if 1.05 > max(default_latency)/row['Max'] > 0.95:
+                        continue
+                    source_router = self.routers[self.get_router_index_from_ip(
+                        row['Source'])]
                     destination_router = self.routers[
                         self.get_router_index_from_ip(row['Destination'])]
-                    indices = [index for index, value in enumerate(source_router.forward_table)
-                               if value.destination == destination_router.ip_address]
-                    self.path_hw_detection(source=source_router, destination=destination_router,
-                                        index=indices[0], routers_id=routers_id,
-                                        sink_dataframe=filtered_sink)
-                    if len(routers_id) == 0:
+                    found_routers = self.latency_hw_detection(source=source_router,
+                                                              destination=destination_router,
+                                                              routers_id=routers_id,
+                                                              sink_dataframe=filtered_sink)
+                    for router in found_routers:
+                        if router not in routers_id:
+                            routers_id.append(router)
+                    if len(found_routers) == 0 and source_router.id not in routers_id:
                         routers_id.append(source_router.id)
-        elif loss:
-            pass
+        if loss:
+            for _, row in filtered_sink.iterrows():
+                source_ipaddress = row['Source']
+                destination_ipaddress = row['Destination']
+                source_row: pd.Series = filtered_source[(filtered_source['Source']
+                                                         == source_ipaddress) &
+                                                        (filtered_source['Destination']
+                                                         == destination_ipaddress)]
+                source_row = source_row.iloc[0]
+                histogram_values: List[str] = row['Histogram Value']
+                int_histogram_values = ast.literal_eval(histogram_values)
+                sink_packet_counter = sum(int_histogram_values)
+                source_packet_counter: int = source_row['Packet Counter']
+                if sink_packet_counter != source_packet_counter:
+                    source_router = self.routers[
+                        self.get_router_index_from_ip(source_ipaddress)
+                    ]
+                    destination_router = self.routers[
+                        self.get_router_index_from_ip(destination_ipaddress)
+                    ]
+                    found_routers = self.loss_hw_detection(source=source_router,
+                                                           destination=destination_router,
+                                                           routers_id=routers_id,
+                                                           sink_dataframe=filtered_sink,
+                                                           source_dataframe=filtered_source)
+                    for router in found_routers:
+                        if router not in routers_id:
+                            routers_id.append(router)
+                    if len(found_routers) == 0 and source_router.id not in routers_id:
+                        routers_id.append(source_router.id)
+        if bin_detection:
+            if rest_of_sink.empty:
+                print("No data to analyze")
+                return routers_id
+            for _, row in filtered_sink.iterrows():
+                source_ipaddress = row['Source']
+                destination_ipaddress = row['Destination']
+                source_router = self.routers[self.get_router_index_from_ip(source_ipaddress)]
+                destination_router = self.routers[
+                    self.get_router_index_from_ip(destination_ipaddress)
+                    ]
+
+                previous_row: pd.Series = rest_of_sink[(rest_of_sink['Source']
+                                                         == source_ipaddress) &
+                                                        (rest_of_sink['Destination']
+                                                         == destination_ipaddress)]
+                previous_row = previous_row.iloc[0]
+
+                histogram_values: List[str] = row['Histogram Value']
+                int_histogram_values = ast.literal_eval(histogram_values)
+
+                previous_histogram_values: List[str] = previous_row['Histogram Value']
+                int_previous_histogram_values = ast.literal_eval(previous_histogram_values)
+
+                indices = [index for index, value in enumerate(
+                source_router.forward_table) if value.destination == destination_ipaddress]
+                indices, _ = self.get_multi_links(source_router, indices)
+                total_number_of_path = 0
+                for i in indices:
+                    total_number_of_path += self.get_number_of_paths(source_router,
+                                                                     destination_router,
+                                                                     index=i)
+                for index, value in enumerate(int_histogram_values):
+                    print(f"From {source_ipaddress} to {destination_ipaddress} with current value {value} and  previous value {int_previous_histogram_values[index]}, the accepted variation is {int_previous_histogram_values[index] + int_previous_histogram_values[index] * ((1/total_number_of_path) )} as upper bound and {int_previous_histogram_values[index] - int_previous_histogram_values[index] * ((1/total_number_of_path) )} as lower bound")
+                    if not ((int_previous_histogram_values[index] +
+                    int_previous_histogram_values[index] * ((1/total_number_of_path) )) >
+                    value >
+                    (int_previous_histogram_values[index] -
+                    int_previous_histogram_values[index] * ((1/total_number_of_path) ))):
+                        self.bin_distribution_hw_detection(source=source_router,
+                                                           destination=destination_router,
+                                                           routers_id=routers_id,
+                                                           current_sink_dataframe=filtered_sink,
+                                                           previous_sink_dataframe=rest_of_sink)
 
         return routers_id
 
-    def path_hw_detection(self, source: Router, destination: Router, index: int,
-                          routers_id: List[str], sink_dataframe: pd.DataFrame) -> None:
+    def latency_hw_detection(self, source: Router, destination: Router,
+                             routers_id: List[str], sink_dataframe: pd.DataFrame) -> List[str]:
         """
         Detect hardware issues along the path from the source router to the destination router.
 
@@ -1313,21 +1413,262 @@ class NetworkEmulator:
         Args:
             source (Router): The source router.
             destination (Router): The destination router.
-            index (int): The index in the source router's forward table.
             routers_id (List[str]): A list to store the IDs of routers with detected hardware
             issues.
             sink_dataframe (pd.DataFrame): The dataframe containing sink data.
         """
-        next_hop = source.forward_table[index].next_hop
-        next_router = self.routers[self.get_router_index_from_ip(next_hop)]
         indices = [index for index, value in enumerate(
-            next_router.forward_table) if value.destination == destination.ip_address]
+            source.forward_table) if value.destination == destination.ip_address]
+        issue_index: List[int] = []
+        for index in indices:
+            next_hop = source.forward_table[index].next_hop
+            next_router = self.routers[self.get_router_index_from_ip(next_hop)]
+            if next_router.ip_address == destination.ip_address:
+                continue
+            if self.check_next_router_latency_issue(next_router, destination, sink_dataframe):
+                issue_index.append(index)
+        if len(issue_index) == 0:
+            return [source.id]
+
+        for index in issue_index:
+            next_hop = source.forward_table[index].next_hop
+            next_router = self.routers[self.get_router_index_from_ip(next_hop)]
+            found_routers = self.latency_hw_detection(next_router, destination,
+                                                      routers_id, sink_dataframe)
+            for router in found_routers:
+                if router not in routers_id:
+                    routers_id.append(router)
+
+        return routers_id
+
+    def check_next_router_latency_issue(self, next_router: Router,
+                                        destination: Router,
+                                        sink_dataframe: pd.DataFrame) -> bool:
+        """
+        Check for hardware issues in the next router along the path.
+
+        This method checks for hardware issues in the next router along the path from the source
+        router to the destination router. If an issue is detected, the source router's ID is added
+        to the list of routers with detected issues.
+
+        Args:
+            next_router (Router): The next router along the path.
+            destination (Router): The destination router.
+            sink_dataframe (pd.DataFrame): The dataframe containing sink data.
+            source (Router): The source router.
+        """
         if next_router.ip_address == destination.ip_address:
+            return False
+
+        next_row = sink_dataframe[
+            (sink_dataframe['Source'] == next_router.ip_address) &
+            (sink_dataframe['Destination'] == destination.ip_address)
+        ]
+        if next_row.empty:
             return
-        relevant_row = sink_dataframe[(sink_dataframe['Source'] == next_router.ip_address) & (
-            sink_dataframe['Destination'] == destination.ip_address)]
-        if (relevant_row['Max'].item() - relevant_row['Min'].item()) >= self.treshold:
-            routers_id.append(source.id)
-            return
+
+        next_row = next_row.iloc[0]
+        if (next_row['Max'] - next_row['Min']) >= self.threshold:
+            zipped_list, _ = self.latency_test(
+                source_id=next_router.id, destination_id=destination.id)
+            default_latency = [x / 10**3 for _, x in zipped_list]
+
+            if not 1.05 > max(default_latency) / next_row['Max'] > 0.95:
+                return True
+        return False
+
+    def loss_hw_detection(self, source: Router, destination: Router,
+                          routers_id: List[str],
+                          sink_dataframe: pd.DataFrame,
+                          source_dataframe: pd.DataFrame) -> list[str]:
+        """
+        Detect hardware issues along the path from the source router to the destination router.
+
+        This method recursively traverses the path from the source router to the destination
+        router, checking for hardware issues based on the loss threshold. If an issue is
+        detected, the source router's ID is added to the list of routers with detected issues.
+
+        Args:
+            source (Router): The source router.
+            destination (Router): The destination router.
+            routers_id (List[str]): A list to store the IDs of routers with detected hardware
+            issues.
+            sink_dataframe (pd.DataFrame): The dataframe containing sink data.
+        """
+        indices = [index for index, value in enumerate(
+            source.forward_table) if value.destination == destination.ip_address]
+        issue_index: List[int] = []
+        for index in indices:
+            next_hop = source.forward_table[index].next_hop
+            next_router = self.routers[self.get_router_index_from_ip(next_hop)]
+            if next_router.ip_address == destination.ip_address:
+                continue
+            if self.check_next_router_loss_issue(next_router,
+                                                 destination,
+                                                 sink_dataframe,
+                                                 source_dataframe):
+                issue_index.append(index)
+        if len(issue_index) == 0:
+            return [source.id]
+
+        for index in issue_index:
+            next_hop = source.forward_table[index].next_hop
+            next_router = self.routers[self.get_router_index_from_ip(next_hop)]
+            found_routers = self.loss_hw_detection(next_router, destination,
+                                                   routers_id, sink_dataframe, source_dataframe)
+            for router in found_routers:
+                if router not in routers_id:
+                    routers_id.append(router)
+
+        return routers_id
+
+    def check_next_router_loss_issue(self, next_router: Router, destination: Router,
+                                     sink_dataframe: pd.DataFrame,
+                                     source_dataframe: pd.DataFrame) -> bool:
+        """
+        Check for hardware issues in the next router along the path.
+
+        This method checks for hardware issues in the next router along the path from the source
+        router to the destination router. If an issue is detected, the source router's ID is added
+        to the list of routers with detected issues.
+
+        Args:
+            next_router (Router): The next router along the path.
+            destination (Router): The destination router.
+            routers_id (list[str]): A list to store the IDs of routers with detected
+            hardware issues.
+            sink_dataframe (pd.DataFrame): The dataframe containing sink data.
+            source_dataframe (pd.DataFrame): The dataframe containing source data.
+
+        Returns:
+            bool: True if a hardware issue is detected, False otherwise.
+        """
+        if next_router.ip_address == destination.ip_address:
+            return False
+
+        next_row = sink_dataframe[
+            (sink_dataframe['Source'] == next_router.ip_address) &
+            (sink_dataframe['Destination'] == destination.ip_address)
+        ]
+        if next_row.empty:
+            return False
+
+        next_row = next_row.iloc[0]
+        source_ipaddress = next_row['Source']
+        destination_ipaddress = next_row['Destination']
+        source_row: pd.Series = source_dataframe[
+            (source_dataframe['Source'] == source_ipaddress) &
+            (source_dataframe['Destination'] == destination_ipaddress)
+        ]
+        source_row = source_row.iloc[0]
+
+        histogram_values: List[str] = next_row['Histogram Value']
+        int_histogram_values = ast.literal_eval(histogram_values)
+        sink_packet_counter = sum(int_histogram_values)
+
+        source_packet_counter = source_row['Packet Counter']
+
+        if sink_packet_counter != source_packet_counter:
+            return True
+        return False
+
+    def bin_distribution_hw_detection(self, source: Router, destination: Router,
+                                      previous_sink_dataframe: pd.DataFrame,
+                                      current_sink_dataframe: pd.DataFrame,
+                                      routers_id: List[str]) -> List[str]:
+
+        """
+        Detect hardware issues along the path from the source router to the destination router.
+
+        This method recursively traverses the path from the source router to the destination
+        router, checking for hardware issues based on the bin distribution. If an issue is
+        detected, the source router's ID is added to the list of routers with detected issues.
+
+        Args:
+            source (Router): The source router.
+            destination (Router): The destination router.
+            routers_id (List[str]): A list to store the IDs of routers with detected hardware
+            issues.
+            sink_dataframe (pd.DataFrame): The dataframe containing sink data.
+        """
+        indices = [index for index, value in enumerate(
+            source.forward_table) if value.destination == destination.ip_address]
+        issue_index: List[int] = []
+        for index in indices:
+            next_hop = source.forward_table[index].next_hop
+            next_router = self.routers[self.get_router_index_from_ip(next_hop)]
+            if next_router.ip_address == destination.ip_address:
+                continue
+            if self.check_next_router_bin_issue(next_router,
+                                                 destination,
+                                                 previous_sink_dataframe,
+                                                 current_sink_dataframe):
+                issue_index.append(index)
+        if len(issue_index) == 0:
+            return [source.id]
+
+        for index in issue_index:
+            next_hop = source.forward_table[index].next_hop
+            next_router = self.routers[self.get_router_index_from_ip(next_hop)]
+            found_routers = self.bin_distribution_hw_detection(next_router, destination,
+                                                   previous_sink_dataframe, current_sink_dataframe,
+                                                   routers_id)
+            for router in found_routers:
+                if router not in routers_id:
+                    routers_id.append(router)
+
+        return routers_id
+
+    def check_next_router_bin_issue(self, next_router: Router, destination: Router,
+                                    previous_sink_dataframe: pd.DataFrame,
+                                    current_sink_dataframe: pd.DataFrame) -> bool:
+        """
+        Checks for bin issues in the next router's histogram values.
+
+        This method compares the histogram values of the next router for a given destination
+        between two dataframes (previous and current) to determine if there are any bin issues.
+        A bin issue is identified if the current histogram values deviate beyond a certain
+        threshold from the previous histogram values, adjusted by the number of paths.
+
+        Args:
+            next_router (Router): The next router in the path.
+            destination (Router): The destination router.
+            previous_sink_dataframe (pd.DataFrame): The dataframe containing previous sink data.
+            current_sink_dataframe (pd.DataFrame): The dataframe containing current sink data.
+
+        Returns:
+            bool: True if a bin issue is detected, False otherwise.
+        """
+
+        previous_row = previous_sink_dataframe[
+            (previous_sink_dataframe['Source'] == next_router.ip_address) &
+            (previous_sink_dataframe['Destination'] == destination.ip_address)
+        ]
+        previous_row = previous_row.iloc[0]
+
+        current_row = current_sink_dataframe[
+            (current_sink_dataframe['Source'] == next_router.ip_address) &
+            (current_sink_dataframe['Destination'] == destination.ip_address)
+        ]
+        current_row = current_row.iloc[0]
+
+        histogram_values: List[str] = current_row['Histogram Value']
+        int_histogram_values = ast.literal_eval(histogram_values)
+
+        previous_histogram_values: List[str] = previous_row['Histogram Value']
+        int_previous_histogram_values = ast.literal_eval(previous_histogram_values)
+
+        indices = [index for index, value in enumerate(
+                next_router.forward_table) if value.destination == destination.ip_address]
+        indices, _ = self.get_multi_links(next_router, indices)
+        total_number_of_path = 0
         for i in indices:
-            return self.path_hw_detection(next_router, destination, i, routers_id, sink_dataframe)
+            total_number_of_path += self.get_number_of_paths(next_router, destination, index=i)
+        for index, value in enumerate(int_histogram_values):
+            if not ((int_previous_histogram_values[index] +
+                    int_previous_histogram_values[index] * ((1/total_number_of_path) )) >
+                    value >
+                    (int_previous_histogram_values[index] -
+                    int_previous_histogram_values[index] * ((1/total_number_of_path) ))):
+                return True
+        return False

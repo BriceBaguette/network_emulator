@@ -1,0 +1,10 @@
+1	Bug on LAX1  for traffic destined to WAS1 goes to SEA1. The corrupted path will have 5 hops instead of 4 hops (Shortest Path): OK
+	 
+2	Bug on LAX1  for traffic destined to ATL1 goes to SFO1. This will create a loop as SFO1 will route traffic back to LAX1 (loss): OK
+	 
+3	Bug on CHI1 to ATL1. Link removed. Traffic from MIN1 to MIA1 goes on longer path.
+	 
+4	Bug on DEN2  for traffic destined to MIA2 goes to KCY2. The corrupted path will have 3 hops instead of 2 hops (Shortest Path)
+	 
+5	Bug on LAX1 to SFO1. Link removed. Traffic from LAX1 to SFO1 goes through SEA1 (longer delay). 
+	Bug on KCY1  for traffic destined to DAL1 goes to MIN1. This will create a loop as MIN1 will route traffic back to KCY1 (loss)

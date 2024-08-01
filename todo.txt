@@ -1,0 +1,5 @@
+done - Fix the issue where it has a path that has no issue and a path that has issue.
+
+Implement the bin - check --- try with a 10% bound should be more accurate than with the amount of paths since distribution is randomized
+
+done - Implement loss analysis

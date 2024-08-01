@@ -31,9 +31,6 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.config['suppress_callback_exceptions'] = True
 net_sim: NetworkEmulator = None
 
-# Sample list of IDs for dropdowns
-sample_ids: list[str] = []
-
 # Define the initial layout of the app
 app.layout = dbc.Container(
     [
@@ -510,6 +507,7 @@ def measurements_analysis_layout() -> dbc.Container:
         fluid=True
     )
 
+
 @app.callback([Output('hw-failure-previous-next-hop', 'options'),
                Output('hw-failure-previous-next-hop', 'disabled'),
                Output('hw-failure-new-next-hop', 'options'),
@@ -544,6 +542,7 @@ def set_failure_options(source_id: str, destination_id: str):
                          for id in all_source_neighbors]
 
     return previous_next_hop, False, possible_next_hop, False
+
 
 @app.callback([Input('probe-rate', 'value'),
                Input('number-of-generation', 'value'),
@@ -636,7 +635,7 @@ def update_output(_, __, ___):
     dropdown_options = []
     router_ids = net_sim.get_routers_ids()  # Assuming this retrieves router IDs
     dropdown_options = [{'label': f"{net_sim.get_router_from_id(id).node_name} - {id}", 'value': id}
-                            for id in router_ids]
+                        for id in router_ids]
     if button_id == 'ecmp-analysis-btn':
         return ecmp_analysis_layout(dropdown_options)
     elif button_id == 'start-simulation-btn':
@@ -646,6 +645,8 @@ def update_output(_, __, ___):
     return dash.no_update
 
 # Define the callback to update the ECMP Analysis content based on dropdown selection
+
+
 @app.callback(
     Output('ecmp-graphs', 'children'),
     Input('ecmp-id-dropdown', 'value'),
@@ -667,15 +668,15 @@ def update_ecmp_graphs(selected_id):
     """
     if selected_id:
         ecmp_values, path = net_sim.ecmp_analysis(selected_id)
-        
+
         # Prepare data for the linear regression
         x = np.array(list(path.keys()))
         y = np.array(list(path.values()))
-        
+
         # Calculate linear regression
         slope, intercept = np.polyfit(x, y, 1)
         regression_line = slope * x + intercept
-        
+
         # Create the graphs
         graph1 = dcc.Graph(
             figure={
@@ -692,7 +693,7 @@ def update_ecmp_graphs(selected_id):
                 }
             }
         )
-        
+
         graph2 = dcc.Graph(
             figure={
                 'data': [
@@ -719,9 +720,9 @@ def update_ecmp_graphs(selected_id):
                 }
             }
         )
-        
+
         return html.Div([graph1, graph2])
-    
+
     return dash.no_update
 
 
@@ -769,7 +770,7 @@ def update_additional_analysis(n_clicks, id1, id2):
     if len(wrong_paths) > 0:
         text_items = [html.Li(f"Path from {wrong_paths[0][0]} to {path[0][-1]} going through "
                               f"{path[0][1:-1]} has a latency imbalance of {path[1]/1000} ms")
-                                for path in wrong_paths]
+                      for path in wrong_paths]
     else:
         text_items = html.Li("No wrong paths found")
 
@@ -780,8 +781,8 @@ def update_additional_analysis(n_clicks, id1, id2):
                                    ],
                           'layout': {
                               'title': f"Latency for number of paths between {id1} and {id2}",
-                                     'xaxis': {'title': 'Latency in ms'},
-                                     'yaxis': {'title': 'Number of paths'}}})  
+            'xaxis': {'title': 'Latency in ms'},
+            'yaxis': {'title': 'Number of paths'}}})
         if len(graph_value.items()) > 0
         else html.Div(),
         html.Ul(text_items)])
@@ -825,8 +826,6 @@ def build_network(pathname, stored_file):
                                   load_folder=None, save_folder=None)
         net_sim.build()
         net_sim.start()
-        global sample_ids
-        sample_ids = net_sim.get_routers_ids()
         # Clean up the temporary file after use
         os.remove(temp_file_path)
 
@@ -917,8 +916,7 @@ def start_emulation(n_clicks, _, source_id, destination_id, prev_next_id, new_ne
 
     net_sim.working = True
 
-
-    if net_sim.current_step <= total_steps:
+    if net_sim.current_step < total_steps:
         routers = net_sim.routers
         start_time = []
         end_time = []
@@ -940,18 +938,18 @@ def start_emulation(n_clicks, _, source_id, destination_id, prev_next_id, new_ne
                     fl = random.randint(0, 256)
                     net_sim.send_prob(
                         source=source, destination=destination, flow_label=fl)
-
-        if (net_sim.current_step % (net_sim.generation_rate*net_sim.duration) == 0
-            and net_sim.current_step != 0):
+        if ((net_sim.current_step+1) % (net_sim.generation_rate*net_sim.duration) == 0
+                and net_sim.current_step != 0):
             timestamp = datetime.datetime.now()
             print(f"Exporting data at {timestamp}")
             for router in routers:
                 net_sim.export_source_data(source_router=router, fl=None,
-                                           gen_number=net_sim.current_step //
-                                           (net_sim.generation_rate*net_sim.duration),
+                                           gen_number=(net_sim.current_step+1) //
+                                           (net_sim.generation_rate *
+                                            net_sim.duration),
                                            timestamp=timestamp)
                 net_sim.export_sink_data(sink_router=router, fl=None,
-                                         gen_number=net_sim.current_step //
+                                         gen_number=(net_sim.current_step+1) //
                                          (net_sim.generation_rate*net_sim.duration),
                                          timestamp=timestamp)
                 router.update_bins()
@@ -975,7 +973,10 @@ def start_emulation(n_clicks, _, source_id, destination_id, prev_next_id, new_ne
 
         return progress_display, True, False,
 
+    print("Simulation completed")
     net_sim.current_step = 0
+    net_sim.hw_issue = pd.DataFrame(columns=['Start', 'End', 'Source', 'Destination',
+                                             'New Next Hop', 'Previous Next Hop'])
     net_sim.working = False
     net_sim.session_id += 1
     # Simulation completed, enable the button and provide download option
@@ -1037,7 +1038,7 @@ def download_output(n_click):
     [State('upload-source', 'contents'),
      State('upload-sink', 'contents')]
 )
-def upload_measurement_files(source_filename, sink_filename, source_contents, sink_contents):
+def upload_measurement_files(source_filename, sink_filename, _, __):
     """
     Handles the upload of measurement files and performs analysis.
 
@@ -1064,36 +1065,62 @@ def upload_measurement_files(source_filename, sink_filename, source_contents, si
     if source_filename is not None:
         if 'source' in source_filename.lower():
             source_message = f'File "{source_filename}" uploaded successfully.'
-            if source_contents:
-                _, content_string = source_contents.split(',')
-                decoded = base64.b64decode(content_string)
-                source_df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
         else:
             source_message = 'Please upload a CSV file containing "source" in its name.'
 
     if sink_filename is not None:
         if 'sink' in sink_filename.lower():
             sink_message = f'File "{sink_filename}" uploaded successfully.'
-            if sink_contents:
-                _, content_string = sink_contents.split(',')
-                decoded = base64.b64decode(content_string)
-                sink_df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
         else:
             sink_message = 'Please upload a CSV file containing "sink" in its name.'
 
     if (source_message and sink_message and 'uploaded successfully' in source_message
-        and 'uploaded successfully' in sink_message):
+            and 'uploaded successfully' in sink_message):
 
-        list_of_routers = net_sim.hw_issue_detection(
-            sink_dataframe=sink_df, source_dataframe=source_df, latency=True)
-        routers_display = html.Ul([html.Li(f"Router with id: {router} encountered hardware failure")
-                                  for router in list_of_routers])
+        dropdown_options = []
+        router_ids = net_sim.get_routers_ids()  # Assuming this retrieves router IDs
+        dropdown_options = [{'label': f"{net_sim.get_router_from_id(id).node_name} - {id}",
+                             'value': id}
+                            for id in router_ids]
         analysis_layout = dbc.Container(
             [
                 dbc.Row(
                     dbc.Col(
-                        routers_display,
+                        [
+                            dbc.Checklist(
+                                id='loss-detection',
+                                options=[
+                                    {'label': 'Loss Detection', 'value': 'loss'}
+                                ],
+                                value=[],
+                                inline=True
+                            ),
+                            dbc.Checklist(
+                                id='latency-detection',
+                                options=[
+                                    {'label': 'Latency Detection',
+                                        'value': 'latency'}
+                                ],
+                                value=[],
+                                inline=True
+                            ),
+                            dbc.Checklist(
+                                id='bin-detection',
+                                options=[
+                                    {'label': 'Bin Detection', 'value': 'bin'}
+                                ],
+                                value=[],
+                                inline=True
+                            ),
+                            dbc.Button('Submit', id='submit-hw-issue-detection', color='primary',
+                                       className='mt-2'),
+                            ],
                         className="my-4"
+                    )
+                ),
+                dbc.Row(
+                    dbc.Col(
+                        html.Div(id='hw-issue-analysis-output')
                     )
                 ),
                 dbc.Row(
@@ -1106,7 +1133,7 @@ def upload_measurement_files(source_filename, sink_filename, source_contents, si
                     dbc.Col(
                         dcc.Dropdown(
                             id='source-id-dropdown',
-                            options=sample_ids,
+                            options=dropdown_options,
                             placeholder="Select the ID of source router"
                         ),
                         width=6,
@@ -1117,7 +1144,7 @@ def upload_measurement_files(source_filename, sink_filename, source_contents, si
                     dbc.Col(
                         dcc.Dropdown(
                             id='sink-id-dropdown',
-                            options=sample_ids,
+                            options=dropdown_options,
                             placeholder="Select an ID of sink router"
                         ),
                         width=6,
@@ -1232,6 +1259,42 @@ def measurement_analysis(n_click, source_id, sink_id, source_file, sink_file):
     return dcc.Graph(figure=fig)
 
 # Define the callback to update the layout based on the URL
+
+
+@app.callback(
+    Output('hw-issue-analysis-output', 'children'),
+    [Input('submit-hw-issue-detection', 'n_clicks')],
+    [State('loss-detection', 'value'),
+     State('latency-detection', 'value'),
+     State('bin-detection', 'value'),
+     State('upload-source', 'contents'),
+     State('upload-sink', 'contents')],
+    prevent_initial_call=True
+)
+def hw_issue_detection(_, loss, latency, bin_detection, source_file, sink_file):
+    if not os.path.exists('uploads'):
+        os.makedirs('uploads')
+    source_file_path = os.path.join('uploads', 'source.csv')
+    save_base64_to_csv(source_file, source_file_path)
+
+    # Save the uploaded sink file
+    sink_file_path = os.path.join('uploads', 'sink.csv')
+    save_base64_to_csv(sink_file, sink_file_path)
+
+    # Read the saved CSV files
+    source_df = pd.read_csv(source_file_path)
+    sink_df = pd.read_csv(sink_file_path)
+
+    list_routers = net_sim.hw_issue_detection(source_df, sink_df,
+                                              loss=loss,
+                                              latency=latency,
+                                              bin_detection=bin_detection)
+    if len(list_routers) == 0:
+        return html.P("No hardware issues detected")
+    display_router = html.Li([html.P(f"Router {net_sim.get_router_from_id(router_id).node_name} -"
+                                     f" {router_id} has hardware issue") for router_id in
+                              list_routers])
+    return display_router
 
 
 @app.callback(
