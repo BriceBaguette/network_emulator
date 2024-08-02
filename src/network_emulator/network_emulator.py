@@ -108,7 +108,7 @@ class NetworkEmulator:
             if router.id == router_id:
                 return router
         return None
-    
+
     def get_router_from_ip(self, router_ip) -> Router:
         """
         Retrieve a router object based on its ip address.
@@ -225,8 +225,8 @@ class NetworkEmulator:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
-                print(f"Error: JSON parsing failed for file '{
-                      self.load_folder}'/routers.json")
+                print(f"Error: JSON parsing failed for file "
+                      f"'{self.load_folder}'/routers.json")
                 return 1
 
         for obj in json_data:
@@ -247,8 +247,8 @@ class NetworkEmulator:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
-                print(f"Error: JSON parsing failed for file '{
-                      self.link_file}'")
+                print(f"Error: JSON parsing failed for file '"
+                      f"{self.link_file}'")
                 return 1
 
         for obj in json_data:
@@ -270,8 +270,8 @@ class NetworkEmulator:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
-                print(f"Error: JSON parsing failed for file '{
-                      self.node_file}' ")
+                print(f"Error: JSON parsing failed for file '"
+                      f"{self.node_file}' ")
                 return 1
 
         for obj in json_data:
@@ -298,8 +298,8 @@ class NetworkEmulator:
             try:
                 json_data = json.load(file)
             except json.JSONDecodeError:
-                print(f"Error: JSON parsing failed for file '{
-                      self.link_file}'")
+                print(f"Error: JSON parsing failed for file '"
+                      f"{self.link_file}'")
                 return 1
 
         for obj in json_data:
@@ -676,8 +676,8 @@ class NetworkEmulator:
                                                  'New Table Element': new_element.to_json(),
                                                  'Entry Index': entry_index}
 
-        print(f"Hardware issue added to router {source_id} from {start} to {end} with destination {
-              destination_id} and new next hop {new_element.next_hop} instead of {next_hop_id}")
+        print(f"Hardware issue added to router {source_id} from {start} to {end} with destination"
+              f"{destination_id} and new next hop {new_element.next_hop} instead of {next_hop_id}")
 
     def hw_update_interface(self, row: pd.Series) -> None:
         """
@@ -759,10 +759,10 @@ class NetworkEmulator:
                 router.update_bins()
 
         return (
-            f"Emulated all ipm sessions for {
-                str(self.num_generation)} generations with "
-            f"{str(self.generation_rate * self.duration)
-               } probes in {str(time.time() - start)}"
+            f"Emulated all ipm sessions for "
+            f"{str(self.num_generation)} generations with "
+            f"{str(self.generation_rate * self.duration)}"
+               f" probes in {str(time.time() - start)}"
         )
 
     def send_prob(self, source: Router, destination: Router, flow_label: int) -> int:
