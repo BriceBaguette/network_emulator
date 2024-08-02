@@ -1370,7 +1370,7 @@ class NetworkEmulator:
                         if router not in routers_id:
                             routers_id.append(router)
                     if len(found_routers) == 0 and source_router.id not in routers_id:
-                        routers_id.append(source_router.id)                
+                        routers_id.append(source_router.id)
 
         if bin_detection:
             if rest_of_sink.empty:
@@ -1407,21 +1407,23 @@ class NetworkEmulator:
                 for index, value in enumerate(int_histogram_values):
                     if value == 0 and int_previous_histogram_values[index] == 0:
                         continue
-                    elif (value == 0 and int_previous_histogram_values[index] > 0) or (value > 0 and int_previous_histogram_values[index] == 0):
+                    elif ((value == 0 and int_previous_histogram_values[index] > 0)
+                        or (value > 0 and int_previous_histogram_values[index] == 0)):
                         self.bin_distribution_hw_detection(source=source_router,
                                                            destination=destination_router,
                                                            routers_id=routers_id,
                                                            current_sink_dataframe=filtered_sink,
                                                            previous_sink_dataframe=rest_of_sink)
-                    elif not (1 + ( number_of_packet/total_number_of_path) >(int_previous_histogram_values[index] /
-                    value) >
-                    (1 -
-                    number_of_packet/total_number_of_path)):
+                        break
+                    elif not (1 + ( number_of_packet/total_number_of_path) >
+                              (int_previous_histogram_values[index] /value) >
+                                1 - (number_of_packet/total_number_of_path)):
                         self.bin_distribution_hw_detection(source=source_router,
                                                            destination=destination_router,
                                                            routers_id=routers_id,
                                                            current_sink_dataframe=filtered_sink,
                                                            previous_sink_dataframe=rest_of_sink)
+                        break
 
         return routers_id
 
@@ -1688,16 +1690,16 @@ class NetworkEmulator:
         total_number_of_path = 0
         for i in indices:
             total_number_of_path += self.get_number_of_paths(next_router, destination, index=i)
-            
+
         number_of_packet = sum(int_histogram_values)
         for index, value in enumerate(int_histogram_values):
             if value == 0 and int_previous_histogram_values[index] == 0:
                 continue
-            elif (value == 0 and int_previous_histogram_values[index] > 0) or (value > 0 and int_previous_histogram_values[index] == 0):
+            elif ((value == 0 and int_previous_histogram_values[index] > 0) or
+                  (value > 0 and int_previous_histogram_values[index] == 0)):
                 return True
-            elif not (1 + ( number_of_packet/total_number_of_path) >(int_previous_histogram_values[index] /
-                    value) >
-                    (1 -
-                    number_of_packet/total_number_of_path)):
+            elif not (1 + ( number_of_packet/total_number_of_path) >
+                      (int_previous_histogram_values[index] / value) >
+                    1 - number_of_packet/total_number_of_path):
                 return True
         return False
