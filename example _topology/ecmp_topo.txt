@@ -1,97 +1,105 @@
-Router ID:          1
-IP Address:         1.1.1.1
-Hostname:           BRU1
-Metric: 100             IS-Extended LIE1.00
-    Link Average Delay: 1000 us     
-Metric: 100             IS-Extended LIE1.00
-    Link Average Delay: 1000 us     
-Metric: 100             IS-Extended NAM1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended HUY1.00
-    Link Average Delay: 1000 us
+BRU1
+  Router ID:          1
+  IP Address:         1.1.1.1
+  Hostname:           BRU1
+  Metric: 100             IS-Extended LIE1.00
+      Link Average Delay: 1000 us     
+  Metric: 100             IS-Extended LIE1.00
+      Link Average Delay: 1000 us     
+  Metric: 100             IS-Extended NAM1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended HUY1.00
+      Link Average Delay: 1000 us
 
-Router ID:          2
-IP Address:         1.1.1.2
-Hostname:           LIE1
-Metric: 100             IS-Extended BRU1.00
-    Link Average Delay: 1000 us     
-Metric: 100             IS-Extended BRU1.00
-    Link Average Delay: 1000 us     
-Metric: 100             IS-Extended WAR1.00
-    Link Average Delay: 10000 us
-Metric: 100             IS-Extended HAS1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended ANT1.00
-    Link Average Delay: 1000 us
+LIE1
+  Router ID:          2
+  IP Address:         1.1.1.2
+  Hostname:           LIE1
+  Metric: 100             IS-Extended BRU1.00
+      Link Average Delay: 1000 us     
+  Metric: 100             IS-Extended BRU1.00
+      Link Average Delay: 1000 us     
+  Metric: 100             IS-Extended WAR1.00
+      Link Average Delay: 10000 us
+  Metric: 100             IS-Extended HAS1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended ANT1.00
+      Link Average Delay: 1000 us
 
-Router ID:          3
-IP Address:         1.1.1.3
-Hostname:           NAM1
-Metric: 100             IS-Extended BRU1.00
-    Link Average Delay: 1000 us         
-Metric: 100             IS-Extended WAR1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended HAS1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended ANT1.00
-    Link Average Delay: 1000 us
+NAM1
+  Router ID:          3
+  IP Address:         1.1.1.3
+  Hostname:           NAM1
+  Metric: 100             IS-Extended BRU1.00
+      Link Average Delay: 1000 us         
+  Metric: 100             IS-Extended WAR1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended HAS1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended ANT1.00
+      Link Average Delay: 1000 us
 
-Router ID:          4
-IP Address:         1.1.1.4
-Hostname:           HUY1
-Metric: 100             IS-Extended BRU1.00
-    Link Average Delay: 1000 us         
-Metric: 100             IS-Extended WAR1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended HAS1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended ANT1.00
-    Link Average Delay: 1000 us
+HUY1
+  Router ID:          4
+  IP Address:         1.1.1.4
+  Hostname:           HUY1
+  Metric: 100             IS-Extended BRU1.00
+      Link Average Delay: 1000 us         
+  Metric: 100             IS-Extended WAR1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended HAS1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended ANT1.00
+      Link Average Delay: 1000 us
 
-Router ID:          5
-IP Address:         1.1.1.5
-Hostname:           WAR1
-Metric: 100             IS-Extended OST1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended OST1.00
-    Link Average Delay: 1000 us             
-Metric: 100             IS-Extended LIE1.00
-    Link Average Delay: 10000 us
-Metric: 100             IS-Extended NAM1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended HUY1.00
-    Link Average Delay: 1000 us 
+WAR1
+  Router ID:          5
+  IP Address:         1.1.1.5
+  Hostname:           WAR1
+  Metric: 100             IS-Extended OST1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended OST1.00
+      Link Average Delay: 1000 us             
+  Metric: 100             IS-Extended LIE1.00
+      Link Average Delay: 10000 us
+  Metric: 100             IS-Extended NAM1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended HUY1.00
+      Link Average Delay: 1000 us 
 
-Router ID:          6
-IP Address:         1.1.1.6
-Hostname:           HAS1
-Metric: 100             IS-Extended OST1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended LIE1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended NAM1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended HUY1.00
-    Link Average Delay: 1000 us  
+HAS1
+  Router ID:          6
+  IP Address:         1.1.1.6
+  Hostname:           HAS1
+  Metric: 100             IS-Extended OST1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended LIE1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended NAM1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended HUY1.00
+      Link Average Delay: 1000 us  
 
-Router ID:          7
-IP Address:         1.1.1.7
-Hostname:           ANT1
-Metric: 100             IS-Extended OST1.00
-    Link Average Delay: 1000 us            
-Metric: 100             IS-Extended LIE1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended NAM1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended HUY1.00
-    Link Average Delay: 1000 us            
+ANT1
+  Router ID:          7
+  IP Address:         1.1.1.7
+  Hostname:           ANT1
+  Metric: 100             IS-Extended OST1.00
+      Link Average Delay: 1000 us            
+  Metric: 100             IS-Extended LIE1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended NAM1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended HUY1.00
+      Link Average Delay: 1000 us            
 
-Router ID:          8
-IP Address:         1.1.1.8
-Hostname:           OST1       
-Metric: 100             IS-Extended WAR1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended HAS1.00
-    Link Average Delay: 1000 us
-Metric: 100             IS-Extended ANT1.00
-    Link Average Delay: 1000 us
+OST1
+  Router ID:          8
+  IP Address:         1.1.1.8
+  Hostname:           OST1       
+  Metric: 100             IS-Extended WAR1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended HAS1.00
+      Link Average Delay: 1000 us
+  Metric: 100             IS-Extended ANT1.00
+      Link Average Delay: 1000 us

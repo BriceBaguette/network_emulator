@@ -534,10 +534,10 @@ def set_failure_options(source_id: str, destination_id: str):
     destination_router = net_sim.get_router_from_id(destination_id)
     all_source_neighbors = net_sim.get_all_neighbors(source_router)
     next_hops = net_sim.get_next_hops(source_router, destination_router)
-    previous_next_hop = [{'label': f"{net_sim.get_router_from_id(id).node_name} - {id}",
+    previous_next_hop = [{'label': f"{net_sim.get_router_from_ip(id).node_name} - {id}",
                           'value': id}
                          for id in next_hops]
-    possible_next_hop = [{'label': f"{net_sim.get_router_from_id(id).node_name} - {id}",
+    possible_next_hop = [{'label': f"{net_sim.get_router_from_ip(id).node_name} - {id}",
                           'value': id}
                          for id in all_source_neighbors]
 
@@ -876,7 +876,7 @@ def redirect_to_final(_):
      State('end_probe', 'value')],
     prevent_initial_call=True
 )
-def start_emulation(n_clicks, _, source_id, destination_id, prev_next_id, new_next_id, start, end):
+def start_emulation(n_clicks, _, source_id, destination_id, prev_next_ip, new_next_ip, start, end):
     """
     Starts the network emulation process.
 
@@ -905,11 +905,14 @@ def start_emulation(n_clicks, _, source_id, destination_id, prev_next_id, new_ne
         return dash.no_update, True, False,
 
     if net_sim.current_step == 0 and source_id is not None:
+        previous_router = net_sim.get_router_from_ip(prev_next_ip)
+        new_next_router = net_sim.get_router_from_ip(new_next_ip)
+
         net_sim.add_hw_issue(start=start, end=end,
                              source_id=source_id,
                              destination_id=destination_id,
-                             new_next_hop_id=new_next_id,
-                             next_hop_id=prev_next_id)
+                             new_next_hop_id=new_next_router.id,
+                             next_hop_id=previous_router.id)
 
     total_steps = net_sim.num_generation * \
         net_sim.duration * net_sim.generation_rate
@@ -1272,6 +1275,26 @@ def measurement_analysis(n_click, source_id, sink_id, source_file, sink_file):
     prevent_initial_call=True
 )
 def hw_issue_detection(_, loss, latency, bin_detection, source_file, sink_file):
+    """
+    Detects hardware issues based on the uploaded source and sink files.
+
+    This callback function is triggered when the hardware issue detection button is clicked.
+    It processes the uploaded source and sink files, performs hardware issue detection,
+    and returns the results.
+
+    Args:
+        _ (int): The number of times the submit button has been clicked (not used).
+        loss (str): The loss detection value.
+        latency (str): The latency detection value.
+        bin_detection (str): The bin detection value.
+        source_file (str): The base64-encoded contents of the uploaded source file.
+        sink_file (str): The base64-encoded contents of the uploaded sink file.
+
+    Returns:
+        dash.development.base_component.Component: A Dash HTML component displaying the results
+        of the hardware issue detection. If no issues are detected, a message is displayed.
+        Otherwise, a list of routers with hardware issues is displayed.
+    """
     if not os.path.exists('uploads'):
         os.makedirs('uploads')
     source_file_path = os.path.join('uploads', 'source.csv')
@@ -1291,7 +1314,7 @@ def hw_issue_detection(_, loss, latency, bin_detection, source_file, sink_file):
                                               bin_detection=bin_detection)
     if len(list_routers) == 0:
         return html.P("No hardware issues detected")
-    display_router = html.Li([html.P(f"Router {net_sim.get_router_from_id(router_id).node_name} -"
+    display_router = html.Ul([html.Li(f"Router {net_sim.get_router_from_id(router_id).node_name} -"
                                      f" {router_id} has hardware issue") for router_id in
                               list_routers])
     return display_router

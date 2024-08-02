@@ -108,6 +108,21 @@ class NetworkEmulator:
             if router.id == router_id:
                 return router
         return None
+    
+    def get_router_from_ip(self, router_ip) -> Router:
+        """
+        Retrieve a router object based on its ip address.
+
+        Args:
+            router_ip (int): The ip address of the router to retrieve.
+
+        Returns:
+            Router: The router object with the specified ID, or None if no such router exists.
+        """
+        for router in self.routers:
+            if router.ip_address == router_ip:
+                return router
+        return None
 
     def get_routers_ids(self) -> List[str]:
         """
@@ -1294,6 +1309,8 @@ class NetworkEmulator:
                                                          (source_dataframe['Packet Counter Type']
                                                           == mark)]
 
+        number_of_packet = filtered_source.iloc[-1]['Packet Counter']
+
         if filtered_source.empty:
             filtered_source = source_dataframe[source_dataframe['Session ID'] == session_id]
         else:
@@ -1353,7 +1370,8 @@ class NetworkEmulator:
                         if router not in routers_id:
                             routers_id.append(router)
                     if len(found_routers) == 0 and source_router.id not in routers_id:
-                        routers_id.append(source_router.id)
+                        routers_id.append(source_router.id)                
+
         if bin_detection:
             if rest_of_sink.empty:
                 print("No data to analyze")
@@ -1387,12 +1405,18 @@ class NetworkEmulator:
                                                                      destination_router,
                                                                      index=i)
                 for index, value in enumerate(int_histogram_values):
-                    print(f"From {source_ipaddress} to {destination_ipaddress} with current value {value} and  previous value {int_previous_histogram_values[index]}, the accepted variation is {int_previous_histogram_values[index] + int_previous_histogram_values[index] * ((1/total_number_of_path) )} as upper bound and {int_previous_histogram_values[index] - int_previous_histogram_values[index] * ((1/total_number_of_path) )} as lower bound")
-                    if not ((int_previous_histogram_values[index] +
-                    int_previous_histogram_values[index] * ((1/total_number_of_path) )) >
-                    value >
-                    (int_previous_histogram_values[index] -
-                    int_previous_histogram_values[index] * ((1/total_number_of_path) ))):
+                    if value == 0 and int_previous_histogram_values[index] == 0:
+                        continue
+                    elif (value == 0 and int_previous_histogram_values[index] > 0) or (value > 0 and int_previous_histogram_values[index] == 0):
+                        self.bin_distribution_hw_detection(source=source_router,
+                                                           destination=destination_router,
+                                                           routers_id=routers_id,
+                                                           current_sink_dataframe=filtered_sink,
+                                                           previous_sink_dataframe=rest_of_sink)
+                    elif not (1 + ( number_of_packet/total_number_of_path) >(int_previous_histogram_values[index] /
+                    value) >
+                    (1 -
+                    number_of_packet/total_number_of_path)):
                         self.bin_distribution_hw_detection(source=source_router,
                                                            destination=destination_router,
                                                            routers_id=routers_id,
@@ -1664,11 +1688,16 @@ class NetworkEmulator:
         total_number_of_path = 0
         for i in indices:
             total_number_of_path += self.get_number_of_paths(next_router, destination, index=i)
+            
+        number_of_packet = sum(int_histogram_values)
         for index, value in enumerate(int_histogram_values):
-            if not ((int_previous_histogram_values[index] +
-                    int_previous_histogram_values[index] * ((1/total_number_of_path) )) >
-                    value >
-                    (int_previous_histogram_values[index] -
-                    int_previous_histogram_values[index] * ((1/total_number_of_path) ))):
+            if value == 0 and int_previous_histogram_values[index] == 0:
+                continue
+            elif (value == 0 and int_previous_histogram_values[index] > 0) or (value > 0 and int_previous_histogram_values[index] == 0):
+                return True
+            elif not (1 + ( number_of_packet/total_number_of_path) >(int_previous_histogram_values[index] /
+                    value) >
+                    (1 -
+                    number_of_packet/total_number_of_path)):
                 return True
         return False
